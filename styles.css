@@ -1,0 +1,104 @@
+/* ==========================
+   VARIABLES DE COLOR
+   ========================== */
+
+:root {
+    --color-primario: #079d8b;
+    --color-secundario: #27ae60;
+    --color-fondo: #f4f4f4;
+    --color-blanco: #ffffff;
+    --color-texto: #222222;
+    --color-borde: #cccccc;
+}
+
+/* ==========================
+   RESET BÁSICO
+   ========================== */
+
+* {
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* ==========================
+   ESTRUCTURA GENERAL
+   ========================== */
+
+body {
+    margin: 0;
+    background-color: var(--color-fondo);
+    color: var(--color-texto);
+}
+
+header {
+    background-color: var(--color-primario);
+    color: var(--color-blanco);
+    padding: 15px;
+    text-align: center;
+}
+
+h1 {
+    margin: 0;
+    font-size: 28px;
+}
+
+main {
+    padding: 20px;
+}
+
+/* ==========================
+   BUSCADOR
+   ========================== */
+
+#buscador {
+    margin-bottom: 20px;
+}
+
+#searchInput {
+    width: 100%;
+    padding: 15px;
+    font-size: 20px;
+    border: 2px solid var(--color-borde);
+    border-radius: 5px;
+}
+
+/* ==========================
+   LISTA DE ARTÍCULOS
+   ========================== */
+
+#lista-articulos {
+    background-color: var(--color-blanco);
+    border-radius: 5px;
+    padding: 10px;
+}
+
+#productList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.product-item {
+    padding: 12px;
+    border-bottom: 1px solid #eeeeee;
+}
+
+.product-item:last-child {
+    border-bottom: none;
+}
+
+.product-name {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.product-price {
+    font-size: 22px;
+    color: var(--color-secundario);
+    margin-top: 5px;
+}
+.producto-codigo {
+    font-size: 14px;
+    color: var(--color-texto-suave);
+}
+

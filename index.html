@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mi Negocio</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Sistema para Negocios</h1>
+    </header>
+
+    <main>
+      <!-- BUSCADOR -->
+      <section id="buscador">
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Buscar artículo por nombre o código..."
+          autocomplete="off"
+        />
+      </section>
+
+      <button id="btnGestion" class="btn-secundario">Gestión de precios</button>
+
+      <section id="gestion" class="oculto">
+        <h2>Gestión de precios</h2>
+
+        <div class="campo">
+          <label for="gananciaGlobalInput">Ganancia global (%)</label>
+          <input type="number" id="gananciaGlobalInput" min="0" />
+        </div>
+
+        <div class="acciones">
+          <button id="aplicarGlobal" class="btn-primario">
+            Aplicar a todos
+          </button>
+        </div>
+      </section>
+
+      <!-- LISTA DE ARTÍCULOS -->
+      <section id="lista-articulos">
+        <ul id="productList">
+          <!-- Los productos se insertan acá desde script.js -->
+        </ul>
+      </section>
+    </main>
+
+    <!-- JS principal -->
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
