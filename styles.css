@@ -4,7 +4,8 @@
 
 :root {
     --color-primario: #079d8b;
-    --color-secundario: #27ae60;
+    --color-secundario: #079d8b;
+    --color-terciario: #ebcd73;
     --color-fondo: #f4f4f4;
     --color-blanco: #ffffff;
     --color-texto: #222222;
@@ -40,6 +41,12 @@ header {
 h1 {
     margin: 0;
     font-size: 28px;
+}
+
+h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: var(--color-texto);
 }
 
 main {
@@ -97,8 +104,113 @@ main {
     color: var(--color-secundario);
     margin-top: 5px;
 }
-.producto-codigo {
+.product-code {
     font-size: 14px;
     color: var(--color-texto-suave);
 }
+.oculto {
+    display: none;
+}
 
+#gestion {
+    margin-top: 20px;
+    padding: 15px;
+    background: var(--color-terciario);
+    border-radius: 8px;
+}
+
+.campo {
+    margin-bottom: 10px;
+}
+
+.campo label {
+    display: block;
+    margin-bottom: 4px;
+}
+
+.campo input {
+    width: 100%;
+    padding: 8px;
+    font-size: 16px;
+}
+
+.acciones {
+    margin-top: 15px;
+}
+.btn-primario {
+    background-color: var(--color-primario);
+    color: var(--color-blanco);
+    border: none;
+    padding: 12px 18px;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-primario:hover {
+    opacity: 0.9;
+}
+
+.btn-secundario {
+    background-color: transparent;
+    color: var(--color-primario);
+    border: 2px solid var(--color-primario);
+    padding: 10px 16px;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.btn-secundario:hover {
+    background-color: var(--color-primario);
+    color: var(--color-blanco);
+}
+
+.product-item.seleccionado {
+    background-color: #e6f7f5;
+    border-left: 5px solid var(--color-primario);
+}
+
+/* ==========================
+   EDITOR DE PRODUCTO OVERLAY
+   ========================== */
+
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+.editor-contenido {
+    background: var(--color-blanco);
+    width: 100%;
+    max-width: 520px;
+    padding: 20px;
+    border-radius: 12px;
+    position: relative;
+}
+
+.editor-cerrar {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    font-size: 22px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.producto-editando {
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: var(--color-primario);
+}
+
+.overlay.oculto {
+    display: none;
+}

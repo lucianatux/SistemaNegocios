@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -24,6 +24,8 @@
 
       <button id="btnGestion" class="btn-secundario">Gestión de precios</button>
 
+      <!-- GESTIÓN DE PRECIOS -->
+
       <section id="gestion" class="oculto">
         <h2>Gestión de precios</h2>
 
@@ -33,9 +35,54 @@
         </div>
 
         <div class="acciones">
-          <button id="aplicarGlobal" class="btn-primario">
-            Aplicar a todos
-          </button>
+          <button id="aplicarGlobal" class="btn-primario">Aplicar</button>
+        </div>
+      </section>
+
+      <!-- EDITOR DE PRODUCTOS -->
+
+      <section id="editorProducto" class="overlay oculto">
+        <div class="editor-contenido">
+          <button id="cerrarEditor" class="editor-cerrar">✕</button>
+
+          <h2>Editar producto</h2>
+
+          <p id="productoEditando" class="producto-editando"></p>
+
+          <div class="campo">
+            <label>Nombre</label>
+            <input type="text" id="editNombre" />
+          </div>
+
+          <div class="campo">
+            <label>Código</label>
+            <input type="text" id="editCodigo" />
+          </div>
+
+          <div class="campo">
+            <label>Costo</label>
+            <input type="number" id="editCosto" min="0" />
+          </div>
+
+          <div class="campo">
+            <label>Ganancia especial (%)</label>
+            <input
+              type="number"
+              id="editGanancia"
+              min="0"
+              placeholder="Vacío = usa ganancia global"
+            />
+          </div>
+
+          <div class="acciones">
+            <button id="cancelarEdicion" class="btn-secundario">
+              Cancelar
+            </button>
+
+            <button id="guardarProducto" class="btn-primario">
+              Guardar cambios
+            </button>
+          </div>
         </div>
       </section>
 
