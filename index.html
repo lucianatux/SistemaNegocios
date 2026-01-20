@@ -8,7 +8,11 @@
   </head>
   <body>
     <header>
-      <h1>Sistema para Negocios</h1>
+      <h1>
+        <span class="title">Mi Negocio </span
+        ><img src="store-icon.png" alt="Mi Negocio" class="app-icon" />
+        <span class="subtitle"> Gestión de precios, costos y promociones</span>
+      </h1>
     </header>
 
     <main>
@@ -22,10 +26,46 @@
         />
       </section>
 
-      <button id="btnGestion" class="btn-secundario">Gestión de precios</button>
-      <button id="btnAgregarProducto" class="btn-secundario">
-        Agregar producto
-      </button>
+      <!-- BARRA DE BOTONES -->
+      <div class="barra-botones">
+        <div class="botones-izquierda">
+          <button id="btnGestion" class="btn-secundario">
+            💰 Gestión de precios
+          </button>
+          <button id="btnAgregarProducto" class="btn-secundario">
+            ➕ Agregar producto
+          </button>
+        </div>
+
+        <div class="botones-derecha">
+          <div class="dropdown">
+            <button id="btnBackup" class="btn-secundario">💾 Backup ▼</button>
+            <div class="dropdown-contenido">
+              <button id="exportarBtn" class="btn-secundario tooltip">
+                💾 Exportar datos
+                <span class="tooltip-text">
+                  Guarda una copia de todos tus productos en un archivo JSON. No
+                  afecta los datos actuales en la app.
+                </span>
+              </button>
+              <hr />
+              <label for="importarInput" class="btn-secundario tooltip"
+                >📂 Importar datos
+                <span class="tooltip-text">
+                  Carga un archivo JSON previamente exportado para restaurar tus
+                  productos.
+                </span>
+              </label>
+              <input
+                type="file"
+                id="importarInput"
+                accept=".json"
+                style="display: none"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
 
       <!-- GESTIÓN DE PRECIOS -->
 
@@ -48,8 +88,6 @@
       <section id="editorProducto" class="overlay oculto">
         <div class="editor-contenido">
           <button id="cerrarEditor" class="editor-cerrar">✕</button>
-
-          <h2>Editar producto</h2>
 
           <p id="productoEditando" class="producto-editando"></p>
 

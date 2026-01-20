@@ -9,6 +9,7 @@
   --color-fondo: #f4f4f4;
   --color-blanco: #ffffff;
   --color-texto: #222222;
+    --color-texto-suave: #54565c;
   --color-borde: #cccccc;
 }
 
@@ -40,8 +41,12 @@ header {
 
 h1 {
   margin: 0;
-  font-size: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
 }
+
 
 h2 {
   margin-top: 0;
@@ -52,6 +57,18 @@ h2 {
 main {
   padding: 20px;
 }
+.title{
+  font-size: 2rem;
+  font-family:Georgia, 'Times New Roman', Times, serif;
+}
+.subtitle {
+  font-size: 1.4rem;
+}
+.app-icon {
+  width: 60px;
+  display: block;
+}
+
 
 /* ==========================
    BUSCADOR
@@ -162,10 +179,11 @@ main {
 
 .btn-secundario {
   background-color: transparent;
-  color: var(--color-primario);
+  color: var(--color-texto-suave);
   border: 2px solid var(--color-primario);
   padding: 10px 16px;
   font-size: 16px;
+  font-weight: 600;
   border-radius: 6px;
   cursor: pointer;
   margin-bottom: 10px;
@@ -284,3 +302,86 @@ main {
   padding: 6px 10px;
   border-radius: 6px;
 }
+
+/* ==========================
+   BARRA DE BOTONES MENU
+   ========================== */
+/* Contenedor y botones */
+.barra-botones {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.botones-izquierda button,
+.botones-derecha button,
+.botones-derecha label {
+  margin-right: 10px;
+}
+
+/* Dropdown */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-contenido {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: var(--color-fondo);
+  min-width: 180px;
+  box-shadow: 0px 4px 8px rgba(0,0,0,0.2);
+  border-radius: 5px;
+  padding: 5px 0;
+  z-index: 1000;
+}
+
+.dropdown-contenido button,
+.dropdown-contenido label {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 8px 12px;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.dropdown-contenido button:hover,
+.dropdown-contenido label:hover {
+  background-color: var(--color-primario);
+}
+
+/* Clase que muestra el dropdown */
+.dropdown.show .dropdown-contenido {
+  display: block;
+}
+
+/* Tooltip básico */
+.tooltip {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.tooltip .tooltip-text {
+  visibility: hidden;
+  width: 200px;
+  background-color: var(--color-primario);
+  color: var(--color-blanco);
+  text-align: center;
+  border-radius: 6px;
+  padding: 6px;
+  position: absolute;
+  right: 0;
+  top: 110%;
+  z-index: 1001;
+  font-size: 14px;
+}
+
+.tooltip:hover .tooltip-text {
+  visibility: visible;
+}
+
