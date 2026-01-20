@@ -20,6 +20,13 @@ const editorProducto = document.getElementById("editorProducto");
 const cerrarEditorBtn = document.getElementById("cerrarEditor");
 const cancelarEdicionBtn = document.getElementById("cancelarEdicion");
 
+const overlayConfirmacion = document.getElementById("overlayConfirmacion");
+const confirmacionTexto = document.getElementById("confirmacionTexto");
+const confirmarAccionBtn = document.getElementById("confirmarAccion");
+const cancelarConfirmacionBtn = document.getElementById("cancelarConfirmacion");
+
+let accionPendiente = null;
+
 // ---------------------------
 // CARGAR DATOS (LOCAL)
 // ---------------------------
@@ -107,15 +114,16 @@ function mostrarProductos(lista) {
     btnEliminar.textContent = "🗑️";
 
     // EVENTOS (por ahora simples)
-    btnEditar.addEventListener("click", (e) => {
-      e.stopPropagation(); // importante
-      seleccionarProducto(producto);
-    });
+   btnEditar.addEventListener("click", (e) => {
+  e.stopPropagation();
+  abrirConfirmacion("editar", producto);
+});
 
-    btnEliminar.addEventListener("click", (e) => {
-      e.stopPropagation(); // importante
-      console.log("Eliminar producto:", producto.nombre);
-    });
+btnEliminar.addEventListener("click", (e) => {
+  e.stopPropagation();
+  abrirConfirmacion("eliminar", producto);
+});
+
 
     acciones.appendChild(btnEditar);
     acciones.appendChild(btnEliminar);
@@ -254,3 +262,51 @@ cancelarEdicionBtn.addEventListener("click", cerrarEditorProducto);
 cerrarBannerBtn.addEventListener("click", () => {
   bannerGanancia.classList.add("oculto");
 });
+
+// ---------------------------
+// ABRIR CONFIRMACIÓN
+// ---------------------------
+function abrirConfirmacion(tipo, producto) {
+  accionPendiente = { tipo, producto };
+
+  if (tipo === "editar") {
+    confirmacionTexto.textContent = `¿Querés editar el producto "${producto.nombre}"?`;
+  }
+
+  if (tipo === "eliminar") {
+    confirmacionTexto.textContent = `¿Seguro que querés eliminar "${producto.nombre}"? Esta acción no se puede deshacer.`;
+  }
+
+  overlayConfirmacion.classList.remove("oculto");
+}
+
+
+// ---------------------------
+// CONFIRMAR ACCIÓN
+// ---------------------------
+confirmarAccionBtn.addEventListener("click", () => {
+  if (!accionPendiente) return;
+
+  const { tipo, producto } = accionPendiente;
+
+  if (tipo === "editar") {
+    seleccionarProducto(producto);
+  }
+
+  if (tipo === "eliminar") {
+    productos = productos.filter((p) => p !== producto);
+    mostrarProductos(productos);
+  }
+
+  cerrarConfirmacion();
+});
+
+// ---------------------------
+// CANCELAR CERRAR CONFIRMACIÓN
+// ---------------------------
+function cerrarConfirmacion() {
+  overlayConfirmacion.classList.add("oculto");
+  accionPendiente = null;
+}
+
+cancelarConfirmacionBtn.addEventListener("click", cerrarConfirmacion);

@@ -23,7 +23,9 @@
       </section>
 
       <button id="btnGestion" class="btn-secundario">Gestión de precios</button>
-      <button id="btnAgregarProducto" class="btn-secundario">Agregar producto</button>
+      <button id="btnAgregarProducto" class="btn-secundario">
+        Agregar producto
+      </button>
 
       <!-- GESTIÓN DE PRECIOS -->
 
@@ -100,11 +102,24 @@
 
       <!-- BANNER DE GANANCIA -->
       <div id="bannerGanancia" class="banner oculto">
-        <span>
-          Margen de ganancia aplicado
-        </span>
+        <span> Margen de ganancia aplicado </span>
         <button id="cerrarBanner" class="banner-cerrar">✕</button>
       </div>
+
+      <!-- OVERLAY DE CONFIRMACIÓN -->
+      <section id="overlayConfirmacion" class="overlay oculto">
+        <div class="editor-contenido">
+          <h2 id="confirmacionTitulo">Confirmar acción</h2>
+          <p id="confirmacionTexto"></p>
+
+          <div class="acciones">
+            <button id="cancelarConfirmacion" class="btn-secundario">
+              Cancelar
+            </button>
+            <button id="confirmarAccion" class="btn-primario">Confirmar</button>
+          </div>
+        </div>
+      </section>
 
       <!-- LISTA DE ARTÍCULOS -->
       <section id="lista-articulos">
