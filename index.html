@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
@@ -23,6 +23,7 @@
       </section>
 
       <button id="btnGestion" class="btn-secundario">Gestión de precios</button>
+      <button id="btnAgregarProducto" class="btn-secundario">Agregar producto</button>
 
       <!-- GESTIÓN DE PRECIOS -->
 
@@ -36,6 +37,7 @@
 
         <div class="acciones">
           <button id="aplicarGlobal" class="btn-primario">Aplicar</button>
+          <button id="cerrarGlobal" class="btn-primario">Cerrar</button>
         </div>
       </section>
 
@@ -57,6 +59,16 @@
           <div class="campo">
             <label>Código</label>
             <input type="text" id="editCodigo" />
+          </div>
+
+          <div class="campo">
+            <label>Categoría</label>
+            <select id="editCategoria" required>
+              <option value="Libreria">Librería</option>
+              <option value="carteras">Carteras</option>
+              <option value="juguetes">Juguetes</option>
+              <option value="otros">Otros</option>
+            </select>
           </div>
 
           <div class="campo">
@@ -85,6 +97,14 @@
           </div>
         </div>
       </section>
+
+      <!-- BANNER DE GANANCIA -->
+      <div id="bannerGanancia" class="banner oculto">
+        <span>
+          Margen de ganancia aplicado
+        </span>
+        <button id="cerrarBanner" class="banner-cerrar">✕</button>
+      </div>
 
       <!-- LISTA DE ARTÍCULOS -->
       <section id="lista-articulos">

@@ -7,16 +7,18 @@ const searchInput = document.getElementById("searchInput");
 const productList = document.getElementById("productList");
 
 const btnGestion = document.getElementById("btnGestion");
+const btnCerrarGlobal = document.getElementById("cerrarGlobal");
 const gestion = document.getElementById("gestion");
 const gananciaGlobalInput = document.getElementById("gananciaGlobalInput");
 const aplicarGlobalBtn = document.getElementById("aplicarGlobal");
+const bannerGanancia = document.getElementById("bannerGanancia");
+const cerrarBannerBtn = document.getElementById("cerrarBanner");
 
 const guardarProductoBtn = document.getElementById("guardarProducto");
 
 const editorProducto = document.getElementById("editorProducto");
 const cerrarEditorBtn = document.getElementById("cerrarEditor");
 const cancelarEdicionBtn = document.getElementById("cancelarEdicion");
-
 
 // ---------------------------
 // CARGAR DATOS (LOCAL)
@@ -28,13 +30,12 @@ ordenarProductos();
 mostrarProductos(productos);
 editorProducto.classList.add("oculto");
 
-
 // ---------------------------
 // ORDENAR ALFABÉTICAMENTE
 // ---------------------------
 function ordenarProductos() {
   productos.sort((a, b) =>
-    a.nombre.localeCompare(b.nombre, "es", { sensitivity: "base" })
+    a.nombre.localeCompare(b.nombre, "es", { sensitivity: "base" }),
   );
 }
 
@@ -45,8 +46,12 @@ function calcularPrecio(producto) {
   const gananciaUsada =
     producto.ganancia !== null ? producto.ganancia : gananciaGlobal;
 
-  const precio = producto.costo + (producto.costo * gananciaUsada) / 100;
-  return Math.round(precio);
+  const precioBase = producto.costo + (producto.costo * gananciaUsada) / 100;
+
+  // Redondear siempre hacia arriba al múltiplo de 10 más cercano
+  const precioRedondeado = Math.ceil(precioBase / 10) * 10;
+
+  return precioRedondeado;
 }
 
 // ---------------------------
@@ -64,6 +69,10 @@ function mostrarProductos(lista) {
     const li = document.createElement("li");
     li.classList.add("product-item");
 
+    // INFO DEL PRODUCTO
+    const info = document.createElement("div");
+    info.classList.add("product-info");
+
     const nombre = document.createElement("div");
     nombre.classList.add("product-name");
     nombre.textContent = producto.nombre;
@@ -72,24 +81,52 @@ function mostrarProductos(lista) {
     codigo.classList.add("product-code");
     codigo.textContent = "Código: " + producto.codigo;
 
+    const categoria = document.createElement("div");
+    categoria.classList.add("product-category");
+    categoria.textContent = "Categoría: " + producto.categoria;
+
     const precio = document.createElement("div");
     precio.classList.add("product-price");
     precio.textContent = "$ " + calcularPrecio(producto);
 
-    li.addEventListener("click", () => {
-      limpiarSeleccion();
-      li.classList.add("seleccionado");
+    info.appendChild(nombre);
+    info.appendChild(codigo);
+    info.appendChild(categoria);
+    info.appendChild(precio);
+
+    // ACCIONES
+    const acciones = document.createElement("div");
+    acciones.classList.add("product-actions");
+
+    const btnEditar = document.createElement("button");
+    btnEditar.classList.add("btn-icono");
+    btnEditar.textContent = "✏️";
+
+    const btnEliminar = document.createElement("button");
+    btnEliminar.classList.add("btn-icono");
+    btnEliminar.textContent = "🗑️";
+
+    // EVENTOS (por ahora simples)
+    btnEditar.addEventListener("click", (e) => {
+      e.stopPropagation(); // importante
       seleccionarProducto(producto);
     });
 
-    li.appendChild(nombre);
-    li.appendChild(codigo);
-    li.appendChild(precio);
+    btnEliminar.addEventListener("click", (e) => {
+      e.stopPropagation(); // importante
+      console.log("Eliminar producto:", producto.nombre);
+    });
+
+    acciones.appendChild(btnEditar);
+    acciones.appendChild(btnEliminar);
+
+    // ARMADO FINAL
+    li.appendChild(info);
+    li.appendChild(acciones);
 
     productList.appendChild(li);
   });
 }
-
 
 // ---------------------------
 // BUSCADOR
@@ -100,7 +137,7 @@ searchInput.addEventListener("input", () => {
   const filtrados = productos.filter(
     (producto) =>
       producto.nombre.toLowerCase().includes(texto) ||
-      producto.codigo.toLowerCase().includes(texto)
+      producto.codigo.toLowerCase().includes(texto),
   );
 
   mostrarProductos(filtrados);
@@ -114,6 +151,10 @@ btnGestion.addEventListener("click", () => {
   gestion.classList.toggle("oculto");
   gananciaGlobalInput.value = gananciaGlobal;
 });
+btnCerrarGlobal.addEventListener("click", () => {
+  gestion.classList.toggle("oculto");
+  gananciaGlobalInput.value = gananciaGlobal;
+});
 
 // ---------------------------
 // APLICAR GANANCIA GLOBAL
@@ -124,6 +165,12 @@ aplicarGlobalBtn.addEventListener("click", () => {
 
   ordenarProductos();
   mostrarProductos(productos);
+
+  bannerGanancia.classList.remove("oculto");
+
+  setTimeout(() => {
+    bannerGanancia.classList.add("oculto");
+  }, 3000);
 });
 
 // ---------------------------
@@ -132,9 +179,8 @@ aplicarGlobalBtn.addEventListener("click", () => {
 function seleccionarProducto(producto) {
   productoSeleccionado = producto;
 
-   // Abrimos editor de producto
-editorProducto.classList.remove("oculto");
-
+  // Abrimos editor de producto
+  editorProducto.classList.remove("oculto");
 
   // Indicamos qué producto se edita
   document.getElementById("productoEditando").textContent =
@@ -143,11 +189,11 @@ editorProducto.classList.remove("oculto");
   // Cargamos datos en el formulario
   document.getElementById("editNombre").value = producto.nombre;
   document.getElementById("editCodigo").value = producto.codigo;
+  document.getElementById("editCategoria").value = producto.categoria;
   document.getElementById("editCosto").value = producto.costo;
   document.getElementById("editGanancia").value =
     producto.ganancia !== null ? producto.ganancia : "";
 }
-
 
 // ---------------------------
 // GUARDAR PRODUCTO
@@ -160,8 +206,11 @@ guardarProductoBtn.addEventListener("click", () => {
 
   productoSeleccionado.codigo = document.getElementById("editCodigo").value;
 
+  productoSeleccionado.categoria =
+    document.getElementById("editCategoria").value;
+
   productoSeleccionado.costo = parseFloat(
-    document.getElementById("editCosto").value
+    document.getElementById("editCosto").value,
   );
 
   const gananciaInput = document.getElementById("editGanancia").value;
@@ -199,3 +248,9 @@ function cerrarEditorProducto() {
 cerrarEditorBtn.addEventListener("click", cerrarEditorProducto);
 cancelarEdicionBtn.addEventListener("click", cerrarEditorProducto);
 
+// ---------------------------
+// CERRAR BANNER
+// ---------------------------
+cerrarBannerBtn.addEventListener("click", () => {
+  bannerGanancia.classList.add("oculto");
+});
