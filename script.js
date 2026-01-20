@@ -25,6 +25,8 @@ const confirmacionTexto = document.getElementById("confirmacionTexto");
 const confirmarAccionBtn = document.getElementById("confirmarAccion");
 const cancelarConfirmacionBtn = document.getElementById("cancelarConfirmacion");
 
+const confirmacionTitulo = document.getElementById("confirmacionTitulo");
+
 let accionPendiente = null;
 
 // ---------------------------
@@ -114,16 +116,15 @@ function mostrarProductos(lista) {
     btnEliminar.textContent = "🗑️";
 
     // EVENTOS (por ahora simples)
-   btnEditar.addEventListener("click", (e) => {
-  e.stopPropagation();
-  abrirConfirmacion("editar", producto);
-});
+    btnEditar.addEventListener("click", (e) => {
+      e.stopPropagation();
+      abrirConfirmacion("editar", producto);
+    });
 
-btnEliminar.addEventListener("click", (e) => {
-  e.stopPropagation();
-  abrirConfirmacion("eliminar", producto);
-});
-
+    btnEliminar.addEventListener("click", (e) => {
+      e.stopPropagation();
+      abrirConfirmacion("eliminar", producto);
+    });
 
     acciones.appendChild(btnEditar);
     acciones.appendChild(btnEliminar);
@@ -269,17 +270,22 @@ cerrarBannerBtn.addEventListener("click", () => {
 function abrirConfirmacion(tipo, producto) {
   accionPendiente = { tipo, producto };
 
+  // Reset visual
+  confirmacionTitulo.classList.remove("titulo-peligro");
+
   if (tipo === "editar") {
+    confirmacionTitulo.textContent = "Editar producto";
     confirmacionTexto.textContent = `¿Querés editar el producto "${producto.nombre}"?`;
   }
 
   if (tipo === "eliminar") {
+    confirmacionTitulo.textContent = "Eliminar producto";
     confirmacionTexto.textContent = `¿Seguro que querés eliminar "${producto.nombre}"? Esta acción no se puede deshacer.`;
+    confirmacionTitulo.classList.add("titulo-peligro");
   }
 
   overlayConfirmacion.classList.remove("oculto");
 }
-
 
 // ---------------------------
 // CONFIRMAR ACCIÓN

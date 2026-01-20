@@ -4,7 +4,7 @@ const DATA = {
     },
     productos: [
     {
-      nombre: "Acrilico EQ50",
+      nombre: "Acrilico EQ 50cc.",
       codigo: "16472",
       costo: 1588,
       ganancia: null,

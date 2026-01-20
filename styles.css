@@ -4,7 +4,7 @@
 
 :root {
   --color-primario: #079d8b;
-  --color-secundario: #079d8b;
+  --color-secundario: #07489d;
   --color-terciario: #ebcd73;
   --color-fondo: #f4f4f4;
   --color-blanco: #ffffff;
@@ -278,3 +278,9 @@ main {
   transform: scale(0.92);
 }
 
+.titulo-peligro {
+  color: #b00020;           /* rojo sobrio */
+  background-color: #ffe5e9; /* fondo suave */
+  padding: 6px 10px;
+  border-radius: 6px;
+}
