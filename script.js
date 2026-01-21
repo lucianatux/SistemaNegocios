@@ -5,6 +5,8 @@ let modoEditor = null; // "editar" | "crear"
 let productoEditando = null;
 
 const searchInput = document.getElementById("searchInput");
+const categoryFilter = document.getElementById("categoryFilter");
+
 const productList = document.getElementById("productList");
 
 const btnGestion = document.getElementById("btnGestion");
@@ -187,16 +189,23 @@ function mostrarProductos(lista) {
 }
 
 // ---------------------------
-// BUSCADOR
+// BUSCADOR + FILTRO CATEGORÍA
 // ---------------------------
-searchInput.addEventListener("input", () => {
+function filtrarProductos() {
   const texto = searchInput.value.toLowerCase();
+  const categoria = categoryFilter.value;
 
-  let filtrados = productos.filter(
-    (p) =>
+  let filtrados = productos.filter((p) => {
+    const coincideTexto =
       p.nombre.toLowerCase().includes(texto) ||
-      p.codigo.toLowerCase().includes(texto),
-  );
+      p.codigo.toLowerCase().includes(texto);
+
+    const coincideCategoria =
+      !categoria ||
+      p.categoria.toLowerCase().trim() === categoria.toLowerCase().trim();
+
+    return coincideTexto && coincideCategoria;
+  });
 
   if (texto) {
     filtrados.sort((a, b) => {
@@ -214,7 +223,10 @@ searchInput.addEventListener("input", () => {
   }
 
   mostrarProductos(filtrados);
-});
+}
+
+searchInput.addEventListener("input", filtrarProductos);
+categoryFilter.addEventListener("change", filtrarProductos);
 
 // ---------------------------
 // MOSTRAR / OCULTAR GESTIÓN
@@ -238,6 +250,7 @@ aplicarGlobalBtn.addEventListener("click", () => {
 
   ordenarProductos();
   searchInput.value = "";
+  categoryFilter.value = "";
   mostrarProductos(productos);
   guardarEnLocalStorage();
 
@@ -263,7 +276,7 @@ function abrirEditor(modo, producto = null) {
 
     document.getElementById("editNombre").value = "";
     document.getElementById("editCodigo").value = "";
-    document.getElementById("editCategoria").value = "libreria";
+    document.getElementById("editCategoria").value = "";
     document.getElementById("editCosto").value = "";
     document.getElementById("editGanancia").value = "";
     precioPublico.textContent = "-";
@@ -537,15 +550,6 @@ function abrirConfirmacionImport() {
 // ACTUALIZAR LISTA DESPUÉS DE EDICIÓN
 // ---------------------------
 function actualizarListaDespuesEdicion() {
-  const texto = searchInput.value.toLowerCase();
-  if (texto) {
-    const filtrados = productos.filter(
-      (p) =>
-        p.nombre.toLowerCase().includes(texto) ||
-        p.codigo.toLowerCase().includes(texto),
-    );
-    mostrarProductos(filtrados);
-  } else {
-    mostrarProductos(productos);
-  }
+  filtrarProductos();
 }
+

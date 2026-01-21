@@ -97,12 +97,28 @@ h2 {
 
 #searchInput {
   width: 100%;
-  padding: 8px;
+  padding: 12px;
   font-size: 20px;
   border: 2px solid var(--color-borde);
   border-radius: 5px;
 }
 #searchInput:focus {
+  outline: 2px solid var(--color-borde);
+  border-color: var(--color-borde);
+}
+#buscador {
+  display: flex;
+  gap: 8px;
+}
+
+#categoryFilter {
+  padding: 8px;
+  font-size: 18px;
+  border: 2px solid var(--color-borde);
+  border-radius: 5px;
+  background: white;
+}
+#categoryFilter:focus {
   outline: 2px solid var(--color-borde);
   border-color: var(--color-borde);
 }

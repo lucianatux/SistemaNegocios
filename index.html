@@ -24,6 +24,15 @@
           placeholder="Buscar artículo por nombre o código..."
           autocomplete="off"
         />
+        <select id="categoryFilter">
+          <option value="" disabled selected>Filtrar por categoría</option>
+
+          <option value="">Todas</option>
+          <option value="Libreria">Librería</option>
+          <option value="Juguetes">Juguetes</option>
+          <option value="Carteras">Carteras</option>
+          <option value="Otros">Otros</option>
+        </select>
       </section>
 
       <!-- BARRA DE BOTONES -->
@@ -35,6 +44,8 @@
           <button id="btnAgregarProducto" class="btn-secundario">
             ➕ Agregar producto
           </button>
+          <button id="btnPromo" class="btn-secundario" >🎁 Armar promo</button>
+
         </div>
 
         <div class="botones-derecha">
