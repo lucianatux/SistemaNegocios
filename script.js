@@ -45,6 +45,8 @@ const btnPromo = document.getElementById("btnPromo");
 const promoPanel = document.getElementById("promoPanel");
 const cerrarPromo = document.getElementById("cerrarPromo");
 
+const totalSinDescuentoElemento = document.getElementById("totalSinDescuento");
+
 // ---------------------------
 // INICIALIZAR DATOS
 // ---------------------------
@@ -645,12 +647,12 @@ function renderPromo() {
   if (promoActual.items.length === 0) {
     promoLista.innerHTML = "<p>No hay productos en la promo</p>";
 
-     // RESET TOTAL Y DESCUENTO
+    // RESET TOTAL Y DESCUENTO
     promoDescuentoInput.value = 0;
-    promoAhorroElemento.textContent = "Ahorro: $0";
-    promoTotalFinalElemento.textContent = "Total Precio Promo: $0";
+    totalAhorroElemento.textContent = "Ahorro: $0";
+    totalConDescuentoElemento.textContent = "Total Precio Promo: $0";
     promoWarning.textContent = "";
-    
+
     return;
   }
 
@@ -716,12 +718,12 @@ function renderPromo() {
 // ACTUALIZAR DESCUENTO
 // ---------------------------
 const promoDescuentoInput = document.getElementById("promoDescuento");
-const promoAhorroElemento = document.getElementById("promoAhorro");
-const promoTotalFinalElemento = document.getElementById("promoTotalFinal");
+const totalAhorroElemento = document.getElementById("totalAhorro");
+const totalConDescuentoElemento = document.getElementById("totalConDescuento");
 const promoWarning = document.getElementById("promoWarning");
 
 function actualizarDescuento() {
-  const totalNormal = calcularTotalPromo();
+  const totalSinDescuento = calcularTotalPromo();
   const descuento = parseFloat(promoDescuentoInput.value) || 0;
 
   // ⚠️ Validación de descuento máximo seguro
@@ -738,16 +740,16 @@ function actualizarDescuento() {
       : "";
 
   // Totales
-  const ahorro = Math.round((totalNormal * descuento) / 100);
-  const totalFinal = totalNormal - ahorro;
+  const ahorro = Math.round((totalSinDescuento * descuento) / 100);
+  const precioTotalConDescuento = totalSinDescuento - ahorro;
 
-  promoAhorroElemento.textContent = `Ahorro: $${ahorro}`;
-  promoTotalFinalElemento.textContent = `Total Precio Promo: $${totalFinal}`;
+  totalSinDescuentoElemento.textContent = `Total sin descuento: $${totalSinDescuento}`;
+  totalAhorroElemento.textContent = `Ahorro: $${ahorro}`;
+  totalConDescuentoElemento.textContent = `Total Precio Promo: $${precioTotalConDescuento}`;
 }
 
 // Listener unificado para recalcular totales y warning al cambiar el descuento
 promoDescuentoInput.addEventListener("input", actualizarDescuento);
-
 
 // ---------------------------
 // CALCULAR TOTAL PRECIO PROMO
@@ -757,8 +759,6 @@ function calcularTotalPromo() {
     return total + item.precio * item.cantidad;
   }, 0);
 }
-
-
 
 // Cada vez que cambia la cantidad o se renderiza la promo, recalculamos el descuento
 promoDescuentoInput.addEventListener("input", actualizarDescuento);
@@ -778,7 +778,7 @@ function calcularCostoTotalPromo() {
 promoDescuentoInput.addEventListener("input", () => {
   const descuento = parseFloat(promoDescuentoInput.value) || 0;
   const totalCosto = calcularCostoTotalPromo();
-  const totalNormal = calcularTotalPromo();
+  const totalSinDescuento = calcularTotalPromo();
 
   // Máximo seguro según margen promedio (simplificado)
   let descuentoMaxSeguro = 0;
