@@ -44,8 +44,7 @@
           <button id="btnAgregarProducto" class="btn-secundario">
             ➕ Agregar producto
           </button>
-          <button id="btnPromo" class="btn-secundario" >🎁 Armar promo</button>
-
+          <button id="btnPromo" class="btn-secundario">🎁 Armar promo</button>
         </div>
 
         <div class="botones-derecha">
@@ -181,6 +180,49 @@
           <!-- Los productos se insertan acá desde script.js -->
         </ul>
       </section>
+      <!-- PROMO PANEL LATERAL -->
+      <aside id="promoPanel" class="promo-panel oculto">
+        <div class="promo-header">
+          <h3>Armar promo</h3>
+          <button id="cerrarPromo">✕</button>
+        </div>
+
+        <div class="promo-body">
+          <input
+            type="text"
+            id="promoNombre"
+            placeholder="Nombre de la promo"
+          />
+
+          <div id="promoLista">
+            <!-- productos promo van acá -->
+          </div>
+        </div>
+
+        <div class="promo-footer">
+          <p>Total sin descuento: $0</p>
+          <div class="promo-descuento">
+            <div
+              class="promo-warning"
+              id="promoWarning"
+              style="font-size: 0.85em; color: #b00020; margin-bottom: 6px"
+            ></div>
+
+            <label for="promoDescuento">Descuento %:</label>
+            <input
+              type="number"
+              id="promoDescuento"
+              min="0"
+              max="100"
+              value="0"
+            />
+            <div id="promoAhorro">Ahorro: $0</div>
+            <div id="promoTotalFinal">Total Precio Promo: $0</div>
+          </div>
+
+          <button id="enviarWhatsapp" disabled>Enviar por WhatsApp</button>
+        </div>
+      </aside>
     </main>
     <footer>
       App desarrollada por <strong>Lu Tux</strong> ©️2026 · Soporte y consultas:

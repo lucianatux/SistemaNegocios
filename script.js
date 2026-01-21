@@ -4,6 +4,12 @@ let gananciaGlobal = 0;
 let modoEditor = null; // "editar" | "crear"
 let productoEditando = null;
 
+let promoActual = {
+  nombre: "",
+  descuento: 0,
+  items: [], // ← productos de la promo
+};
+
 const searchInput = document.getElementById("searchInput");
 const categoryFilter = document.getElementById("categoryFilter");
 
@@ -32,6 +38,12 @@ const cancelarConfirmacionBtn = document.getElementById("cancelarConfirmacion");
 const confirmacionTitulo = document.getElementById("confirmacionTitulo");
 
 let accionPendiente = null;
+
+let modoPromoActivo = false;
+
+const btnPromo = document.getElementById("btnPromo");
+const promoPanel = document.getElementById("promoPanel");
+const cerrarPromo = document.getElementById("cerrarPromo");
 
 // ---------------------------
 // INICIALIZAR DATOS
@@ -114,6 +126,24 @@ function mostrarProductos(lista) {
     const li = document.createElement("li");
     li.classList.add("product-item");
 
+    // 👉 CONTENEDOR IZQUIERDO (promo + info)
+    const leftGroup = document.createElement("div");
+    leftGroup.classList.add("product-left");
+
+    // BOTÓN PROMO (solo en modo promo)
+    if (modoPromoActivo) {
+      const btnPromoItem = document.createElement("button");
+      btnPromoItem.classList.add("btn-icono", "btn-promo-item");
+      btnPromoItem.textContent = "🎁";
+
+      btnPromoItem.addEventListener("click", (e) => {
+        e.stopPropagation();
+        agregarProductoAPromo(producto);
+      });
+
+      leftGroup.appendChild(btnPromoItem);
+    }
+
     // INFO DEL PRODUCTO
     const info = document.createElement("div");
     info.classList.add("product-info");
@@ -154,7 +184,10 @@ function mostrarProductos(lista) {
     info.appendChild(categoria);
     info.appendChild(precio);
 
-    // ACCIONES
+    // info va dentro del grupo izquierdo
+    leftGroup.appendChild(info);
+
+    // ACCIONES (derecha)
     const acciones = document.createElement("div");
     acciones.classList.add("product-actions");
 
@@ -166,7 +199,6 @@ function mostrarProductos(lista) {
     btnEliminar.classList.add("btn-icono");
     btnEliminar.textContent = "🗑️";
 
-    // EVENTOS (por ahora simples)
     btnEditar.addEventListener("click", (e) => {
       e.stopPropagation();
       abrirConfirmacion("editar", producto);
@@ -181,9 +213,8 @@ function mostrarProductos(lista) {
     acciones.appendChild(btnEliminar);
 
     // ARMADO FINAL
-    li.appendChild(info);
+    li.appendChild(leftGroup);
     li.appendChild(acciones);
-
     productList.appendChild(li);
   });
 }
@@ -364,6 +395,15 @@ function cerrarEditorProducto() {
 cerrarEditorBtn.addEventListener("click", cerrarEditorProducto);
 cancelarEdicionBtn.addEventListener("click", cerrarEditorProducto);
 document.getElementById("exportarBtn").addEventListener("click", exportarDatos);
+btnPromo.addEventListener("click", () => {
+  modoPromoActivo = true;
+  promoPanel.classList.remove("oculto");
+});
+
+cerrarPromo.addEventListener("click", () => {
+  modoPromoActivo = false;
+  promoPanel.classList.add("oculto");
+});
 
 // ---------------------------
 // CERRAR BANNER
@@ -553,3 +593,210 @@ function actualizarListaDespuesEdicion() {
   filtrarProductos();
 }
 
+// ---------------------------
+// AGREGAR PRODUCTO A PROMO
+// ---------------------------
+function agregarProductoAPromo(producto) {
+  const precioPublico = calcularPrecio(producto);
+
+  const yaExiste = promoActual.items.find(
+    (item) => item.nombre === producto.nombre,
+  );
+
+  if (yaExiste) {
+    return; // no duplicamos ni sumamos
+  }
+
+  promoActual.items.push({
+    nombre: producto.nombre,
+    precio: precioPublico,
+    cantidad: 1, // valor inicial, luego editable
+    costo: producto.costo, // SOLO para cálculos internos
+    ganancia: producto.ganancia !== null ? producto.ganancia : gananciaGlobal,
+  });
+  renderPromo();
+}
+
+// ---------------------------
+// ABRIR PROMO
+// ---------------------------
+btnPromo.addEventListener("click", () => {
+  modoPromoActivo = true;
+  promoPanel.classList.remove("oculto");
+  filtrarProductos();
+});
+
+// ---------------------------
+// CERRAR PROMO
+// ---------------------------
+cerrarPromo.addEventListener("click", () => {
+  modoPromoActivo = false;
+  promoPanel.classList.add("oculto");
+  filtrarProductos();
+});
+
+// ---------------------------
+// RENDER PROMO
+// ---------------------------
+function renderPromo() {
+  const promoLista = document.getElementById("promoLista");
+  promoLista.innerHTML = "";
+
+  if (promoActual.items.length === 0) {
+    promoLista.innerHTML = "<p>No hay productos en la promo</p>";
+
+     // RESET TOTAL Y DESCUENTO
+    promoDescuentoInput.value = 0;
+    promoAhorroElemento.textContent = "Ahorro: $0";
+    promoTotalFinalElemento.textContent = "Total Precio Promo: $0";
+    promoWarning.textContent = "";
+    
+    return;
+  }
+
+  promoActual.items.forEach((item, index) => {
+    const fila = document.createElement("div");
+    fila.classList.add("promo-item");
+
+    // Nombre
+    const nombre = document.createElement("div");
+    nombre.classList.add("promo-nombre");
+    nombre.textContent = item.nombre;
+
+    // Precio unitario (FIJO)
+    const precioUnitario = document.createElement("div");
+    precioUnitario.classList.add("promo-precio-unitario");
+    precioUnitario.textContent = `Precio unitario: $${item.precio}`;
+
+    // Cantidad (editable)
+    const cantidad = document.createElement("input");
+    cantidad.type = "number";
+    cantidad.min = 1;
+    cantidad.value = item.cantidad;
+    cantidad.classList.add("promo-cantidad");
+
+    cantidad.addEventListener("input", () => {
+      let valor = parseInt(cantidad.value);
+      if (isNaN(valor) || valor < 1) valor = 1;
+      item.cantidad = valor;
+      cantidad.value = valor;
+      renderPromo();
+    });
+
+    // Subtotal (precio * cantidad)
+    const subtotal = document.createElement("div");
+    subtotal.classList.add("promo-subtotal");
+    subtotal.textContent = `Subtotal: $${item.precio * item.cantidad}`;
+
+    // Quitar
+    const quitar = document.createElement("button");
+    quitar.textContent = "❌";
+    quitar.classList.add("promo-quitar");
+
+    quitar.addEventListener("click", () => {
+      promoActual.items.splice(index, 1);
+      renderPromo();
+    });
+
+    // Armado visual del item
+    fila.appendChild(nombre);
+    fila.appendChild(precioUnitario);
+    fila.appendChild(cantidad);
+    fila.appendChild(subtotal);
+    fila.appendChild(quitar);
+
+    promoLista.appendChild(fila);
+  });
+
+  // 🔑 recalcular totales y descuento
+  actualizarDescuento();
+}
+
+// ---------------------------
+// ACTUALIZAR DESCUENTO
+// ---------------------------
+const promoDescuentoInput = document.getElementById("promoDescuento");
+const promoAhorroElemento = document.getElementById("promoAhorro");
+const promoTotalFinalElemento = document.getElementById("promoTotalFinal");
+const promoWarning = document.getElementById("promoWarning");
+
+function actualizarDescuento() {
+  const totalNormal = calcularTotalPromo();
+  const descuento = parseFloat(promoDescuentoInput.value) || 0;
+
+  // ⚠️ Validación de descuento máximo seguro
+  let descuentoMaxSeguro = 0;
+  promoActual.items.forEach((item) => {
+    const maxDescItem = ((item.precio - item.costo) / item.precio) * 100;
+    if (maxDescItem > descuentoMaxSeguro) descuentoMaxSeguro = maxDescItem;
+  });
+  descuentoMaxSeguro = Math.floor(descuentoMaxSeguro);
+
+  promoWarning.textContent =
+    descuento > descuentoMaxSeguro
+      ? `⚠️ Descuento máximo seguro: ${descuentoMaxSeguro}%`
+      : "";
+
+  // Totales
+  const ahorro = Math.round((totalNormal * descuento) / 100);
+  const totalFinal = totalNormal - ahorro;
+
+  promoAhorroElemento.textContent = `Ahorro: $${ahorro}`;
+  promoTotalFinalElemento.textContent = `Total Precio Promo: $${totalFinal}`;
+}
+
+// Listener unificado para recalcular totales y warning al cambiar el descuento
+promoDescuentoInput.addEventListener("input", actualizarDescuento);
+
+
+// ---------------------------
+// CALCULAR TOTAL PRECIO PROMO
+// ---------------------------
+function calcularTotalPromo() {
+  return promoActual.items.reduce((total, item) => {
+    return total + item.precio * item.cantidad;
+  }, 0);
+}
+
+
+
+// Cada vez que cambia la cantidad o se renderiza la promo, recalculamos el descuento
+promoDescuentoInput.addEventListener("input", actualizarDescuento);
+
+// ---------------------------
+// CALCULAR COSTO TOTAL PROMO
+// ---------------------------
+function calcularCostoTotalPromo() {
+  return promoActual.items.reduce((total, item) => {
+    return total + item.costo * item.cantidad;
+  }, 0);
+}
+// ---------------------------
+// DESCUENTO MÁXIMO SEGURO
+// ---------------------------
+
+promoDescuentoInput.addEventListener("input", () => {
+  const descuento = parseFloat(promoDescuentoInput.value) || 0;
+  const totalCosto = calcularCostoTotalPromo();
+  const totalNormal = calcularTotalPromo();
+
+  // Máximo seguro según margen promedio (simplificado)
+  let descuentoMaxSeguro = 0;
+  promoActual.items.forEach((item) => {
+    const precioUnitario = item.precio;
+    const costoUnitario = item.costo;
+    const maxDescItem =
+      ((precioUnitario - costoUnitario) / precioUnitario) * 100;
+    if (maxDescItem > descuentoMaxSeguro) descuentoMaxSeguro = maxDescItem;
+  });
+
+  descuentoMaxSeguro = Math.floor(descuentoMaxSeguro); // redondear para mostrar
+
+  if (descuento > descuentoMaxSeguro) {
+    promoWarning.textContent = `⚠️ Descuento máximo seguro: ${descuentoMaxSeguro}%`;
+  } else {
+    promoWarning.textContent = "";
+  }
+
+  renderPromo(); // recalcular totales con descuento aplicado
+});

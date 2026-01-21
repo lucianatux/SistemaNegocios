@@ -152,6 +152,12 @@ h2 {
   border-bottom: 1px solid #c0c0c0;
 }
 
+.product-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .product-name {
   font-size: 18px;
   font-weight: bold;
@@ -317,7 +323,6 @@ h2 {
   color: #777;
 }
 
-
 /* ==========================
    BANNER
    ========================== */
@@ -459,6 +464,182 @@ h2 {
 
 .tooltip:hover .tooltip-text {
   visibility: visible;
+}
+
+/* ==========================
+   PROMO PANEL LATERAL
+   ========================== */
+.promo-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 350px;
+  height: 100%;
+  background: #fff;
+  border-left: 1px solid #ddd;
+  padding: 12px;
+  z-index: 1000;
+}
+
+.oculto {
+  display: none;
+}
+
+.promo-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.promo-footer {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  right: 12px;
+}
+
+/* ==========================
+   PROMO BODY - PRODUCTOS
+   ========================== */
+.promo-body {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: calc(100% - 60px); /* para no salirse del panel */
+  overflow-y: auto;
+  padding-right: 4px; /* espacio para scrollbar si aparece */
+  max-height: calc(100% - 310px); /* dejar espacio para footer */
+}
+
+.promo-body input#promoNombre {
+  padding: 10px 12px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: 2px solid var(--color-borde);
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.promo-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--color-blanco);
+  border-radius: 6px;
+  padding: 8px 10px;
+  margin-bottom: 8px;
+  border: 1px solid #ddd;
+}
+
+.promo-item div,
+.promo-item input {
+  font-size: 14px;
+  color: var(--color-texto);
+}
+
+.promo-nombre {
+  font-weight: bold;
+  flex: 2;
+  padding-right: 5px;
+}
+
+.promo-precio-unitario {
+  flex: 1;
+  color: var(--color-secundario);
+}
+
+.promo-cantidad {
+  width: 50px;
+  padding: 4px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--color-borde);
+  text-align: center;
+  margin: 0 8px;
+}
+
+.promo-subtotal {
+  font-weight: bold;
+  flex: 1;
+  text-align: right;
+  color: var(--color-primario);
+}
+
+.promo-quitar {
+  background: transparent;
+  border: none;
+  color: #b00020;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 4px;
+  border-radius: 4px;
+}
+
+.promo-quitar:hover {
+  background-color: rgba(176, 0, 32, 0.1);
+}
+
+.promo-footer p {
+  font-size: 14px;
+  font-weight: bold;
+  margin: 0;
+  color: var(--color-primario);
+  padding: 8px;
+}
+
+.promo-descuento {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+}
+
+.promo-descuento label {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.promo-descuento input {
+  width: 50px;
+  font-size: 18px;
+  padding: 4px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--color-borde);
+}
+
+#promoAhorro,
+#promoTotalFinal {
+  font-weight: bold;
+  font-size: 16px;
+  color: var(--color-primario);
+  padding: 8px;
+}
+
+.promo-warning {
+  font-size: 0.85em;
+  color: #b00020;
+  margin: 0; /* elimina margen default de <div> */
+  line-height: 1.2;
+}
+
+#enviarWhatsapp {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: none;
+  background-color: #25d366;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+#enviarWhatsapp:disabled {
+  background-color: #a5d6a7;
+  cursor: not-allowed;
+}
+
+#enviarWhatsapp:hover:not(:disabled) {
+  background-color: #1ebe5c;
 }
 
 /* ==========================
