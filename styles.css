@@ -6,7 +6,7 @@
   --color-primario: #079d8b;
   --color-secundario: #07489d;
   --color-terciario: #ebcd73;
-  --color-fondo: #d8d2d2;
+  --color-fondo: #e3e3e3;
   --color-blanco: #eee;
   --color-texto: #222222;
   --color-texto-suave: #54565c;
@@ -124,12 +124,16 @@ h2 {
 }
 
 .product-item {
-  padding: 12px;
-  border-bottom: 1px solid #eeeeee;
-}
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
-.product-item:last-child {
-  border-bottom: none;
+  padding: 12px 10px;
+  margin-bottom: 8px;
+
+  background-color: var(--color-blanco);
+  border-radius: 6px;
+  border-bottom: 1px solid #c0c0c0;
 }
 
 .product-name {
@@ -138,16 +142,33 @@ h2 {
 }
 
 .product-price {
-  font-size: 22px;
+  font-size: 18px;
   color: var(--color-secundario);
   margin-top: 5px;
 }
+.price-label {
+  font-size: 14px;
+  color: var(--color-texto-suave);
+  margin-right: 6px;
+}
+
+.price-currency {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.price-value {
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--color-secundario);
+}
+
 .product-code {
   font-size: 14px;
   color: var(--color-texto-suave);
 }
 .product-category {
-  font-size: 16px;
+  font-size: 14px;
   color: var(--color-texto-suave);
   padding: 5px 0;
 }
@@ -262,6 +283,24 @@ h2 {
 .overlay.oculto {
   display: none;
 }
+
+.campo-precio-publico {
+  background: #f8f8f8;
+  border-radius: 6px;
+  padding: 10px;
+}
+
+.precio-publico {
+  font-size: 1.4em;
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.campo-precio-publico .ayuda {
+  font-size: 0.75em;
+  color: #777;
+}
+
 
 /* ==========================
    BANNER

@@ -130,7 +130,22 @@ function mostrarProductos(lista) {
 
     const precio = document.createElement("div");
     precio.classList.add("product-price");
-    precio.textContent = "$ " + calcularPrecio(producto);
+
+    const precioLabel = document.createElement("span");
+    precioLabel.classList.add("price-label");
+    precioLabel.textContent = "Precio público";
+
+    const precioSimbolo = document.createElement("span");
+    precioSimbolo.classList.add("price-currency");
+    precioSimbolo.textContent = " $ ";
+
+    const precioValor = document.createElement("span");
+    precioValor.classList.add("price-value");
+    precioValor.textContent = calcularPrecio(producto);
+
+    precio.appendChild(precioLabel);
+    precio.appendChild(precioSimbolo);
+    precio.appendChild(precioValor);
 
     info.appendChild(nombre);
     info.appendChild(codigo);
@@ -177,11 +192,26 @@ function mostrarProductos(lista) {
 searchInput.addEventListener("input", () => {
   const texto = searchInput.value.toLowerCase();
 
-  const filtrados = productos.filter(
-    (producto) =>
-      producto.nombre.toLowerCase().includes(texto) ||
-      producto.codigo.toLowerCase().includes(texto),
+  let filtrados = productos.filter(
+    (p) =>
+      p.nombre.toLowerCase().includes(texto) ||
+      p.codigo.toLowerCase().includes(texto),
   );
+
+  if (texto) {
+    filtrados.sort((a, b) => {
+      const aNombre = a.nombre.toLowerCase();
+      const bNombre = b.nombre.toLowerCase();
+
+      const aEmpieza = aNombre.startsWith(texto);
+      const bEmpieza = bNombre.startsWith(texto);
+
+      if (aEmpieza && !bEmpieza) return -1;
+      if (!aEmpieza && bEmpieza) return 1;
+
+      return aNombre.localeCompare(bNombre, "es", { sensitivity: "base" });
+    });
+  }
 
   mostrarProductos(filtrados);
 });
@@ -226,6 +256,7 @@ function abrirEditor(modo, producto = null) {
   productoEditando = producto;
 
   const titulo = document.getElementById("productoEditando");
+  const precioPublico = document.getElementById("editPrecioPublico");
 
   if (modo === "crear") {
     titulo.textContent = "Nuevo producto";
@@ -235,6 +266,7 @@ function abrirEditor(modo, producto = null) {
     document.getElementById("editCategoria").value = "libreria";
     document.getElementById("editCosto").value = "";
     document.getElementById("editGanancia").value = "";
+    precioPublico.textContent = "-";
   }
 
   if (modo === "editar") {
@@ -246,6 +278,7 @@ function abrirEditor(modo, producto = null) {
     document.getElementById("editCosto").value = producto.costo;
     document.getElementById("editGanancia").value =
       producto.ganancia !== null ? producto.ganancia : "";
+    precioPublico.textContent = "$ " + calcularPrecio(producto);
   }
 
   editorProducto.classList.remove("oculto");
