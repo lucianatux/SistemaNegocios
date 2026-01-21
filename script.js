@@ -207,6 +207,7 @@ aplicarGlobalBtn.addEventListener("click", () => {
   gananciaGlobal = parseFloat(gananciaGlobalInput.value);
 
   ordenarProductos();
+  searchInput.value = "";
   mostrarProductos(productos);
   guardarEnLocalStorage();
 
@@ -286,7 +287,8 @@ guardarProductoBtn.addEventListener("click", () => {
   }
 
   ordenarProductos();
-  mostrarProductos(productos);
+  // Actualizar lista respetando el buscador
+  actualizarListaDespuesEdicion();
   guardarEnLocalStorage();
   cerrarEditorProducto();
 });
@@ -365,6 +367,10 @@ confirmarAccionBtn.addEventListener("click", () => {
     guardarEnLocalStorage();
   }
 
+  if (accionPendiente.tipo === "importar") {
+    importarDatos();
+  }
+
   cerrarConfirmacion();
 });
 
@@ -436,6 +442,8 @@ function importarDatos() {
       // Guardar inmediatamente en localStorage
       guardarEnLocalStorage();
 
+      // Limpiar buscador al actualizar la lista
+      searchInput.value = "";
       // Mostrar productos
       mostrarProductos(productos);
 
@@ -462,7 +470,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Toggle del dropdown al hacer click en el botón
   btnBackup.addEventListener("click", (e) => {
-    e.stopPropagation(); 
+    e.stopPropagation();
     dropdown.classList.toggle("show");
   });
 
@@ -474,9 +482,37 @@ document.addEventListener("DOMContentLoaded", () => {
   // Input file integrado (opción moderna)
   importarInput.addEventListener("change", () => {
     if (importarInput.files.length) {
-      importarDatos();
-      importarInput.value = ""; // limpiar para futuras importaciones
+      abrirConfirmacionImport();
+      // No llamar a importarDatos() todavía
     }
   });
 });
 
+// ---------------------------
+// ABRIR CONFIRMACION IMPORTAR
+// ---------------------------
+function abrirConfirmacionImport() {
+  confirmacionTitulo.textContent = "Importar datos";
+  confirmacionTexto.textContent =
+    "⚠️ Esto reemplazará todos los productos actuales. ¿Querés continuar?";
+
+  accionPendiente = { tipo: "importar" }; // tipo especial para importar
+  overlayConfirmacion.classList.remove("oculto");
+}
+
+// ---------------------------
+// ACTUALIZAR LISTA DESPUÉS DE EDICIÓN
+// ---------------------------
+function actualizarListaDespuesEdicion() {
+  const texto = searchInput.value.toLowerCase();
+  if (texto) {
+    const filtrados = productos.filter(
+      (p) =>
+        p.nombre.toLowerCase().includes(texto) ||
+        p.codigo.toLowerCase().includes(texto),
+    );
+    mostrarProductos(filtrados);
+  } else {
+    mostrarProductos(productos);
+  }
+}
