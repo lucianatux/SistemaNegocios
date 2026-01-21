@@ -9,7 +9,7 @@
   --color-fondo: #d8d2d2;
   --color-blanco: #eee;
   --color-texto: #222222;
-    --color-texto-suave: #54565c;
+  --color-texto-suave: #54565c;
   --color-borde: #cccccc;
 }
 
@@ -34,7 +34,7 @@ main {
   display: flex;
   flex-direction: column;
   height: calc(100vh - 60px);
-  padding: 20px;
+  padding: 10px;
 }
 
 #lista-articulos {
@@ -53,7 +53,7 @@ body {
 header {
   background-color: var(--color-primario);
   color: var(--color-blanco);
-  padding: 15px;
+  padding: 10px;
   text-align: center;
 }
 
@@ -65,16 +65,15 @@ h1 {
   gap: 12px;
 }
 
-
 h2 {
   margin-top: 0;
   margin-bottom: 15px;
   color: var(--color-texto);
 }
 
-.title{
+.title {
   font-size: 2rem;
-  font-family:Georgia, 'Times New Roman', Times, serif;
+  font-family: Georgia, "Times New Roman", Times, serif;
 }
 .subtitle {
   font-size: 1.4rem;
@@ -89,26 +88,23 @@ h2 {
   top: 0;
   z-index: 5;
   background: var(--color-fondo);
-  padding-top: 10px;
-  padding-bottom: 10px;
+  margin: 8px 8px 20px 8px;
 }
-
-
 
 /* ==========================
    BUSCADOR
    ========================== */
 
-#buscador {
-  margin-bottom: 20px;
-}
-
 #searchInput {
   width: 100%;
-  padding: 15px;
+  padding: 8px;
   font-size: 20px;
   border: 2px solid var(--color-borde);
   border-radius: 5px;
+}
+#searchInput:focus {
+  outline: 2px solid var(--color-borde);
+  border-color: var(--color-borde);
 }
 
 /* ==========================
@@ -195,7 +191,7 @@ h2 {
 }
 
 .btn-primario:hover {
-    background-color: var(--color-secundario);
+  background-color: var(--color-secundario);
 }
 .btn-primario:active {
   background-color: transparent;
@@ -267,7 +263,6 @@ h2 {
   display: none;
 }
 
-
 /* ==========================
    BANNER
    ========================== */
@@ -310,7 +305,9 @@ h2 {
   font-size: 18px;
   padding: 6px;
   border-radius: 6px;
-  transition: background 0.2s ease, transform 0.1s ease;
+  transition:
+    background 0.2s ease,
+    transform 0.1s ease;
 }
 
 .btn-icono:hover {
@@ -322,7 +319,7 @@ h2 {
 }
 
 .titulo-peligro {
-  color: #b00020;           /* rojo sobrio */
+  color: #b00020; /* rojo sobrio */
   background-color: #ffe5e9; /* fondo suave */
   padding: 6px 10px;
   border-radius: 6px;
@@ -336,7 +333,6 @@ h2 {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
 }
 
 .botones-izquierda button,
@@ -357,7 +353,7 @@ h2 {
   right: 0;
   background-color: var(--color-fondo);
   min-width: 180px;
-  box-shadow: 0px 4px 8px rgba(0,0,0,0.2);
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
   border-radius: 5px;
   padding: 5px 0;
   z-index: 1000;
@@ -410,3 +406,25 @@ h2 {
   visibility: visible;
 }
 
+/* ==========================
+   FOOTER
+   ========================== */
+
+footer {
+  background-color: var(--color-fondo);
+  border-top: 1px solid var(--color-borde);
+  padding: 10px 15px;
+  text-align: center;
+  font-size: 14px;
+  color: var(--color-texto-suave);
+}
+
+footer a {
+  color: var(--color-primario);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
