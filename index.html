@@ -183,39 +183,41 @@
       <!-- PROMO PANEL LATERAL -->
       <aside id="promoPanel" class="promo-panel oculto">
         <div class="promo-header">
-          <h3>Armar promo</h3>
-          <button id="cerrarPromo">✕</button>
-        </div>
-
-        <div class="promo-body">
           <input
             type="text"
             id="promoNombre"
             placeholder="Nombre de la promo"
           />
 
+          <button id="cerrarPromo">✕</button>
+        </div>
+
+        <div class="promo-body">
           <div id="promoLista">
             <!-- productos promo van acá -->
           </div>
         </div>
 
         <div class="promo-footer">
-            <p id="totalSinDescuento">Total sin descuento: $0</p>
           <div class="promo-descuento">
+            <p id="totalSinDescuento">Total sin descuento: $0</p>
+
             <div
               class="promo-warning"
               id="promoWarning"
               style="font-size: 0.85em; color: #b00020; margin-bottom: 6px"
             ></div>
+            <div class="promo-descuento-row">
+              <label for="promoDescuento">Descuento %:</label>
+              <input
+                type="number"
+                id="promoDescuento"
+                min="0"
+                max="100"
+                value="0"
+              />
+            </div>
 
-            <label for="promoDescuento">Descuento %:</label>
-            <input
-              type="number"
-              id="promoDescuento"
-              min="0"
-              max="100"
-              value="0"
-            />
             <div id="totalAhorro">Ahorro: $0</div>
             <div id="totalConDescuento">Total Precio Promo: $0</div>
           </div>
@@ -225,7 +227,7 @@
       </aside>
     </main>
     <footer>
-      App desarrollada por <strong>Lu Tux</strong> ©️2026 · Soporte y consultas:
+      App desarrollada por <strong>Lu Tux</strong> ©2026 · Soporte y consultas:
       <a href="https://wa.me/5493512309375" target="_blank">
         WhatsApp +549 351 2309375
       </a>

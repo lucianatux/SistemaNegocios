@@ -1,20 +1,32 @@
+// ---------------------------
+// DATOS PRINCIPALES
+// ---------------------------
 let productos = [];
 let gananciaGlobal = 0;
 
-let modoEditor = null; // "editar" | "crear"
+let modoEditor = null;           // "editar" | "crear"
 let productoEditando = null;
 
 let promoActual = {
   nombre: "",
   descuento: 0,
-  items: [], // ← productos de la promo
+  items: [], // productos de la promo
 };
 
+let modoPromoActivo = false;
+let accionPendiente = null;
+
+// ---------------------------
+// ELEMENTOS DEL DOM
+// ---------------------------
+// Búsqueda y filtros
 const searchInput = document.getElementById("searchInput");
 const categoryFilter = document.getElementById("categoryFilter");
 
+// Lista de productos
 const productList = document.getElementById("productList");
 
+// Gestión de ganancia global
 const btnGestion = document.getElementById("btnGestion");
 const btnCerrarGlobal = document.getElementById("cerrarGlobal");
 const gestion = document.getElementById("gestion");
@@ -23,29 +35,33 @@ const aplicarGlobalBtn = document.getElementById("aplicarGlobal");
 const bannerGanancia = document.getElementById("bannerGanancia");
 const cerrarBannerBtn = document.getElementById("cerrarBanner");
 
+// Editor de productos
 const guardarProductoBtn = document.getElementById("guardarProducto");
-
 const btnAgregarProducto = document.getElementById("btnAgregarProducto");
 const editorProducto = document.getElementById("editorProducto");
 const cerrarEditorBtn = document.getElementById("cerrarEditor");
 const cancelarEdicionBtn = document.getElementById("cancelarEdicion");
 
+// Confirmaciones
 const overlayConfirmacion = document.getElementById("overlayConfirmacion");
 const confirmacionTexto = document.getElementById("confirmacionTexto");
+const confirmacionTitulo = document.getElementById("confirmacionTitulo");
 const confirmarAccionBtn = document.getElementById("confirmarAccion");
 const cancelarConfirmacionBtn = document.getElementById("cancelarConfirmacion");
 
-const confirmacionTitulo = document.getElementById("confirmacionTitulo");
-
-let accionPendiente = null;
-
-let modoPromoActivo = false;
-
+// Promos
 const btnPromo = document.getElementById("btnPromo");
 const promoPanel = document.getElementById("promoPanel");
 const cerrarPromo = document.getElementById("cerrarPromo");
-
+const promoDescuentoInput = document.getElementById("promoDescuento");
+const totalAhorroElemento = document.getElementById("totalAhorro");
+const totalConDescuentoElemento = document.getElementById("totalConDescuento");
+const promoWarning = document.getElementById("promoWarning");
 const totalSinDescuentoElemento = document.getElementById("totalSinDescuento");
+
+// Backup / Import
+const importarInput = document.getElementById("importarInput");
+
 
 // ---------------------------
 // INICIALIZAR DATOS
@@ -397,15 +413,6 @@ function cerrarEditorProducto() {
 cerrarEditorBtn.addEventListener("click", cerrarEditorProducto);
 cancelarEdicionBtn.addEventListener("click", cerrarEditorProducto);
 document.getElementById("exportarBtn").addEventListener("click", exportarDatos);
-btnPromo.addEventListener("click", () => {
-  modoPromoActivo = true;
-  promoPanel.classList.remove("oculto");
-});
-
-cerrarPromo.addEventListener("click", () => {
-  modoPromoActivo = false;
-  promoPanel.classList.add("oculto");
-});
 
 // ---------------------------
 // CERRAR BANNER
@@ -649,6 +656,7 @@ function renderPromo() {
 
     // RESET TOTAL Y DESCUENTO
     promoDescuentoInput.value = 0;
+    totalSinDescuentoElemento.textContent = "Total sin descuento: $0";
     totalAhorroElemento.textContent = "Ahorro: $0";
     totalConDescuentoElemento.textContent = "Total Precio Promo: $0";
     promoWarning.textContent = "";
@@ -717,11 +725,6 @@ function renderPromo() {
 // ---------------------------
 // ACTUALIZAR DESCUENTO
 // ---------------------------
-const promoDescuentoInput = document.getElementById("promoDescuento");
-const totalAhorroElemento = document.getElementById("totalAhorro");
-const totalConDescuentoElemento = document.getElementById("totalConDescuento");
-const promoWarning = document.getElementById("promoWarning");
-
 function actualizarDescuento() {
   const totalSinDescuento = calcularTotalPromo();
   const descuento = parseFloat(promoDescuentoInput.value) || 0;
