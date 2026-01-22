@@ -4,7 +4,7 @@
 let productos = [];
 let gananciaGlobal = 0;
 
-let modoEditor = null;           // "editar" | "crear"
+let modoEditor = null; // "editar" | "crear"
 let productoEditando = null;
 
 let promoActual = {
@@ -62,7 +62,6 @@ const totalSinDescuentoElemento = document.getElementById("totalSinDescuento");
 // Backup / Import
 const importarInput = document.getElementById("importarInput");
 
-
 // ---------------------------
 // INICIALIZAR DATOS
 // ---------------------------
@@ -113,6 +112,32 @@ function ordenarProductos() {
     a.nombre.localeCompare(b.nombre, "es", { sensitivity: "base" }),
   );
 }
+
+// ---------------------------
+// RESTAURAR PROMO DESDE LOCAL STORAGE
+// ---------------------------
+function restaurarPromoDesdeLocalStorage() {
+  const guardado = localStorage.getItem("promoActual");
+  if (!guardado) return;
+
+  try {
+    const data = JSON.parse(guardado);
+
+    promoActual = data.promoActual;
+    modoPromoActivo = data.modoPromoActivo;
+
+    if (modoPromoActivo) {
+      promoPanel.classList.remove("oculto");
+      promoDescuentoInput.value = promoActual.descuento || 0;
+      document.getElementById("promoNombre").value = promoActual.nombre || "";
+      renderPromo();
+      filtrarProductos();
+    }
+  } catch {
+    localStorage.removeItem("promoActual");
+  }
+}
+restaurarPromoDesdeLocalStorage();
 
 // ---------------------------
 // CALCULAR PRECIO FINAL
@@ -601,6 +626,17 @@ function abrirConfirmacionImport() {
 function actualizarListaDespuesEdicion() {
   filtrarProductos();
 }
+// ---------------------------
+// PROMO – NOMBRE
+// ---------------------------
+const promoNombreInput = document.getElementById("promoNombre");
+
+promoNombreInput.addEventListener("input", () => {
+  if (!promoActual) return;
+
+  promoActual.nombre = promoNombreInput.value.trim();
+  actualizarPreview(); // refresca el modal si está abierto
+});
 
 // ---------------------------
 // AGREGAR PRODUCTO A PROMO
@@ -623,6 +659,7 @@ function agregarProductoAPromo(producto) {
     costo: producto.costo, // SOLO para cálculos internos
     ganancia: producto.ganancia !== null ? producto.ganancia : gananciaGlobal,
   });
+  guardarPromoEnLocalStorage();
   renderPromo();
 }
 
@@ -643,6 +680,19 @@ cerrarPromo.addEventListener("click", () => {
   promoPanel.classList.add("oculto");
   filtrarProductos();
 });
+
+// ---------------------------
+// GUARDAR PROMO EN LOCAL STORAGE
+// ---------------------------
+function guardarPromoEnLocalStorage() {
+  localStorage.setItem(
+    "promoActual",
+    JSON.stringify({
+      promoActual,
+      modoPromoActivo,
+    }),
+  );
+}
 
 // ---------------------------
 // RENDER PROMO
@@ -729,6 +779,8 @@ function actualizarDescuento() {
   const totalSinDescuento = calcularTotalPromo();
   const descuento = parseFloat(promoDescuentoInput.value) || 0;
 
+  promoActual.descuento = descuento;
+
   // ⚠️ Validación de descuento máximo seguro
   let descuentoMaxSeguro = 0;
   promoActual.items.forEach((item) => {
@@ -803,3 +855,145 @@ promoDescuentoInput.addEventListener("input", () => {
 
   renderPromo(); // recalcular totales con descuento aplicado
 });
+
+// ---------------------------
+// REVISAR MENSAJE WHATSAPP
+// ---------------------------
+const whatsappModal = document.getElementById("whatsappModal");
+const mensajePreview = document.getElementById("mensajePreview");
+const chkSubtotales = document.getElementById("chkSubtotales");
+const chkTotalSinDescuento = document.getElementById("chkTotalSinDescuento");
+const chkDescuento = document.getElementById("chkDescuento");
+const chkAhorro = document.getElementById("chkAhorro");
+document.getElementById("enviarWhatsapp").addEventListener("click", () => {
+  // Abrir modal
+  whatsappModal.classList.remove("oculto");
+  // Mostrar texto inicial según defaults de checkboxes
+  actualizarPreview();
+});
+
+// Cerrar modal
+document.getElementById("cerrarModal").addEventListener("click", () => {
+  whatsappModal.classList.add("oculto");
+});
+
+// Cada vez que se cambia una opción, actualizar preview
+[chkSubtotales, chkTotalSinDescuento, chkDescuento, chkAhorro].forEach(
+  (chk) => {
+    chk.addEventListener("change", actualizarPreview);
+  },
+);
+
+// Función para actualizar preview
+function actualizarPreview() {
+  if (!promoActual) {
+    mensajePreview.value = "";
+    return;
+  }
+
+  const opciones = {
+    subtotales: chkSubtotales.checked,
+    totalSinDescuento: chkTotalSinDescuento.checked,
+    descuento: chkDescuento.checked,
+    ahorro: chkAhorro.checked,
+  };
+
+  const texto = generarTextoPromo(promoActual, opciones);
+  mensajePreview.value = texto;
+
+  // Guardado provisorio (solo estado actual)
+  localStorage.setItem(
+    "promoPreview",
+    JSON.stringify({
+      opciones,
+      texto,
+    }),
+  );
+}
+
+// Función generar texto promo
+function generarTextoPromo(promo, opciones) {
+  let texto = "";
+
+  // Nombre promo (siempre)
+  if (promo.nombre) {
+    texto += `✦ ${promo.nombre} ✦\n\n`;
+  }
+
+  // Productos (siempre)
+  promo.items.forEach((prod) => {
+    texto += `• ${prod.nombre} x${prod.cantidad}`;
+
+    if (opciones.subtotales) {
+      texto += ` — $${prod.precio * prod.cantidad}`;
+    }
+
+    texto += `\n`;
+  });
+
+  texto += `\n`;
+
+  // 👇 LEER DEL PANEL PROMO (fuente real)
+  const nombrePromo = document.getElementById("promoNombre").value.trim();
+  const totalSin = document.getElementById("totalSinDescuento").textContent;
+  const ahorro = document.getElementById("totalAhorro").textContent;
+  const totalFinal = document.getElementById("totalConDescuento").textContent;
+  const descuento = document.getElementById("promoDescuento").value;
+
+  // Opcionales
+  if (opciones.totalSinDescuento) {
+    texto += `${totalSin}\n`;
+  }
+
+  if (opciones.descuento) {
+    texto += `Descuento: ${descuento}%\n`;
+  }
+
+  if (opciones.ahorro) {
+    texto += `${ahorro}\n`;
+  }
+
+  // Total final (siempre)
+  texto += `\n${totalFinal}`;
+
+  return texto;
+}
+
+//Función para restaurar preview
+(function restaurarPreview() {
+  const guardado = localStorage.getItem("promoPreview");
+  if (!guardado) return;
+
+  try {
+    const data = JSON.parse(guardado);
+
+    chkSubtotales.checked = data.opciones.subtotales;
+    chkTotalSinDescuento.checked = data.opciones.totalSinDescuento;
+    chkDescuento.checked = data.opciones.descuento;
+    chkAhorro.checked = data.opciones.ahorro;
+
+    mensajePreview.value = data.texto;
+  } catch (e) {
+    localStorage.removeItem("promoPreview");
+  }
+})();
+
+//Función que copia el mensaje a whatsapp
+const copiarWhatsAppBtn = document.getElementById("copiarWhatsApp");
+function enviarWhatsapp() {
+  const texto = mensajePreview.value.trim();
+
+  if (!texto) {
+    alert("No hay mensaje para enviar");
+    return;
+  }
+
+  const textoNormalizado = texto.normalize("NFC").replace(/\r\n/g, "\n");
+
+  const textoCodificado = encodeURIComponent(textoNormalizado);
+
+  const url = `https://wa.me/?text=${textoCodificado}`;
+
+  window.open(url, "_blank");
+}
+copiarWhatsAppBtn.addEventListener("click", enviarWhatsapp);

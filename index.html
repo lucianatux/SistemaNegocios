@@ -202,11 +202,7 @@
           <div class="promo-descuento">
             <p id="totalSinDescuento">Total sin descuento: $0</p>
 
-            <div
-              class="promo-warning"
-              id="promoWarning"
-              style="font-size: 0.85em; color: #b00020; margin-bottom: 6px"
-            ></div>
+            <div class="promo-warning" id="promoWarning"></div>
             <div class="promo-descuento-row">
               <label for="promoDescuento">Descuento %:</label>
               <input
@@ -222,9 +218,43 @@
             <div id="totalConDescuento">Total Precio Promo: $0</div>
           </div>
 
-          <button id="enviarWhatsapp" disabled>Enviar por WhatsApp</button>
+          <button id="enviarWhatsapp">Enviar por WhatsApp</button>
         </div>
       </aside>
+      <!-- MODAL REVISAR MENSAJE WHATSAPP -->
+      <div id="whatsappModal" class="modal oculto">
+        <div class="modal-contenido">
+          <h2>Revisá tu mensaje</h2>
+          <p>Seleccioná las casillas que quieras incluir en el mensaje:</p>
+
+          <div class="modal-opcionales">
+            <label
+              ><input type="checkbox" id="chkSubtotales" checked /> Subtotales
+              de cada producto</label
+            >
+            <label
+              ><input type="checkbox" id="chkTotalSinDescuento" checked /> Total
+              sin descuento</label
+            >
+            <label
+              ><input type="checkbox" id="chkDescuento" checked /> Descuento
+              (%)</label
+            >
+            <label
+              ><input type="checkbox" id="chkAhorro" checked /> Ahorro</label
+            >
+          </div>
+
+          <textarea id="mensajePreview" readonly></textarea>
+
+          <div class="modal-botones">
+            <button id="copiarWhatsApp" class="btn-secundario">
+              Enviar por WhatsApp
+            </button>
+            <button id="cerrarModal" class="btn-secundario">Cancelar</button>
+          </div>
+        </div>
+      </div>
     </main>
     <footer>
       App desarrollada por <strong>Lu Tux</strong> ©2026 · Soporte y consultas:
