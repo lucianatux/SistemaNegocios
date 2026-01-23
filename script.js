@@ -16,6 +16,8 @@ let promoActual = {
 let modoPromoActivo = false;
 let accionPendiente = null;
 
+let promoPanelActivo = false;
+
 // ---------------------------
 // ELEMENTOS DEL DOM
 // ---------------------------
@@ -126,10 +128,10 @@ function restaurarPromoDesdeLocalStorage() {
     promoActual = data.promoActual;
     modoPromoActivo = data.modoPromoActivo;
 
+    promoDescuentoInput.value = promoActual.descuento || 0;
+    document.getElementById("promoNombre").value = promoActual.nombre || "";
+
     if (modoPromoActivo) {
-      promoPanel.classList.remove("oculto");
-      promoDescuentoInput.value = promoActual.descuento || 0;
-      document.getElementById("promoNombre").value = promoActual.nombre || "";
       renderPromo();
       filtrarProductos();
     }
@@ -667,7 +669,7 @@ function agregarProductoAPromo(producto) {
 // ABRIR PROMO
 // ---------------------------
 btnPromo.addEventListener("click", () => {
-  modoPromoActivo = true;
+  promoPanelActivo = true;
   promoPanel.classList.remove("oculto");
   filtrarProductos();
 });
@@ -676,7 +678,7 @@ btnPromo.addEventListener("click", () => {
 // CERRAR PROMO
 // ---------------------------
 cerrarPromo.addEventListener("click", () => {
-  modoPromoActivo = false;
+  promoPanelActivo = false;
   promoPanel.classList.add("oculto");
   filtrarProductos();
 });
