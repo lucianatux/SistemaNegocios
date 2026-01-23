@@ -176,7 +176,7 @@ function mostrarProductos(lista) {
     leftGroup.classList.add("product-left");
 
     // BOTÓN PROMO (solo en modo promo)
-    if (modoPromoActivo) {
+    if (promoPanelActivo) {
       const btnPromoItem = document.createElement("button");
       btnPromoItem.classList.add("btn-icono", "btn-promo-item");
       btnPromoItem.textContent = "🎁";
@@ -868,6 +868,8 @@ const chkTotalSinDescuento = document.getElementById("chkTotalSinDescuento");
 const chkDescuento = document.getElementById("chkDescuento");
 const chkAhorro = document.getElementById("chkAhorro");
 document.getElementById("enviarWhatsapp").addEventListener("click", () => {
+    // Cerrar panel de promo (solo UI)
+  promoPanel.classList.add("oculto");
   // Abrir modal
   whatsappModal.classList.remove("oculto");
   // Mostrar texto inicial según defaults de checkboxes
