@@ -67,6 +67,7 @@ header {
   color: var(--color-texto);
   padding: 0px;
   text-align: center;
+  box-shadow: 0 8px 10px rgba(0, 0, 0, 0.25);
 }
 
 h1 {
@@ -107,7 +108,7 @@ h2 {
   width: 65px;
   display: block;
   position: relative;
-  top: 10px; 
+  top: 10px;
 }
 #buscador,
 .barra-botones {
@@ -117,6 +118,42 @@ h2 {
   background: var(--color-fondo);
   margin: 8px 8px 20px 8px;
 }
+
+.btn-primario {
+  background-color: var(--color-primario);
+  color: var(--color-blanco);
+  border: 2px solid var(--color-primario);
+  padding: 12px 18px;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-primario:hover {
+  background-color: var(--color-secundario);
+}
+.btn-primario:active {
+  background-color: transparent;
+  color: var(--color-primario);
+}
+
+.btn-secundario {
+  background-color: transparent;
+  color: var(--color-texto-suave);
+  border: 2px solid var(--color-primario);
+  padding: 10px 16px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.btn-secundario:hover {
+  background-color: var(--color-primario);
+  color: var(--color-blanco);
+}
+
 
 /* ==========================
    BUSCADOR
@@ -256,39 +293,49 @@ h2 {
 .acciones {
   margin-top: 15px;
 }
-.btn-primario {
-  background-color: var(--color-primario);
-  color: var(--color-blanco);
-  border: 2px solid var(--color-primario);
-  padding: 12px 18px;
-  font-size: 16px;
-  border-radius: 6px;
-  cursor: pointer;
+
+.bloque-gestion {
+  margin-bottom: 20px;
 }
 
-.btn-primario:hover {
-  background-color: var(--color-secundario);
-}
-.btn-primario:active {
-  background-color: transparent;
-  color: var(--color-primario);
+.bloque-gestion .descripcion {
+  font-size: 0.9rem;
+  opacity: 0.75;
+  margin-bottom: 12px;
 }
 
-.btn-secundario {
-  background-color: transparent;
-  color: var(--color-texto-suave);
-  border: 2px solid var(--color-primario);
-  padding: 10px 16px;
-  font-size: 16px;
-  font-weight: 600;
-  border-radius: 6px;
-  cursor: pointer;
-  margin-bottom: 10px;
+.categorias-ganancia {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.btn-secundario:hover {
-  background-color: var(--color-primario);
-  color: var(--color-blanco);
+.fila-categoria {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.categoria-nombre {
+  flex: 1;
+  font-weight: 500;
+}
+
+.ganancia-categoria {
+  width: 120px;
+  text-align: right;
+  border-radius: 5px;
+}
+.ganancia-categoria:focus {
+  outline: 2px solid var(--color-borde);
+  border-color: var(--color-borde);
+  border-radius: 5px;
+}
+#gananciaGlobalInput:focus {
+  outline: 2px solid var(--color-borde);
+  border-color: var(--color-borde);
+  border-radius: 5px;
 }
 
 .product-item.seleccionado {
@@ -507,6 +554,7 @@ h2 {
   background: var(--color-cuaternario);
   padding: 10px;
   z-index: 1000;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
 .promo-header {
@@ -552,6 +600,34 @@ input#promoNombre:focus {
   left: 12px;
   right: 12px;
 }
+
+.promo-info-vendedor {
+  margin-top: 10px;
+  padding: 8px 10px;
+  font-size: 0.85em;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 6px;
+  line-height: 1.4;
+}
+
+.promo-info-vendedor strong {
+  display: block;
+  margin-bottom: 4px;
+}
+.btn-info-vendedor {
+  margin-top: 8px;
+  font-size: 0.8em;
+  background: transparent;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  text-align: left;
+}
+
+.btn-info-vendedor:hover {
+  text-decoration: underline;
+}
+
 
 /* ==========================
    PROMO BODY - PRODUCTOS

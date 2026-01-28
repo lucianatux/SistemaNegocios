@@ -16,7 +16,7 @@
       </h1> -->
       <h1>
         <span class="firstletter">T</span><span class="title">ERO</span>
-        <img src="logos/teroblack.png" alt="Mi Negocio" class="app-icon" /> 
+        <img src="logos/teroblack.png" alt="Mi Negocio" class="app-icon" />
         <span class="subtitle"> Gestión de precios para negocios</span>
       </h1>
     </header>
@@ -88,9 +88,77 @@
       <section id="gestion" class="oculto">
         <h2>Gestión de precios</h2>
 
-        <div class="campo">
-          <label for="gananciaGlobalInput">Ganancia global (%)</label>
-          <input type="number" id="gananciaGlobalInput" min="0" />
+        <!-- BLOQUE: GANANCIA GLOBAL -->
+        <div class="bloque-gestion">
+          <h3>Ganancia global</h3>
+
+          <div class="campo">
+            <label for="gananciaGlobalInput">Ganancia global (%)</label>
+            <input type="number" id="gananciaGlobalInput" min="0" />
+            <small class="ayuda">
+              Se aplica a todos los productos que no tengan un margen específico
+            </small>
+          </div>
+        </div>
+
+        <!-- BLOQUE: GANANCIA POR CATEGORÍA -->
+        <div class="bloque-gestion">
+          <h3>Ganancia por categoría</h3>
+
+          <p class="descripcion">
+            Opcional. Si una categoría no tiene ganancia definida, se usará la
+            ganancia global.
+          </p>
+
+          <div class="categorias-ganancia">
+            <!-- Librería -->
+            <div class="fila-categoria">
+              <span class="categoria-nombre">Librería</span>
+              <input
+                type="number"
+                class="ganancia-categoria"
+                data-categoria="Libreria"
+                min="0"
+                placeholder="Usa global"
+              />
+            </div>
+
+            <!-- Juguetes -->
+            <div class="fila-categoria">
+              <span class="categoria-nombre">Juguetes</span>
+              <input
+                type="number"
+                class="ganancia-categoria"
+                data-categoria="Juguetes"
+                min="0"
+                placeholder="Usa global"
+              />
+            </div>
+
+            <!-- Carteras -->
+            <div class="fila-categoria">
+              <span class="categoria-nombre">Carteras</span>
+              <input
+                type="number"
+                class="ganancia-categoria"
+                data-categoria="Carteras"
+                min="0"
+                placeholder="Usa global"
+              />
+            </div>
+
+            <!-- Otros -->
+            <div class="fila-categoria">
+              <span class="categoria-nombre">Otros</span>
+              <input
+                type="number"
+                class="ganancia-categoria"
+                data-categoria="Otros"
+                min="0"
+                placeholder="Usa global"
+              />
+            </div>
+          </div>
         </div>
 
         <div class="acciones">
@@ -205,6 +273,10 @@
         </div>
 
         <div class="promo-footer">
+          <button id="toggleInfoVendedor" class="btn-info-vendedor">
+            Mostrar info vendedor
+          </button>
+          <div id="infoVendedor" class="promo-info-vendedor oculto"></div>
           <div class="promo-descuento">
             <p id="totalSinDescuento">Total sin descuento: $0</p>
 

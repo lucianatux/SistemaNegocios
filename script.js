@@ -3,6 +3,7 @@
 // ---------------------------
 let productos = [];
 let gananciaGlobal = 0;
+let gananciasPorCategoria = {};
 
 let modoEditor = null; // "editar" | "crear"
 let productoEditando = null;
@@ -17,6 +18,7 @@ let modoPromoActivo = false;
 let accionPendiente = null;
 
 let promoPanelActivo = false;
+let infoVendedorVisible = false;
 
 // ---------------------------
 // ELEMENTOS DEL DOM
@@ -36,6 +38,9 @@ const gananciaGlobalInput = document.getElementById("gananciaGlobalInput");
 const aplicarGlobalBtn = document.getElementById("aplicarGlobal");
 const bannerGanancia = document.getElementById("bannerGanancia");
 const cerrarBannerBtn = document.getElementById("cerrarBanner");
+const gananciasCategoriaInputs = document.querySelectorAll(
+  ".ganancia-categoria",
+);
 
 // Editor de productos
 const guardarProductoBtn = document.getElementById("guardarProducto");
@@ -67,8 +72,6 @@ const importarInput = document.getElementById("importarInput");
 // ---------------------------
 // INICIALIZAR DATOS
 // ---------------------------
-/*productos = DATA.productos;
-gananciaGlobal = DATA.configuracion.gananciaGlobal;*/
 
 function inicializarDatos() {
   const dataLocal = cargarDesdeLocalStorage();
@@ -76,11 +79,11 @@ function inicializarDatos() {
   if (dataLocal) {
     productos = dataLocal.productos || [];
     gananciaGlobal = dataLocal.gananciaGlobal || 0;
-    console.log("Datos cargados desde localStorage");
+    gananciasPorCategoria = dataLocal.gananciasPorCategoria || {};
   } else {
     productos = DATA.productos;
     gananciaGlobal = DATA.configuracion.gananciaGlobal;
-    console.log("Datos cargados desde DATA inicial");
+    gananciasPorCategoria = {};
   }
 }
 
@@ -88,6 +91,7 @@ function guardarEnLocalStorage() {
   const data = {
     productos,
     gananciaGlobal,
+    gananciasPorCategoria,
   };
   localStorage.setItem("miAppProductos", JSON.stringify(data));
 }
@@ -145,12 +149,18 @@ restaurarPromoDesdeLocalStorage();
 // CALCULAR PRECIO FINAL
 // ---------------------------
 function calcularPrecio(producto) {
-  const gananciaUsada =
-    producto.ganancia !== null ? producto.ganancia : gananciaGlobal;
+  let gananciaUsada = gananciaGlobal;
+
+  // 🥇 margen del producto
+  if (producto.ganancia !== null) {
+    gananciaUsada = producto.ganancia;
+  }
+  // 🥈 margen de categoría
+  else if (gananciasPorCategoria[producto.categoria] !== undefined) {
+    gananciaUsada = gananciasPorCategoria[producto.categoria];
+  }
 
   const precioBase = producto.costo + (producto.costo * gananciaUsada) / 100;
-
-  // Redondear siempre hacia arriba al múltiplo de 10 más cercano
   const precioRedondeado = Math.ceil(precioBase / 10) * 10;
 
   return precioRedondeado;
@@ -311,7 +321,16 @@ categoryFilter.addEventListener("change", filtrarProductos);
 btnGestion.addEventListener("click", () => {
   gestion.classList.toggle("oculto");
   gananciaGlobalInput.value = gananciaGlobal;
+
+  gananciasCategoriaInputs.forEach((input) => {
+    const cat = input.dataset.categoria;
+    input.value =
+      gananciasPorCategoria[cat] !== undefined
+        ? gananciasPorCategoria[cat]
+        : "";
+  });
 });
+
 btnCerrarGlobal.addEventListener("click", () => {
   gestion.classList.toggle("oculto");
   gananciaGlobalInput.value = gananciaGlobal;
@@ -322,7 +341,18 @@ btnCerrarGlobal.addEventListener("click", () => {
 // ---------------------------
 
 aplicarGlobalBtn.addEventListener("click", () => {
-  gananciaGlobal = parseFloat(gananciaGlobalInput.value);
+  gananciaGlobal = parseFloat(gananciaGlobalInput.value) || 0;
+
+  gananciasPorCategoria = {};
+
+  gananciasCategoriaInputs.forEach((input) => {
+    const valor = input.value;
+    const categoria = input.dataset.categoria;
+
+    if (valor !== "") {
+      gananciasPorCategoria[categoria] = parseFloat(valor);
+    }
+  });
 
   ordenarProductos();
   searchInput.value = "";
@@ -440,6 +470,14 @@ function cerrarEditorProducto() {
 cerrarEditorBtn.addEventListener("click", cerrarEditorProducto);
 cancelarEdicionBtn.addEventListener("click", cerrarEditorProducto);
 document.getElementById("exportarBtn").addEventListener("click", exportarDatos);
+const btnToggleInfoVendedor = document.getElementById("toggleInfoVendedor");
+btnToggleInfoVendedor.addEventListener("click", () => {
+  infoVendedorVisible = !infoVendedorVisible;
+  btnToggleInfoVendedor.textContent = infoVendedorVisible
+    ? "Ocultar info vendedor"
+    : "Mostrar info vendedor";
+  renderInfoVendedor();
+});
 
 // ---------------------------
 // CERRAR BANNER
@@ -702,7 +740,7 @@ function guardarPromoEnLocalStorage() {
 function renderPromo() {
   const promoLista = document.getElementById("promoLista");
   promoLista.innerHTML = "";
-
+  limpiarInfoVendedor();
   if (promoActual.items.length === 0) {
     promoLista.innerHTML = "<p>No hay productos en la promo</p>";
 
@@ -712,6 +750,7 @@ function renderPromo() {
     totalAhorroElemento.textContent = "Ahorro: $0";
     totalConDescuentoElemento.textContent = "Total Precio Promo: $0";
     promoWarning.textContent = "";
+    limpiarInfoVendedor();
 
     return;
   }
@@ -784,16 +823,19 @@ function actualizarDescuento() {
   promoActual.descuento = descuento;
 
   // ⚠️ Validación de descuento máximo seguro
+  // ⚠️ Validación de descuento máximo seguro (REAL, por promo)
   let descuentoMaxSeguro = 0;
-  promoActual.items.forEach((item) => {
-    const maxDescItem = ((item.precio - item.costo) / item.precio) * 100;
-    if (maxDescItem > descuentoMaxSeguro) descuentoMaxSeguro = maxDescItem;
-  });
-  descuentoMaxSeguro = Math.floor(descuentoMaxSeguro);
+
+  if (totalSinDescuento > 0) {
+    descuentoMaxSeguro =
+      (1 - calcularCostoTotalPromo() / totalSinDescuento) * 100;
+  }
+
+  const descuentoMaxSeguroNum = Number(descuentoMaxSeguro.toFixed(2));
 
   promoWarning.textContent =
-    descuento > descuentoMaxSeguro
-      ? `⚠️ Descuento máximo seguro: ${descuentoMaxSeguro}%`
+    descuento > descuentoMaxSeguroNum
+      ? `⚠️ Descuento máximo seguro: ${descuentoMaxSeguroNum}%`
       : "";
 
   // Totales
@@ -803,6 +845,7 @@ function actualizarDescuento() {
   totalSinDescuentoElemento.textContent = `Total sin descuento: $${totalSinDescuento}`;
   totalAhorroElemento.textContent = `Ahorro: $${ahorro}`;
   totalConDescuentoElemento.textContent = `Total Precio Promo: $${precioTotalConDescuento}`;
+  renderInfoVendedor();
 }
 
 // Listener unificado para recalcular totales y warning al cambiar el descuento
@@ -828,35 +871,6 @@ function calcularCostoTotalPromo() {
     return total + item.costo * item.cantidad;
   }, 0);
 }
-// ---------------------------
-// DESCUENTO MÁXIMO SEGURO
-// ---------------------------
-
-promoDescuentoInput.addEventListener("input", () => {
-  const descuento = parseFloat(promoDescuentoInput.value) || 0;
-  const totalCosto = calcularCostoTotalPromo();
-  const totalSinDescuento = calcularTotalPromo();
-
-  // Máximo seguro según margen promedio (simplificado)
-  let descuentoMaxSeguro = 0;
-  promoActual.items.forEach((item) => {
-    const precioUnitario = item.precio;
-    const costoUnitario = item.costo;
-    const maxDescItem =
-      ((precioUnitario - costoUnitario) / precioUnitario) * 100;
-    if (maxDescItem > descuentoMaxSeguro) descuentoMaxSeguro = maxDescItem;
-  });
-
-  descuentoMaxSeguro = Math.floor(descuentoMaxSeguro); // redondear para mostrar
-
-  if (descuento > descuentoMaxSeguro) {
-    promoWarning.textContent = `⚠️ Descuento máximo seguro: ${descuentoMaxSeguro}%`;
-  } else {
-    promoWarning.textContent = "";
-  }
-
-  renderPromo(); // recalcular totales con descuento aplicado
-});
 
 // ---------------------------
 // REVISAR MENSAJE WHATSAPP
@@ -868,7 +882,7 @@ const chkTotalSinDescuento = document.getElementById("chkTotalSinDescuento");
 const chkDescuento = document.getElementById("chkDescuento");
 const chkAhorro = document.getElementById("chkAhorro");
 document.getElementById("enviarWhatsapp").addEventListener("click", () => {
-    // Cerrar panel de promo (solo UI)
+  // Cerrar panel de promo (solo UI)
   promoPanel.classList.add("oculto");
   // Abrir modal
   whatsappModal.classList.remove("oculto");
@@ -877,9 +891,9 @@ document.getElementById("enviarWhatsapp").addEventListener("click", () => {
 });
 
 // Cerrar modal
-document.getElementById("cerrarModal").addEventListener("click", () => {
-  whatsappModal.classList.add("oculto");
-});
+document
+  .getElementById("cerrarModal")
+  .addEventListener("click", cerrarWhatsappModal);
 
 // Cada vez que se cambia una opción, actualizar preview
 [chkSubtotales, chkTotalSinDescuento, chkDescuento, chkAhorro].forEach(
@@ -999,5 +1013,53 @@ function enviarWhatsapp() {
   const url = `https://wa.me/?text=${textoCodificado}`;
 
   window.open(url, "_blank");
+  cerrarWhatsappModal();
 }
 copiarWhatsAppBtn.addEventListener("click", enviarWhatsapp);
+
+// Función para cerrar whatsapp modal
+function cerrarWhatsappModal() {
+  whatsappModal.classList.add("oculto");
+  promoPanelActivo = false;
+  filtrarProductos();
+}
+
+// ---------------------------
+// INFO PARA EL VENDEDOR
+// ---------------------------
+function renderInfoVendedor() {
+  const info = document.getElementById("infoVendedor");
+
+    if (!promoActual.items.length || !infoVendedorVisible) {
+    info.classList.add("oculto");
+    info.innerHTML = "";
+    return;
+  }
+
+  const totalCosto = calcularCostoTotalPromo();
+  const totalSinDescuento = calcularTotalPromo();
+  const descuento = promoActual.descuento || 0;
+
+  const ahorro = Math.round((totalSinDescuento * descuento) / 100);
+  const totalFinal = totalSinDescuento - ahorro;
+
+  const ganancia = totalFinal - totalCosto;
+  const margen =
+    totalCosto > 0 ? ((ganancia / totalCosto) * 100).toFixed(2) : "0.00";
+
+  info.classList.remove("oculto");
+  info.innerHTML = `
+    <strong>Info para el vendedor</strong>
+    <div>Total costo: $${totalCosto}</div>
+    <div>Ganancia estimada: $${ganancia}</div>
+    <div>Margen real: ${margen}%</div>
+  `;
+}
+// Limpiar info vendedor
+function limpiarInfoVendedor() {
+  const info = document.getElementById("infoVendedor");
+  if (!info) return;
+
+  info.innerHTML = "";
+  info.classList.add("oculto");
+}
