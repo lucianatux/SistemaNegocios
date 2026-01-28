@@ -45,19 +45,37 @@ body {
   height: 100%;
 }
 
-header {
+@font-face {
+  font-family: "LeagueGothic";
+  src: url("fonts/LeagueGothic.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Buda";
+  src: url("fonts/Buda-Light.ttf") format("truetype");
+}
+
+/*header {
   background-color: var(--color-primario);
   color: var(--color-blanco);
   padding: 10px;
+  text-align: center;
+}*/
+
+header {
+  background-color: var(--color-terciario);
+  color: var(--color-texto);
+  padding: 0px;
   text-align: center;
 }
 
 h1 {
   margin: 0;
+  padding: 7px;
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: center;
-  gap: 12px;
+  gap: 6px;
 }
 
 h2 {
@@ -69,17 +87,27 @@ h2 {
 .oculto {
   display: none !important;
 }
-
+.firstletter {
+  font-size: 3rem;
+  font-family: "Buda", "Times New Roman", Times, serif;
+  padding: 0;
+  margin: 0;
+  margin-right: -10px;
+}
 .title {
   font-size: 2rem;
-  font-family: Georgia, "Times New Roman", Times, serif;
+  font-family: "Buda", "Times New Roman", Times, serif;
+  padding: 0;
+  margin: 0;
 }
 .subtitle {
   font-size: 1.4rem;
 }
 .app-icon {
-  width: 60px;
+  width: 65px;
   display: block;
+  position: relative;
+  top: 10px; 
 }
 #buscador,
 .barra-botones {
@@ -209,7 +237,6 @@ h2 {
   z-index: 998;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
-
 
 .campo {
   margin-bottom: 10px;
@@ -657,7 +684,7 @@ input#promoNombre:focus {
   color: #b00020;
   margin: 0;
   line-height: 1.2;
-  margin-bottom: 6px
+  margin-bottom: 6px;
 }
 
 #enviarWhatsapp {
@@ -685,9 +712,11 @@ input#promoNombre:focus {
    ========================== */
 .modal {
   position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.5);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -723,7 +752,6 @@ input#promoNombre:focus {
   justify-content: flex-end;
   gap: 10px;
 }
-
 
 #whatsappModal {
   backdrop-filter: blur(2px);
@@ -776,7 +804,6 @@ input#promoNombre:focus {
   border: 2px solid var(--color-borde);
 }
 
-
 #whatsappModal #mensajePreview {
   font-family: "Segoe UI", Arial, sans-serif;
   font-size: 15px;
@@ -793,8 +820,6 @@ input#promoNombre:focus {
   outline: none;
   border-color: var(--color-primario);
 }
-
-
 
 /* ==========================
    FOOTER
