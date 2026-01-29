@@ -90,11 +90,11 @@
 
         <!-- BLOQUE: GANANCIA GLOBAL -->
         <div class="bloque-gestion">
-          <h3>Ganancia global</h3>
+          <h3>Margen de Ganancia global</h3>
 
           <div class="campo">
-            <label for="gananciaGlobalInput">Ganancia global (%)</label>
-            <input type="number" id="gananciaGlobalInput" min="0" />
+            <label for="gananciaGlobalInput">Ganancia global</label>
+            <input type="number" id="gananciaGlobalInput" min="0" /> %<br>
             <small class="ayuda">
               Se aplica a todos los productos que no tengan un margen específico
             </small>
@@ -103,7 +103,7 @@
 
         <!-- BLOQUE: GANANCIA POR CATEGORÍA -->
         <div class="bloque-gestion">
-          <h3>Ganancia por categoría</h3>
+          <h3>Margen de Ganancia por categoría</h3>
 
           <p class="descripcion">
             Opcional. Si una categoría no tiene ganancia definida, se usará la
@@ -120,7 +120,7 @@
                 data-categoria="Libreria"
                 min="0"
                 placeholder="Usa global"
-              />
+              />%
             </div>
 
             <!-- Juguetes -->
@@ -132,7 +132,7 @@
                 data-categoria="Juguetes"
                 min="0"
                 placeholder="Usa global"
-              />
+              />%
             </div>
 
             <!-- Carteras -->
@@ -144,7 +144,7 @@
                 data-categoria="Carteras"
                 min="0"
                 placeholder="Usa global"
-              />
+              />%
             </div>
 
             <!-- Otros -->
@@ -156,7 +156,7 @@
                 data-categoria="Otros"
                 min="0"
                 placeholder="Usa global"
-              />
+              />%
             </div>
           </div>
         </div>

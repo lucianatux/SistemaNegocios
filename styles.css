@@ -332,6 +332,11 @@ h2 {
   border-color: var(--color-borde);
   border-radius: 5px;
 }
+#gananciaGlobalInput{
+max-width: 70px;
+  border-radius: 5px;
+}
+
 #gananciaGlobalInput:focus {
   outline: 2px solid var(--color-borde);
   border-color: var(--color-borde);
