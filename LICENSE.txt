@@ -1,0 +1,11 @@
+© 2026 Lu Tux
+
+Este software fue desarrollado a medida.
+
+Se autoriza su uso exclusivo para el negocio del cliente.
+Este permiso no implica cesión de derechos de autor.
+
+No está permitida la redistribución, reventa, copia,
+modificación ni reutilización total o parcial del
+código fuente en otros proyectos sin autorización
+expresa y por escrito de la autora.
