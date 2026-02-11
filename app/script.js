@@ -525,10 +525,14 @@ confirmarAccionBtn.addEventListener("click", () => {
     productos = productos.filter((p) => p !== producto);
     mostrarProductos(productos);
     guardarEnLocalStorage();
+    searchInput.value = "";
+    categoryFilter.value = "";
   }
 
   if (accionPendiente.tipo === "importar") {
     importarDatos();
+    searchInput.value = "";
+    categoryFilter.value = "";
   }
 
   cerrarConfirmacion();
@@ -599,11 +603,14 @@ function importarDatos() {
 
       productos = datos.productos;
 
+      ordenarProductos();
       // Guardar inmediatamente en localStorage
       guardarEnLocalStorage();
 
       // Limpiar buscador al actualizar la lista
       searchInput.value = "";
+      categoryFilter.value = "";
+
       // Mostrar productos
       mostrarProductos(productos);
 
@@ -1030,7 +1037,7 @@ function cerrarWhatsappModal() {
 function renderInfoVendedor() {
   const info = document.getElementById("infoVendedor");
 
-    if (!promoActual.items.length || !infoVendedorVisible) {
+  if (!promoActual.items.length || !infoVendedorVisible) {
     info.classList.add("oculto");
     info.innerHTML = "";
     return;
