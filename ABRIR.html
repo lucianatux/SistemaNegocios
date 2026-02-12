@@ -48,7 +48,7 @@
           <button id="btnAgregarProducto" class="btn-secundario">
             ➕ Agregar producto
           </button>
-          <button id="btnPromo" class="btn-secundario">🎁 Armar promo</button>
+          <button id="btnPromo" class="btn-secundario">🎁 Promo</button>
           <button id="btnTicket" class="btn-secundario">🧾 Ticket</button>
         </div>
 
@@ -355,7 +355,7 @@
         <!-- FOOTER -->
         <div class="ticket-footer">
           <div class="ticket-resumen">
-            <div class="ticket-linea">
+            <div class="ticket-linea first">
               <span>Total</span>
               <span id="ticketTotal">$0</span>
             </div>
@@ -371,7 +371,7 @@
               />
             </div>
 
-            <div class="ticket-linea ajuste">
+            <div class="ticket-linea ajuste first">
               <span>Recargo %</span>
               <input
                 type="number"
@@ -388,7 +388,14 @@
             </div>
           </div>
 
-          <p class="ticket-gracias">Gracias por tu compra</p>
+          <p class="ticket-gracias">Gracias por tu compra <span class="corazon"> ♥</span></p>
+          <div class="ticket-acciones">
+            <button id="btnImprimir" class="btn-primario">Imprimir</button>
+
+            <button id="btnNuevaVenta" class="btn-primario">
+              Nueva venta
+            </button>
+          </div>
         </div>
       </aside>
     </main>

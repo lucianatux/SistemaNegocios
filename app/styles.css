@@ -55,7 +55,6 @@ body {
   src: url("fonts/Buda-Light.ttf") format("truetype");
 }
 
-
 header {
   background-color: var(--color-primario);
   color: var(--color-blanco);
@@ -69,7 +68,7 @@ h1 {
   padding: 7px;
   display: flex;
   align-items: baseline;
-  justify-content:center;
+  justify-content: center;
   gap: 6px;
 }
 
@@ -148,7 +147,6 @@ h2 {
   background-color: var(--color-primario);
   color: var(--color-blanco);
 }
-
 
 /* ==========================
    BUSCADOR
@@ -327,8 +325,8 @@ h2 {
   border-color: var(--color-borde);
   border-radius: 5px;
 }
-#gananciaGlobalInput{
-max-width: 70px;
+#gananciaGlobalInput {
+  max-width: 70px;
   border-radius: 5px;
 }
 
@@ -628,7 +626,6 @@ input#promoNombre:focus {
   text-decoration: underline;
 }
 
-
 /* ==========================
    PROMO BODY - PRODUCTOS
    ========================== */
@@ -906,9 +903,9 @@ input#promoNombre:focus {
   top: 0;
   right: 0;
   width: 370px;
-  height: 100vh;
+  height: 100dvh;
   background: #ffffff;
-  box-shadow: -4px 0 15px rgba(0,0,0,0.15);
+  box-shadow: -4px 0 15px rgba(0, 0, 0, 0.15);
   display: flex;
   flex-direction: column;
   z-index: 1000;
@@ -918,12 +915,11 @@ input#promoNombre:focus {
   display: none;
 }
 
-
-
 .ticket-header {
   padding: 16px;
   border-bottom: 1px solid #e5e7eb;
   position: relative;
+  flex-shrink: 0;
 }
 
 .ticket-cerrar {
@@ -954,7 +950,6 @@ input#promoNombre:focus {
   color: #374151;
 }
 
-
 .ticket-body {
   flex: 1;
   overflow-y: auto;
@@ -979,12 +974,25 @@ input#promoNombre:focus {
   width: 50px;
 }
 
-
 .ticket-footer {
   padding: 16px;
   border-top: 1px solid #e5e7eb;
   background: #fafafa;
+  flex-shrink: 0;
 }
+.ticket-footer button {
+  margin-top: 8px;
+}
+.ticket-acciones {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.ticket-acciones button {
+  flex: 1; /* ambos ocupan el mismo espacio */
+}
+
 
 .ticket-linea {
   display: flex;
@@ -997,7 +1005,9 @@ input#promoNombre:focus {
   width: 60px;
   text-align: right;
 }
-
+.first{
+  border-bottom: 1px solid #e5e7eb;
+}
 .total-final {
   font-weight: bold;
   margin-top: 8px;
@@ -1008,7 +1018,10 @@ input#promoNombre:focus {
   font-size: 12px;
   margin-top: 12px;
   color: #6b7280;
+  border-top: 1px dashed #ccc;
+  padding-top: 10px;
 }
+
 
 .ticket-item {
   display: flex;
@@ -1028,6 +1041,56 @@ input#promoNombre:focus {
 
 .ticket-eliminar:hover {
   transform: scale(1.2);
+}
+
+.corazon {
+  color: #9a0714d1;
+  animation: latido 1.6s infinite;
+}
+
+@keyframes latido {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(2); }
+  100% { transform: scale(1); }
+}
+
+
+/* ==========================
+   MODO IMPRESIÓN
+   ========================== */
+
+@media print {
+
+  body * {
+    visibility: hidden;
+  }
+
+  #ticketPanel,
+  #ticketPanel * {
+    visibility: visible;
+  }
+
+  #ticketPanel {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    box-shadow: none;
+  }
+
+  /* Ocultar botones y cerrar */
+  .ticket-cerrar, .ticket-eliminar,
+  .ticket-acciones {
+    display: none !important;
+  }
+  /* Quitar estilo de input cantidad */
+  .ticket-cantidad, #ticketDescuento, #ticketRecargo {
+    border: none !important;
+    outline: none !important;
+    background: transparent !important;
+    width: auto !important;
+    appearance: none;
+  }
 }
 
 /* ==========================

@@ -67,7 +67,16 @@ function renderTicket() {
   contenedor.innerHTML = "";
 
   if (ticketActual.items.length === 0) {
-    contenedor.innerHTML = "<p>No hay productos en el ticket</p>";
+    contenedor.innerHTML =
+      "<p class='ticket-vacio'>No hay productos en el ticket</p>";
+
+    // Reset totales
+    document.getElementById("ticketTotal").textContent = "$0";
+    document.getElementById("ticketTotalFinal").textContent = "$0";
+
+    document.getElementById("ticketDescuento").value = 0;
+    document.getElementById("ticketRecargo").value = 0;
+
     return;
   }
 
@@ -80,10 +89,17 @@ function renderTicket() {
     fila.innerHTML = `
       <div class="ticket-item-info">
         <div class="ticket-item-nombre">${item.nombre}</div>
-        <div class="ticket-item-detalle">
-          Cant: ${item.cantidad}
-          | $${item.precio.toLocaleString("es-AR")}
-          | $${subtotal.toLocaleString("es-AR")}
+         <div class="ticket-item-detalle">
+          <input 
+            type="number" 
+            min="1" 
+            value="${item.cantidad}" 
+            class="ticket-cantidad"
+            data-index="${index}"
+          />
+
+          x $${item.precio.toLocaleString("es-AR")}
+          = $${subtotal.toLocaleString("es-AR")}
         </div>
       </div>
 
@@ -93,16 +109,82 @@ function renderTicket() {
     contenedor.appendChild(fila);
   });
 
-  const botonesEliminar = document.querySelectorAll(".ticket-eliminar");
-  botonesEliminar.forEach((btn) => {
+  // Eventos eliminar
+  document.querySelectorAll(".ticket-eliminar").forEach((btn) => {
     btn.addEventListener("click", () => {
-      const index = btn.dataset.index;
-      eliminarItemTicket(index);
+      eliminarItemTicket(btn.dataset.index);
     });
   });
+
+  // Eventos cantidad
+  document.querySelectorAll(".ticket-cantidad").forEach((input) => {
+    input.addEventListener("input", () => {
+      const index = input.dataset.index;
+      const nuevaCantidad = parseInt(input.value) || 1;
+
+      ticketActual.items[index].cantidad = nuevaCantidad;
+
+      renderTicket(); // re-render
+      calcularTotalTicket();
+    });
+  });
+
+  calcularTotalTicket();
 }
 //ELIMINAR ITEM TICKET
 function eliminarItemTicket(index) {
   ticketActual.items.splice(index, 1);
   renderTicket();
 }
+
+//CALCULAR TOTAL TICKET
+function calcularTotalTicket() {
+  let subtotal = 0;
+
+  ticketActual.items.forEach((item) => {
+    subtotal += item.precio * item.cantidad;
+  });
+
+  const descuentoInput = document.getElementById("ticketDescuento");
+  const recargoInput = document.getElementById("ticketRecargo");
+
+  const descuento = parseFloat(descuentoInput.value) || 0;
+  const recargo = parseFloat(recargoInput.value) || 0;
+
+  const montoDescuento = subtotal * (descuento / 100);
+  const subtotalConDescuento = subtotal - montoDescuento;
+
+  const montoRecargo = subtotalConDescuento * (recargo / 100);
+  const totalFinal = subtotalConDescuento + montoRecargo;
+
+  // Mostrar subtotal
+  document.getElementById("ticketTotal").textContent =
+    "$" + subtotal.toLocaleString("es-AR");
+
+  // Mostrar total final
+  document.getElementById("ticketTotalFinal").textContent =
+    "$" + totalFinal.toLocaleString("es-AR");
+}
+
+// Activar eventos
+document
+  .getElementById("ticketDescuento")
+  .addEventListener("input", calcularTotalTicket);
+
+document
+  .getElementById("ticketRecargo")
+  .addEventListener("input", calcularTotalTicket);
+
+document.getElementById("btnImprimir").addEventListener("click", () => {
+  mostrarFechaActual();
+  window.print();
+});
+
+
+//NUEVA VENTA
+const btnNuevaVenta = document.getElementById("btnNuevaVenta");
+btnNuevaVenta.addEventListener("click", () => {
+  ticketActual.items = [];
+  renderTicket();
+  mostrarFechaActual(); // opcional, pero queda lindo
+});
