@@ -55,12 +55,6 @@ body {
   src: url("fonts/Buda-Light.ttf") format("truetype");
 }
 
-/*header {
-  background-color: var(--color-primario);
-  color: var(--color-blanco);
-  padding: 10px;
-  text-align: center;
-}*/
 
 header {
   background-color: var(--color-primario);
@@ -89,24 +83,24 @@ h2 {
   display: none !important;
 }
 .firstletter {
-  font-size: 3rem;
+  font-size: 2rem;
   font-family: "Buda", "Times New Roman", Times, serif;
   padding: 0;
   margin: 0;
-  margin-right: -10px;
+  margin-right: -5px;
 }
 .title {
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-family: "Buda", "Times New Roman", Times, serif;
   padding: 0;
   margin: 0;
 }
 .subtitle {
-  padding-left: 1rem;
+  padding-right: 2rem;
   font-size: 1.5rem;
 }
 .app-icon {
-  width: 55px;
+  width: 48px;
   display: block;
   position: relative;
   top: 10px;
@@ -901,6 +895,139 @@ input#promoNombre:focus {
 #whatsappModal #mensajePreview:focus {
   outline: none;
   border-color: var(--color-primario);
+}
+
+/* ==========================
+   TICKET
+   ========================== */
+
+.ticket-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 370px;
+  height: 100vh;
+  background: #ffffff;
+  box-shadow: -4px 0 15px rgba(0,0,0,0.15);
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+}
+
+.oculto {
+  display: none;
+}
+
+
+
+.ticket-header {
+  padding: 16px;
+  border-bottom: 1px solid #e5e7eb;
+  position: relative;
+}
+
+.ticket-cerrar {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  border: none;
+  background: transparent;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.ticket-negocio {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.ticket-direccion {
+  margin: 2px 0;
+  font-size: 11px;
+  color: #6b7280;
+}
+
+.ticket-fecha {
+  font-size: 12px;
+  margin-top: 6px;
+  color: #374151;
+}
+
+
+.ticket-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px 16px;
+}
+
+.ticket-item {
+  margin-bottom: 12px;
+  font-size: 13px;
+  border-bottom: 1px dashed #ddd;
+  padding-bottom: 8px;
+}
+
+.ticket-item-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 4px;
+}
+
+.ticket-item input {
+  width: 50px;
+}
+
+
+.ticket-footer {
+  padding: 16px;
+  border-top: 1px solid #e5e7eb;
+  background: #fafafa;
+}
+
+.ticket-linea {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.ticket-linea.ajuste input {
+  width: 60px;
+  text-align: right;
+}
+
+.total-final {
+  font-weight: bold;
+  margin-top: 8px;
+}
+
+.ticket-gracias {
+  text-align: center;
+  font-size: 12px;
+  margin-top: 12px;
+  color: #6b7280;
+}
+
+.ticket-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.ticket-eliminar {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: #aa0000;
+}
+
+.ticket-eliminar:hover {
+  transform: scale(1.2);
 }
 
 /* ==========================

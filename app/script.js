@@ -15,6 +15,7 @@ let promoActual = {
 };
 
 let modoPromoActivo = false;
+let modoTicketActivo = false;
 let accionPendiente = null;
 
 let promoPanelActivo = false;
@@ -197,6 +198,19 @@ function mostrarProductos(lista) {
       });
 
       leftGroup.appendChild(btnPromoItem);
+    }
+    //BOTÓN TICKET
+    if (modoTicketActivo) {
+      const btnTicketItem = document.createElement("button");
+      btnTicketItem.classList.add("btn-icono", "btn-ticket-item");
+      btnTicketItem.textContent = "🧾";
+
+      btnTicketItem.addEventListener("click", (e) => {
+        e.stopPropagation();
+        agregarProductoATicket(producto);
+      });
+
+      leftGroup.appendChild(btnTicketItem);
     }
 
     // INFO DEL PRODUCTO

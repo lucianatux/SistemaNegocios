@@ -5,19 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tero</title>
     <link rel="stylesheet" href="app/styles.css" />
-    <link rel="shortcut icon" href="app/logos/terocircle.png" type="image/x-icon" />
+    <link
+      rel="shortcut icon"
+      href="app/logos/terocircle.png"
+      type="image/x-icon"
+    />
   </head>
   <body>
     <header>
-      <!-- <h1>
-        <span class="title">Mi Negocio </span
-        ><img src="store-icon.png" alt="Mi Negocio" class="app-icon" />
-        <span class="subtitle"> Gestión de precios, costos y promociones</span>
-      </h1> -->
       <h1>
-        <span class="firstletter">T</span><span class="title">ERO</span>
         <img src="app/logos/terocircle.png" alt="Mi Negocio" class="app-icon" />
-        <span class="subtitle"> Gestión de precios para negocios</span>
+        <span class="firstletter">T</span><span class="title">ERO</span>
+        <span class="subtitle"> Gestión</span>
+        Librería Virgen del Valle
       </h1>
     </header>
 
@@ -44,13 +44,12 @@
       <!-- BARRA DE BOTONES -->
       <div class="barra-botones">
         <div class="botones-izquierda">
-          <button id="btnGestion" class="btn-secundario">
-            💰 Ganancia
-          </button>
+          <button id="btnGestion" class="btn-secundario">💰 Ganancia</button>
           <button id="btnAgregarProducto" class="btn-secundario">
             ➕ Agregar producto
           </button>
           <button id="btnPromo" class="btn-secundario">🎁 Armar promo</button>
+          <button id="btnTicket" class="btn-secundario">🧾 Ticket</button>
         </div>
 
         <div class="botones-derecha">
@@ -92,7 +91,7 @@
 
           <div class="campo">
             <label for="gananciaGlobalInput">Ganancia global</label>
-            <input type="number" id="gananciaGlobalInput" min="0" /> %<br>
+            <input type="number" id="gananciaGlobalInput" min="0" /> %<br />
             <small class="ayuda">
               Se aplica a todos los productos que no tengan un margen específico
             </small>
@@ -297,6 +296,7 @@
           <button id="enviarWhatsapp">Enviar por WhatsApp</button>
         </div>
       </aside>
+
       <!-- MODAL REVISAR MENSAJE WHATSAPP -->
       <div id="whatsappModal" class="modal oculto">
         <div class="modal-contenido">
@@ -331,6 +331,66 @@
           </div>
         </div>
       </div>
+      <!--Ticket-->
+      <!-- PANEL TICKET -->
+      <aside id="ticketPanel" class="ticket-panel oculto">
+        <!-- HEADER -->
+        <div class="ticket-header">
+          <button id="cerrarTicket" class="ticket-cerrar">✕</button>
+
+          <h2 class="ticket-negocio">Librería Virgen del Valle</h2>
+          <p class="ticket-direccion">
+            Vicente Forestieri 5268 Córdoba Capital
+          </p>
+
+          <p id="ticketFecha" class="ticket-fecha"></p>
+        </div>
+
+        <!-- BODY SCROLLEABLE -->
+        <div id="ticketItems" class="ticket-body">
+          <!-- Items dinámicos -->
+          <p class="ticket-vacio">No hay productos en el ticket</p>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="ticket-footer">
+          <div class="ticket-resumen">
+            <div class="ticket-linea">
+              <span>Total</span>
+              <span id="ticketTotal">$0</span>
+            </div>
+
+            <div class="ticket-linea ajuste">
+              <span>Descuento %</span>
+              <input
+                type="number"
+                id="ticketDescuento"
+                min="0"
+                max="100"
+                value="0"
+              />
+            </div>
+
+            <div class="ticket-linea ajuste">
+              <span>Recargo %</span>
+              <input
+                type="number"
+                id="ticketRecargo"
+                min="0"
+                max="100"
+                value="0"
+              />
+            </div>
+
+            <div class="ticket-linea total-final">
+              <span>Total final</span>
+              <span id="ticketTotalFinal">$0</span>
+            </div>
+          </div>
+
+          <p class="ticket-gracias">Gracias por tu compra</p>
+        </div>
+      </aside>
     </main>
     <footer>
       App desarrollada por <strong>Lu Tux</strong> ©2026 · Soporte y consultas:
@@ -341,5 +401,6 @@
     <!-- JS principal -->
     <script src="app/data.js"></script>
     <script src="app/script.js"></script>
+    <script src="app/ticket.js"></script>
   </body>
 </html>
