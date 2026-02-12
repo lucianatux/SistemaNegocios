@@ -98,6 +98,12 @@ h2 {
   padding-right: 2rem;
   font-size: 1.5rem;
 }
+.shop{
+  font-size: 1rem;
+}
+.shopname{
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
 .app-icon {
   width: 48px;
   display: block;
