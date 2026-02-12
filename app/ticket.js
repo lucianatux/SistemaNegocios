@@ -59,8 +59,10 @@ function agregarProductoATicket(producto) {
     cantidad: 1,
   });
 
+  guardarTicketEnLocalStorage();
   renderTicket();
 }
+
 //RENDER TICKET
 function renderTicket() {
   const contenedor = document.getElementById("ticketItems");
@@ -124,16 +126,20 @@ function renderTicket() {
 
       ticketActual.items[index].cantidad = nuevaCantidad;
 
-      renderTicket(); // re-render
+      guardarTicketEnLocalStorage();
+      renderTicket();
       calcularTotalTicket();
     });
   });
 
+  guardarTicketEnLocalStorage();
   calcularTotalTicket();
 }
+
 //ELIMINAR ITEM TICKET
 function eliminarItemTicket(index) {
   ticketActual.items.splice(index, 1);
+  guardarTicketEnLocalStorage();
   renderTicket();
 }
 
@@ -180,11 +186,26 @@ document.getElementById("btnImprimir").addEventListener("click", () => {
   window.print();
 });
 
-
 //NUEVA VENTA
 const btnNuevaVenta = document.getElementById("btnNuevaVenta");
 btnNuevaVenta.addEventListener("click", () => {
   ticketActual.items = [];
   renderTicket();
-  mostrarFechaActual(); // opcional, pero queda lindo
+  mostrarFechaActual();
+  localStorage.removeItem("ticketActual");
 });
+
+//GUARDAR TICKET EN LOCAL STORAGE
+function guardarTicketEnLocalStorage() {
+  localStorage.setItem("ticketActual", JSON.stringify(ticketActual));
+}
+//CARGAR TICKET DESDE LOCAL STORAGE
+function cargarTicketDesdeLocalStorage() {
+  const guardado = localStorage.getItem("ticketActual");
+  if (guardado) {
+    ticketActual = JSON.parse(guardado);
+    renderTicket();
+  }
+}
+
+cargarTicketDesdeLocalStorage();
