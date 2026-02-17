@@ -61,10 +61,13 @@ header {
   padding: 0px;
   text-align: center;
   box-shadow: 0 8px 10px rgba(0, 0, 0, 0.25);
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
 }
 
-h1 {
-  margin: 0;
+.marcaTero, .negocioNombre {
+  margin: 0px 20px;
   padding: 7px;
   display: flex;
   align-items: baseline;
@@ -99,7 +102,7 @@ h2 {
   font-size: 1.5rem;
 }
 .shop {
-  font-size: 1rem;
+  font-size: 1.2rem;
 }
 .shopname {
   font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
