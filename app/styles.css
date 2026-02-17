@@ -98,11 +98,11 @@ h2 {
   padding-right: 2rem;
   font-size: 1.5rem;
 }
-.shop{
+.shop {
   font-size: 1rem;
 }
-.shopname{
-    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+.shopname {
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
 }
 .app-icon {
   width: 48px;
@@ -999,7 +999,6 @@ input#promoNombre:focus {
   flex: 1; /* ambos ocupan el mismo espacio */
 }
 
-
 .ticket-linea {
   display: flex;
   justify-content: space-between;
@@ -1011,7 +1010,7 @@ input#promoNombre:focus {
   width: 60px;
   text-align: right;
 }
-.first{
+.first {
   border-bottom: 1px solid #e5e7eb;
 }
 .total-final {
@@ -1027,7 +1026,6 @@ input#promoNombre:focus {
   border-top: 1px dashed #ccc;
   padding-top: 10px;
 }
-
 
 .ticket-item {
   display: flex;
@@ -1056,43 +1054,69 @@ input#promoNombre:focus {
 }
 
 @keyframes latido {
-  0%   { transform: scale(1); }
-  50%  { transform: scale(1.15); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
-
-
 
 /* ==========================
    MODO IMPRESIÓN
    ========================== */
 
 @media print {
-
-  body * {
-    visibility: hidden;
+  header, #buscador, .barra-botones, #lista-articulos, footer {
+    display: none !important;
+  }
+  @page {
+    margin: 10mm;
   }
 
-  #ticketPanel,
-  #ticketPanel * {
-    visibility: visible;
+  html,
+  body {
+    margin: 0;
+    padding: 0;
   }
 
-  #ticketPanel {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    box-shadow: none;
+  /* El panel deja de ser panel */
+  .ticket-panel {
+    position: static !important;
+    width: 100% !important;
+    height: auto !important;
+    box-shadow: none !important;
   }
 
-  /* Ocultar botones y cerrar */
-  .ticket-cerrar, .ticket-eliminar,
+  /* El body del ticket se expande */
+  .ticket-body {
+    overflow: visible !important;
+    height: auto !important;
+  }
+
+  /* El footer también normal */
+  .ticket-footer {
+    position: static !important;
+  }
+
+  /* Ocultar botones */
+  .ticket-cerrar,
+  .ticket-eliminar,
   .ticket-acciones {
     display: none !important;
   }
+
+  /* Quitar animaciones (por seguridad) */
+  * {
+    animation: none !important;
+  }
   /* Quitar estilo de input cantidad */
-  .ticket-cantidad, #ticketDescuento, #ticketRecargo {
+  .ticket-cantidad,
+  #ticketDescuento,
+  #ticketRecargo {
     border: none !important;
     outline: none !important;
     background: transparent !important;
