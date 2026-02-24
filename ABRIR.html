@@ -19,8 +19,8 @@
         <span class="subtitle"> Gestión</span>
       </h1>
       <h1 class="negocioNombre">
-          <span class="shop">Librería</span
-          ><span class="shopname"> Del Valle</span>
+          <span class="shop"></span
+          ><span class="shopname">Los Pollitos</span>
           </h1>
     </header>
 
@@ -39,8 +39,10 @@
           <option value="">Todas</option>
           <option value="Libreria">Librería</option>
           <option value="Juguetes">Juguetes</option>
-          <option value="Carteras">Carteras</option>
-          <option value="Otros">Otros</option>
+          <option value="Cotillón">Cotillón</option>
+          <option value="Accesorios">Accesorios</option>
+          <option value="Mobiliario">Mobiliario</option>
+          <option value="Eventos">Eventos</option>
         </select>
       </section>
 
@@ -135,29 +137,52 @@
               />%
             </div>
 
-            <!-- Carteras -->
+            <!-- Cotillón -->
             <div class="fila-categoria">
-              <span class="categoria-nombre">Carteras</span>
+              <span class="categoria-nombre">Cotillón</span>
               <input
                 type="number"
                 class="ganancia-categoria"
-                data-categoria="Carteras"
+                data-categoria="Cotillón"
                 min="0"
                 placeholder="Usa global"
               />%
             </div>
 
-            <!-- Otros -->
+            <!-- Accesorios -->
             <div class="fila-categoria">
-              <span class="categoria-nombre">Otros</span>
+              <span class="categoria-nombre">Accesorios</span>
               <input
                 type="number"
                 class="ganancia-categoria"
-                data-categoria="Otros"
+                data-categoria="Accesorios"
                 min="0"
                 placeholder="Usa global"
               />%
             </div>
+            <!-- Mobiliario -->
+            <div class="fila-categoria">
+              <span class="categoria-nombre">Mobiliario</span>
+              <input
+                type="number"
+                class="ganancia-categoria"
+                data-categoria="Mobiliario"
+                min="0"
+                placeholder="Usa global"
+              />%
+            </div>
+            <!-- Eventos -->
+            <div class="fila-categoria">
+              <span class="categoria-nombre">Eventos</span>
+              <input
+                type="number"
+                class="ganancia-categoria"
+                data-categoria="Eventos"
+                min="0"
+                placeholder="Usa global"
+              />%
+            </div>
+
           </div>
         </div>
 
@@ -189,9 +214,11 @@
             <label>Categoría</label>
             <select id="editCategoria" class="campo" required>
               <option value="Libreria">Librería</option>
-              <option value="Carteras">Carteras</option>
+              <option value="Cotillón">Cotillón</option>
               <option value="Juguetes">Juguetes</option>
-              <option value="Otros">Otros</option>
+              <option value="Accesorios">Accesorios</option>
+              <option value="Mobiliario">Mobiliario</option>
+              <option value="Eventos">Eventos</option>
             </select>
           </div>
 
@@ -341,9 +368,9 @@
         <div class="ticket-header">
           <button id="cerrarTicket" class="ticket-cerrar">✕</button>
 
-          <h2 class="ticket-negocio">Librería Del Valle</h2>
+          <h2 class="ticket-negocio">Los Pollitos</h2>
           <p class="ticket-direccion">
-            Vicente Forestieri 5268 Córdoba Capital
+            Francisco Pascacio Moreno 118 Córdoba Capital
           </p>
 
           <p id="ticketFecha" class="ticket-fecha"></p>

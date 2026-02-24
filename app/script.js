@@ -162,9 +162,10 @@ function calcularPrecio(producto) {
   }
 
   const precioBase = producto.costo + (producto.costo * gananciaUsada) / 100;
-  const precioRedondeado = Math.ceil(precioBase / 10) * 10;
+  const precioRedondeado = Math.ceil(precioBase / 1) * 1;
 
   return precioRedondeado;
+  //return precioBase;
 }
 
 // ---------------------------
