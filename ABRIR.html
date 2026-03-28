@@ -19,9 +19,8 @@
         <span class="subtitle"> Gestión</span>
       </h1>
       <h1 class="negocioNombre">
-          <span class="shop"></span
-          ><span class="shopname">Los Pollitos</span>
-          </h1>
+        <span class="shop"></span><span class="shopname">Los Pollitos</span>
+      </h1>
     </header>
 
     <main>
@@ -182,7 +181,6 @@
                 placeholder="Usa global"
               />%
             </div>
-
           </div>
         </div>
 
@@ -435,9 +433,28 @@
         WhatsApp +549 351 2309375
       </a>
     </footer>
-    <!-- JS principal -->
+
+    <!-- CORE -->
+    <script src="app/core/EventBus.js"></script>
+    <script src="app/core/Storage.js"></script>
+    <script src="app/core/Store.js"></script>
+
+    <!-- SERVICES -->
+    <script src="app/services/PriceService.js"></script>
+    <script src="app/services/ProductService.js"></script>
+
+    <!-- DATOS -->
     <script src="app/data.js"></script>
-    <script src="app/script.js"></script>
-    <script src="app/ticket.js"></script>
+
+    <!-- MÓDULOS -->
+    <script src="app/modules/ProductListModule.js"></script>
+    <script src="app/modules/GananciaModule.js"></script>
+    <script src="app/modules/EditorModule.js"></script>
+    <script src="app/modules/PromoModule.js"></script>
+    <script src="app/modules/TicketModule.js"></script>
+    <script src="app/modules/SearchModule.js"></script>
+
+    <!-- PUNTO DE ENTRADA — siempre último -->
+    <script src="app/main.js"></script>
   </body>
 </html>
