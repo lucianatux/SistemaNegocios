@@ -11,441 +11,294 @@
       type="image/x-icon"
     />
   </head>
-  <body>
+<body>
+ 
+    <!-- ========== HEADER ========== -->
     <header>
       <h1 class="marcaTero">
-        <img src="app/logos/terocircle.png" alt="Mi Negocio" class="app-icon" />
+        <img src="app/logos/terocircle.png" alt="Tero" class="app-icon" />
         <span class="firstletter">T</span><span class="title">ERO</span>
-        <span class="subtitle"> Gestión</span>
+        <span class="subtitle">Gestión</span>
       </h1>
-      <h1 class="negocioNombre">
-        <span class="shop"></span><span class="shopname">Los Pollitos</span>
-      </h1>
+      <img src="app/logos/estrella2.png" alt="Tero" class="shop-icon" />
+
+     <!--<h1 class="negocioNombre">
+        <span class="shopname">Polirubro Estrella</span>
+      </h1>-->
     </header>
-
-    <main>
-      <!-- BUSCADOR -->
-      <section id="buscador">
-        <input
-          type="text"
-          id="searchInput"
-          placeholder="Buscar artículo por nombre o código..."
-          autocomplete="off"
-        />
-        <select id="categoryFilter">
-          <option value="" disabled selected>Filtrar por categoría</option>
-
-          <option value="">Todas</option>
-          <option value="Libreria">Librería</option>
-          <option value="Juguetes">Juguetes</option>
-          <option value="Cotillón">Cotillón</option>
-          <option value="Accesorios">Accesorios</option>
-          <option value="Mobiliario">Mobiliario</option>
-          <option value="Eventos">Eventos</option>
-        </select>
-      </section>
-
-      <!-- BARRA DE BOTONES -->
-      <div class="barra-botones">
-        <div class="botones-izquierda">
-          <button id="btnGestion" class="btn-secundario">💰 Ganancia</button>
-          <button id="btnAgregarProducto" class="btn-secundario">
-            ➕ Agregar producto
-          </button>
-          <button id="btnPromo" class="btn-secundario">🎁 Promo</button>
-          <button id="btnTicket" class="btn-secundario">🧾 Ticket</button>
+ 
+    <!-- ========== CUERPO: SIDEBAR + MAIN ========== -->
+    <div class="app-body">
+ 
+      <!-- SIDEBAR DE NAVEGACIÓN -->
+      <nav class="sidebar">
+ 
+        <div class="nav-section">
+          <div class="nav-label">Catálogo</div>
+          <button id="btnAgregarProducto" class="nav-item">➕ Agregar producto</button>
+          <button id="btnGestion"         class="nav-item">💰 Ganancia</button>
         </div>
-
-        <div class="botones-derecha">
-          <div class="dropdown">
-            <button id="btnBackup" class="btn-secundario">💾 Backup ▼</button>
-            <div class="dropdown-contenido">
-              <button id="exportarBtn" class="btn-secundario tooltip">
-                💾 Exportar datos
-                <span class="tooltip-text">
-                  Guarda una copia de todos tus productos en un archivo JSON. No
-                  afecta los datos actuales en la app.
-                </span>
-              </button>
-              <hr />
-              <label for="importarInput" class="btn-secundario tooltip"
-                >📂 Importar datos
-                <span class="tooltip-text">
-                  Carga un archivo JSON previamente exportado para restaurar tus
-                  productos.
-                </span>
-              </label>
-              <input
-                type="file"
-                id="importarInput"
-                accept=".json"
-                style="display: none"
-              />
-            </div>
-          </div>
+ 
+        <div class="nav-section">
+          <div class="nav-label">Ventas</div>
+          <button id="btnTicket" class="nav-item">🧾 Ticket</button>
+          <button id="btnPromo"  class="nav-item">🎁 Promo</button>
         </div>
-      </div>
-
-      <!-- GESTIÓN DE PRECIOS -->
-
-      <section id="gestion" class="oculto">
-        <!-- BLOQUE: GANANCIA GLOBAL -->
-        <div class="bloque-gestion">
-          <h3>Margen de Ganancia global</h3>
-
-          <div class="campo">
-            <label for="gananciaGlobalInput">Ganancia global</label>
-            <input type="number" id="gananciaGlobalInput" min="0" /> %<br />
-            <small class="ayuda">
-              Se aplica a todos los productos que no tengan un margen específico
-            </small>
-          </div>
+ 
+        <div class="nav-section nav-section-sistema">
+          <div class="nav-label">Sistema</div>
+          <button id="exportarBtn" class="nav-item">💾 Exportar datos</button>
+          <label for="importarInput" class="nav-item">📂 Importar datos</label>
+          <input type="file" id="importarInput" accept=".json" style="display:none" />
         </div>
-
-        <!-- BLOQUE: GANANCIA POR CATEGORÍA -->
-        <div class="bloque-gestion">
-          <h3>Margen de Ganancia por categoría</h3>
-
-          <p class="descripcion">
-            Opcional. Si una categoría no tiene ganancia definida, se usará la
-            ganancia global.
-          </p>
-
-          <div class="categorias-ganancia">
-            <!-- Librería -->
-            <div class="fila-categoria">
-              <span class="categoria-nombre">Librería</span>
-              <input
-                type="number"
-                class="ganancia-categoria"
-                data-categoria="Libreria"
-                min="0"
-                placeholder="Usa global"
-              />%
-            </div>
-
-            <!-- Juguetes -->
-            <div class="fila-categoria">
-              <span class="categoria-nombre">Juguetes</span>
-              <input
-                type="number"
-                class="ganancia-categoria"
-                data-categoria="Juguetes"
-                min="0"
-                placeholder="Usa global"
-              />%
-            </div>
-
-            <!-- Cotillón -->
-            <div class="fila-categoria">
-              <span class="categoria-nombre">Cotillón</span>
-              <input
-                type="number"
-                class="ganancia-categoria"
-                data-categoria="Cotillón"
-                min="0"
-                placeholder="Usa global"
-              />%
-            </div>
-
-            <!-- Accesorios -->
-            <div class="fila-categoria">
-              <span class="categoria-nombre">Accesorios</span>
-              <input
-                type="number"
-                class="ganancia-categoria"
-                data-categoria="Accesorios"
-                min="0"
-                placeholder="Usa global"
-              />%
-            </div>
-            <!-- Mobiliario -->
-            <div class="fila-categoria">
-              <span class="categoria-nombre">Mobiliario</span>
-              <input
-                type="number"
-                class="ganancia-categoria"
-                data-categoria="Mobiliario"
-                min="0"
-                placeholder="Usa global"
-              />%
-            </div>
-            <!-- Eventos -->
-            <div class="fila-categoria">
-              <span class="categoria-nombre">Eventos</span>
-              <input
-                type="number"
-                class="ganancia-categoria"
-                data-categoria="Eventos"
-                min="0"
-                placeholder="Usa global"
-              />%
-            </div>
-          </div>
-        </div>
-
-        <div class="acciones">
-          <button id="aplicarGlobal" class="btn-primario">Aplicar</button>
-          <button id="cerrarGlobal" class="btn-primario">Cerrar</button>
-        </div>
-      </section>
-
-      <!-- EDITOR DE PRODUCTOS -->
-
-      <section id="editorProducto" class="overlay oculto">
-        <div class="editor-contenido">
-          <button id="cerrarEditor" class="editor-cerrar">✕</button>
-
-          <p id="productoEditando" class="producto-editando"></p>
-
-          <div class="campo">
-            <label>Nombre</label>
-            <input type="text" id="editNombre" />
-          </div>
-
-          <div class="campo">
-            <label>Código</label>
-            <input type="text" id="editCodigo" />
-          </div>
-
-          <div class="campo">
-            <label>Categoría</label>
-            <select id="editCategoria" class="campo" required>
-              <option value="Libreria">Librería</option>
-              <option value="Cotillón">Cotillón</option>
-              <option value="Juguetes">Juguetes</option>
-              <option value="Accesorios">Accesorios</option>
-              <option value="Mobiliario">Mobiliario</option>
-              <option value="Eventos">Eventos</option>
-            </select>
-          </div>
-
-          <div class="campo">
-            <label>Costo</label>
-            <input type="number" id="editCosto" min="0" />
-          </div>
-
-          <div class="campo campo-precio-publico">
-            <label>Precio público</label>
-            <div id="editPrecioPublico" class="precio-publico">$ 0</div>
-            <small class="ayuda">
-              Calculado automáticamente según el margen
-            </small>
-          </div>
-
-          <div class="campo">
-            <label>Ganancia especial (%)</label>
-            <input
-              type="number"
-              id="editGanancia"
-              min="0"
-              placeholder="Vacío = usa ganancia global"
-            />
-          </div>
-
-          <div class="acciones">
-            <button id="guardarProducto" class="btn-primario">
-              Guardar cambios
-            </button>
-            <button id="cancelarEdicion" class="btn-primario">Cancelar</button>
-          </div>
-        </div>
-      </section>
-
-      <!-- BANNER DE GANANCIA -->
-      <div id="bannerGanancia" class="banner oculto">
-        <span> Margen de ganancia aplicado </span>
-        <button id="cerrarBanner" class="banner-cerrar">✕</button>
-      </div>
-
-      <!-- OVERLAY DE CONFIRMACIÓN -->
-      <section id="overlayConfirmacion" class="overlay oculto">
-        <div class="editor-contenido">
-          <h2 id="confirmacionTitulo">Confirmar acción</h2>
-          <p id="confirmacionTexto"></p>
-
-          <div class="acciones">
-            <button id="confirmarAccion" class="btn-primario">Confirmar</button>
-            <button id="cancelarConfirmacion" class="btn-primario">
-              Cancelar
-            </button>
-          </div>
-        </div>
-      </section>
-
-      <!-- LISTA DE ARTÍCULOS -->
-      <section id="lista-articulos">
-        <ul id="productList">
-          <!-- Los productos se insertan acá desde script.js -->
-        </ul>
-      </section>
-      <!-- PROMO PANEL LATERAL -->
-      <aside id="promoPanel" class="promo-panel oculto">
-        <div class="promo-header">
+ 
+      </nav>
+ 
+      <!-- CONTENIDO PRINCIPAL -->
+      <main>
+ 
+        <!-- BUSCADOR -->
+        <section id="buscador">
           <input
             type="text"
-            id="promoNombre"
-            placeholder="Nombre de la promo"
+            id="searchInput"
+            placeholder="Buscar artículo por nombre o código..."
+            autocomplete="off"
           />
-
-          <button id="cerrarPromo">✕</button>
-        </div>
-
-        <div class="promo-body">
-          <div id="promoLista">
-            <!-- productos promo van acá -->
-          </div>
-        </div>
-
-        <div class="promo-footer">
-          <button id="toggleInfoVendedor" class="btn-info-vendedor">
-            Mostrar info vendedor
-          </button>
-          <div id="infoVendedor" class="promo-info-vendedor oculto"></div>
-          <div class="promo-descuento">
-            <p id="totalSinDescuento">Total sin descuento: $0</p>
-
-            <div class="promo-warning" id="promoWarning"></div>
-            <div class="promo-descuento-row">
-              <label for="promoDescuento">Descuento %:</label>
-              <input
-                type="number"
-                id="promoDescuento"
-                min="0"
-                max="100"
-                value="0"
-              />
-            </div>
-
-            <div id="totalAhorro">Ahorro: $0</div>
-            <div id="totalConDescuento">Total Precio Promo: $0</div>
-          </div>
-
-          <button id="enviarWhatsapp">Enviar por WhatsApp</button>
-        </div>
-      </aside>
-
-      <!-- MODAL REVISAR MENSAJE WHATSAPP -->
-      <div id="whatsappModal" class="modal oculto">
-        <div class="modal-contenido">
-          <h2>Revisá tu mensaje</h2>
-          <p>Seleccioná las casillas que quieras incluir en el mensaje:</p>
-
-          <div class="modal-opcionales">
-            <label
-              ><input type="checkbox" id="chkSubtotales" checked /> Subtotales
-              de cada producto</label
-            >
-            <label
-              ><input type="checkbox" id="chkTotalSinDescuento" checked /> Total
-              sin descuento</label
-            >
-            <label
-              ><input type="checkbox" id="chkDescuento" checked /> Descuento
-              (%)</label
-            >
-            <label
-              ><input type="checkbox" id="chkAhorro" checked /> Ahorro</label
-            >
-          </div>
-
-          <textarea id="mensajePreview" readonly></textarea>
-
-          <div class="modal-botones">
-            <button id="copiarWhatsApp" class="btn-secundario">
-              Enviar por WhatsApp
-            </button>
-            <button id="cerrarModal" class="btn-secundario">Cancelar</button>
-          </div>
-        </div>
-      </div>
-      <!--Ticket-->
-      <!-- PANEL TICKET -->
-      <aside id="ticketPanel" class="ticket-panel oculto">
-        <!-- HEADER -->
-        <div class="ticket-header">
-          <button id="cerrarTicket" class="ticket-cerrar">✕</button>
-
-          <h2 class="ticket-negocio">Los Pollitos</h2>
-          <p class="ticket-direccion">
-            Francisco Pascacio Moreno 118 Córdoba Capital
-          </p>
-
-          <p id="ticketFecha" class="ticket-fecha"></p>
-        </div>
-
-        <!-- BODY SCROLLEABLE -->
-        <div id="ticketItems" class="ticket-body">
-          <!-- Items dinámicos -->
-          <p class="ticket-vacio">No hay productos en el ticket</p>
-        </div>
-
-        <!-- FOOTER -->
-        <div class="ticket-footer">
-          <div class="ticket-resumen">
-            <div class="ticket-linea first">
-              <span>Total</span>
-              <span id="ticketTotal">$0</span>
-            </div>
-
-            <div class="ticket-linea ajuste">
-              <span>Descuento %</span>
-              <input
-                type="number"
-                id="ticketDescuento"
-                min="0"
-                max="100"
-                value="0"
-              />
-            </div>
-
-            <div class="ticket-linea ajuste first">
-              <span>Recargo %</span>
-              <input
-                type="number"
-                id="ticketRecargo"
-                min="0"
-                max="100"
-                value="0"
-              />
-            </div>
-
-            <div class="ticket-linea total-final">
-              <span>Total final</span>
-              <span id="ticketTotalFinal">$0</span>
+          <select id="categoryFilter">
+            <option value="" disabled selected>Filtrar por categoría</option>
+            <option value="">Todas</option>
+            <option value="Libreria">Librería</option>
+            <option value="Reposteria">Repostería</option>
+            <option value="Cotillon">Cotillón</option>
+            <option value="Regaleria">Regalería</option>
+            <option value="Electronica">Electrónica</option>
+            <option value="Descartables">Descartables</option>
+          </select>
+        </section>
+ 
+        <!-- LISTA DE ARTÍCULOS -->
+        <section id="lista-articulos">
+          <ul id="productList"></ul>
+        </section>
+ 
+        <!-- ===== OVERLAYS Y PANELES (position:fixed, pueden estar en cualquier lugar) ===== -->
+ 
+        <!-- GESTIÓN DE PRECIOS -->
+        <section id="gestion" class="oculto">
+          <div class="bloque-gestion">
+            <h3>Margen de Ganancia global</h3>
+            <div class="campo">
+              <label for="gananciaGlobalInput">Ganancia global</label>
+              <input type="number" id="gananciaGlobalInput" min="0" /> %
+              <small class="ayuda">Se aplica a todos los productos que no tengan un margen específico</small>
             </div>
           </div>
-
-          <p class="ticket-gracias">
-            Gracias por tu compra <span class="corazon"> ♥</span>
-          </p>
-          <div class="ticket-acciones">
-            <button id="btnImprimir" class="btn-primario">Imprimir</button>
-
-            <button id="btnNuevaVenta" class="btn-primario">Nueva venta</button>
+ 
+          <div class="bloque-gestion">
+            <h3>Margen de Ganancia por categoría</h3>
+            <p class="descripcion">Opcional. Si una categoría no tiene ganancia definida, se usará la ganancia global.</p>
+            <div class="categorias-ganancia">
+              <div class="fila-categoria">
+                <span class="categoria-nombre">Librería</span>
+                <input type="number" class="ganancia-categoria" data-categoria="Libreria" min="0" placeholder="Usa global" />%
+              </div>
+              <div class="fila-categoria">
+                <span class="categoria-nombre">Repostería</span>
+                <input type="number" class="ganancia-categoria" data-categoria="Reposteria" min="0" placeholder="Usa global" />%
+              </div>
+              <div class="fila-categoria">
+                <span class="categoria-nombre">Cotillón</span>
+                <input type="number" class="ganancia-categoria" data-categoria="Cotillón" min="0" placeholder="Usa global" />%
+              </div>
+              <div class="fila-categoria">
+                <span class="categoria-nombre">Regalería</span>
+                <input type="number" class="ganancia-categoria" data-categoria="Regaleria" min="0" placeholder="Usa global" />%
+              </div>
+              <div class="fila-categoria">
+                <span class="categoria-nombre">Electrónica</span>
+                <input type="number" class="ganancia-categoria" data-categoria="Electronica" min="0" placeholder="Usa global" />%
+              </div>
+               <div class="fila-categoria">
+                <span class="categoria-nombre">Descartables</span>
+                <input type="number" class="ganancia-categoria" data-categoria="Descartables" min="0" placeholder="Usa global" />%
+              </div>
+            </div>
+          </div>
+ 
+          <div class="acciones">
+            <button id="aplicarGlobal" class="btn-primario">Aplicar</button>
+            <button id="cerrarGlobal" class="btn-primario">Cerrar</button>
+          </div>
+        </section>
+ 
+        <!-- EDITOR DE PRODUCTOS -->
+        <section id="editorProducto" class="overlay oculto">
+          <div class="editor-contenido">
+            <button id="cerrarEditor" class="editor-cerrar">✕</button>
+            <p id="productoEditando" class="producto-editando"></p>
+            <div class="campo">
+              <label>Nombre</label>
+              <input type="text" id="editNombre" />
+            </div>
+            <div class="campo">
+              <label>Código</label>
+              <input type="text" id="editCodigo" />
+            </div>
+            <div class="campo">
+              <label>Categoría</label>
+              <select id="editCategoria" required>
+                <option value="Libreria">Librería</option>
+                <option value="Cotillón">Cotillón</option>
+                <option value="Reposteria">Repostería</option>
+                <option value="Regaleria">Regalería</option>
+                <option value="Descartables">Descartables</option>
+                <option value="Electronica">Electrónica</option>
+              </select>
+            </div>
+            <div class="campo">
+              <label>Costo</label>
+              <input type="number" id="editCosto" min="0" />
+            </div>
+            <div class="campo campo-precio-publico">
+              <label>Precio público</label>
+              <div id="editPrecioPublico" class="precio-publico">$ 0</div>
+              <small class="ayuda">Calculado automáticamente según el margen</small>
+            </div>
+            <div class="campo">
+              <label>Ganancia especial (%)</label>
+              <input type="number" id="editGanancia" min="0" placeholder="Vacío = usa ganancia global" />
+            </div>
+            <div class="acciones">
+              <button id="guardarProducto" class="btn-primario">Guardar cambios</button>
+              <button id="cancelarEdicion" class="btn-primario">Cancelar</button>
+            </div>
+          </div>
+        </section>
+ 
+        <!-- BANNER DE GANANCIA -->
+        <div id="bannerGanancia" class="banner oculto">
+          <span>Margen de ganancia aplicado</span>
+          <button id="cerrarBanner" class="banner-cerrar">✕</button>
+        </div>
+ 
+        <!-- OVERLAY DE CONFIRMACIÓN -->
+        <section id="overlayConfirmacion" class="overlay oculto">
+          <div class="editor-contenido">
+            <h2 id="confirmacionTitulo">Confirmar acción</h2>
+            <p id="confirmacionTexto"></p>
+            <div class="acciones">
+              <button id="confirmarAccion" class="btn-primario">Confirmar</button>
+              <button id="cancelarConfirmacion" class="btn-primario">Cancelar</button>
+            </div>
+          </div>
+        </section>
+ 
+        <!-- PROMO PANEL LATERAL -->
+        <aside id="promoPanel" class="promo-panel oculto">
+          <div class="promo-header">
+            <input type="text" id="promoNombre" placeholder="Nombre de la promo" />
+            <button id="cerrarPromo">✕</button>
+          </div>
+          <div class="promo-body">
+            <div id="promoLista"></div>
+          </div>
+          <div class="promo-footer">
+            <button id="toggleInfoVendedor" class="btn-info-vendedor">Mostrar info vendedor</button>
+            <div id="infoVendedor" class="promo-info-vendedor oculto"></div>
+            <div class="promo-descuento">
+              <p id="totalSinDescuento">Total sin descuento: $0</p>
+              <div class="promo-warning" id="promoWarning"></div>
+              <div class="promo-descuento-row">
+                <label for="promoDescuento">Descuento %:</label>
+                <input type="number" id="promoDescuento" min="0" max="100" value="0" />
+              </div>
+              <div id="totalAhorro">Ahorro: $0</div>
+              <div id="totalConDescuento">Total Precio Promo: $0</div>
+            </div>
+            <button id="enviarWhatsapp">Enviar por WhatsApp</button>
+          </div>
+        </aside>
+ 
+        <!-- MODAL WHATSAPP -->
+        <div id="whatsappModal" class="modal oculto">
+          <div class="modal-contenido">
+            <h2>Revisá tu mensaje</h2>
+            <p>Seleccioná las casillas que quieras incluir en el mensaje:</p>
+            <div class="modal-opcionales">
+              <label><input type="checkbox" id="chkSubtotales" checked /> Subtotales de cada producto</label>
+              <label><input type="checkbox" id="chkTotalSinDescuento" checked /> Total sin descuento</label>
+              <label><input type="checkbox" id="chkDescuento" checked /> Descuento (%)</label>
+              <label><input type="checkbox" id="chkAhorro" checked /> Ahorro</label>
+            </div>
+            <textarea id="mensajePreview" readonly></textarea>
+            <div class="modal-botones">
+              <button id="copiarWhatsApp" class="btn-secundario">Enviar por WhatsApp</button>
+              <button id="cerrarModal"    class="btn-secundario">Cancelar</button>
+            </div>
           </div>
         </div>
-      </aside>
-    </main>
+ 
+        <!-- PANEL TICKET -->
+        <aside id="ticketPanel" class="ticket-panel oculto">
+          <div class="ticket-header">
+            <button id="cerrarTicket" class="ticket-cerrar">✕</button>
+            <h2 class="ticket-negocio">Los Pollitos</h2>
+            <p class="ticket-direccion">Francisco Pascacio Moreno 118 Córdoba Capital</p>
+            <p id="ticketFecha" class="ticket-fecha"></p>
+          </div>
+          <div id="ticketItems" class="ticket-body">
+            <p class="ticket-vacio">No hay productos en el ticket</p>
+          </div>
+          <div class="ticket-footer">
+            <div class="ticket-resumen">
+              <div class="ticket-linea first">
+                <span>Total</span>
+                <span id="ticketTotal">$0</span>
+              </div>
+              <div class="ticket-linea ajuste">
+                <span>Descuento %</span>
+                <input type="number" id="ticketDescuento" min="0" max="100" value="0" />
+              </div>
+              <div class="ticket-linea ajuste first">
+                <span>Recargo %</span>
+                <input type="number" id="ticketRecargo" min="0" max="100" value="0" />
+              </div>
+              <div class="ticket-linea total-final">
+                <span>Total final</span>
+                <span id="ticketTotalFinal">$0</span>
+              </div>
+            </div>
+            <p class="ticket-gracias">Gracias por tu compra <span class="corazon">♥</span></p>
+            <div class="ticket-acciones">
+              <button id="btnImprimir"   class="btn-primario">Imprimir</button>
+              <button id="btnNuevaVenta" class="btn-primario">Nueva venta</button>
+            </div>
+          </div>
+        </aside>
+ 
+      </main>
+    </div>
+ 
+    <!-- ========== FOOTER ========== -->
     <footer>
       App desarrollada por <strong>Lu Tux</strong> ©2026 · Soporte y consultas:
-      <a href="https://wa.me/5493512309375" target="_blank">
-        WhatsApp +549 351 2309375
-      </a>
+      <a href="https://wa.me/5493512309375" target="_blank">WhatsApp +549 351 2309375</a>
     </footer>
-
+ 
+    <!-- ========== SCRIPTS ========== -->
     <!-- CORE -->
     <script src="app/core/EventBus.js"></script>
     <script src="app/core/Storage.js"></script>
     <script src="app/core/Store.js"></script>
-
+ 
     <!-- SERVICES -->
     <script src="app/services/PriceService.js"></script>
     <script src="app/services/ProductService.js"></script>
-
+ 
     <!-- DATOS -->
     <script src="app/data.js"></script>
-
+ 
     <!-- MÓDULOS -->
     <script src="app/modules/ProductListModule.js"></script>
     <script src="app/modules/GananciaModule.js"></script>
@@ -453,8 +306,9 @@
     <script src="app/modules/PromoModule.js"></script>
     <script src="app/modules/TicketModule.js"></script>
     <script src="app/modules/SearchModule.js"></script>
-
+ 
     <!-- PUNTO DE ENTRADA — siempre último -->
     <script src="app/main.js"></script>
+ 
   </body>
 </html>

@@ -1,12 +1,6 @@
 // =============================================================
 // ProductListModule.js — Renderizado de la lista de productos
 // =============================================================
-// Responsabilidades:
-//   - Escuchar "productos:filtrados" y renderizar la lista
-//   - Agregar botones según el modo activo (promo, ticket)
-//   - Delegar acciones a EditorModule vía EventBus
-//   - Manejar exportar/importar del backup
-// =============================================================
 
 var App = App || {};
 
@@ -15,14 +9,11 @@ App.ProductListModule = (function (EventBus, Store, PriceService, ProductService
   var _productList  = null;
   var _importInput  = null;
 
-  // ---------------------------------------------------------
-  // render — dibuja la lista recibida
-  // ---------------------------------------------------------
   function render(lista) {
     _productList.innerHTML = "";
 
     if (!lista || lista.length === 0) {
-      _productList.innerHTML = "<li>No se encontraron productos</li>";
+      _productList.innerHTML = "<li style='padding:16px;color:#888;font-size:14px'>No se encontraron productos</li>";
       return;
     }
 
@@ -33,15 +24,14 @@ App.ProductListModule = (function (EventBus, Store, PriceService, ProductService
       var li = document.createElement("li");
       li.classList.add("product-item");
 
-      // — Grupo izquierdo —
       var leftGroup = document.createElement("div");
       leftGroup.classList.add("product-left");
 
-      // Botón promo
       if (modoPromo) {
         var btnPromoItem = document.createElement("button");
-        btnPromoItem.classList.add("btn-icono", "btn-promo-item");
+        btnPromoItem.classList.add("btn-icono");
         btnPromoItem.textContent = "🎁";
+        btnPromoItem.title = "Agregar a promo";
         btnPromoItem.addEventListener("click", function (e) {
           e.stopPropagation();
           EventBus.emit("promo:agregar-producto", { producto: producto });
@@ -49,11 +39,11 @@ App.ProductListModule = (function (EventBus, Store, PriceService, ProductService
         leftGroup.appendChild(btnPromoItem);
       }
 
-      // Botón ticket
       if (modoTicket) {
         var btnTicketItem = document.createElement("button");
-        btnTicketItem.classList.add("btn-icono", "btn-ticket-item");
+        btnTicketItem.classList.add("btn-icono");
         btnTicketItem.textContent = "🧾";
+        btnTicketItem.title = "Agregar al ticket";
         btnTicketItem.addEventListener("click", function (e) {
           e.stopPropagation();
           EventBus.emit("ticket:agregar-producto", { producto: producto });
@@ -61,58 +51,37 @@ App.ProductListModule = (function (EventBus, Store, PriceService, ProductService
         leftGroup.appendChild(btnTicketItem);
       }
 
-      // Info del producto
-      var info      = document.createElement("div");
+      var info = document.createElement("div");
       info.classList.add("product-info");
 
-      var nombre    = document.createElement("div");
+      var nombre = document.createElement("div");
       nombre.classList.add("product-name");
       nombre.textContent = producto.nombre;
 
-      var codigo    = document.createElement("div");
-      codigo.classList.add("product-code");
-      codigo.textContent = "Código: " + producto.codigo;
-
-      var categoria = document.createElement("div");
-      categoria.classList.add("product-category");
-      categoria.textContent = "Categoría: " + producto.categoria;
-
-      var precio    = document.createElement("div");
-      precio.classList.add("product-price");
-
-      var precioLabel   = document.createElement("span");
-      precioLabel.classList.add("price-label");
-      precioLabel.textContent = "Precio público";
-
-      var precioSimbolo = document.createElement("span");
-      precioSimbolo.classList.add("price-currency");
-      precioSimbolo.textContent = " $ ";
-
-      var precioValor   = document.createElement("span");
-      precioValor.classList.add("price-value");
-      precioValor.textContent = PriceService.calcularDesdeStore(producto);
-
-      precio.appendChild(precioLabel);
-      precio.appendChild(precioSimbolo);
-      precio.appendChild(precioValor);
+      var meta = document.createElement("div");
+      meta.classList.add("product-meta");
+      meta.textContent = "Cód: " + producto.codigo + " · " + producto.categoria;
 
       info.appendChild(nombre);
-      info.appendChild(codigo);
-      info.appendChild(categoria);
-      info.appendChild(precio);
+      info.appendChild(meta);
       leftGroup.appendChild(info);
 
-      // — Acciones (derecha) —
+      var precio = document.createElement("div");
+      precio.classList.add("product-price");
+      precio.textContent = "$ " + PriceService.calcularDesdeStore(producto);
+
       var acciones    = document.createElement("div");
       acciones.classList.add("product-actions");
 
       var btnEditar   = document.createElement("button");
       btnEditar.classList.add("btn-icono");
       btnEditar.textContent = "✏️";
+      btnEditar.title = "Editar";
 
       var btnEliminar = document.createElement("button");
       btnEliminar.classList.add("btn-icono");
       btnEliminar.textContent = "🗑️";
+      btnEliminar.title = "Eliminar";
 
       btnEditar.addEventListener("click", function (e) {
         e.stopPropagation();
@@ -128,50 +97,30 @@ App.ProductListModule = (function (EventBus, Store, PriceService, ProductService
       acciones.appendChild(btnEliminar);
 
       li.appendChild(leftGroup);
+      li.appendChild(precio);
       li.appendChild(acciones);
       _productList.appendChild(li);
     });
   }
 
-  // ---------------------------------------------------------
-  // init
-  // ---------------------------------------------------------
   function init() {
     _productList = document.getElementById("productList");
     _importInput = document.getElementById("importarInput");
 
-    // Escuchar resultado del filtrado
-    EventBus.on("productos:filtrados", function (datos) {
-      render(datos.lista);
-    });
+    EventBus.on("productos:filtrados", function (datos) { render(datos.lista); });
+    EventBus.on("store:modoPromo:cambiado",  function () { EventBus.emit("busqueda:refiltrar"); });
+    EventBus.on("store:modoTicket:cambiado", function () { EventBus.emit("busqueda:refiltrar"); });
+    EventBus.on("store:ganancia:cambiado",   function () { EventBus.emit("busqueda:refiltrar"); });
 
-    // Re-renderizar cuando cambia el modo promo o ticket
-    EventBus.on("store:modoPromo:cambiado",  function () {
-      EventBus.emit("busqueda:refiltrar");
-    });
-    EventBus.on("store:modoTicket:cambiado", function () {
-      EventBus.emit("busqueda:refiltrar");
-    });
-
-    // Re-renderizar cuando cambian las ganancias (los precios cambian)
-    EventBus.on("store:ganancia:cambiado", function () {
-      EventBus.emit("busqueda:refiltrar");
-    });
-
-    // Exportar
     document.getElementById("exportarBtn")
-      .addEventListener("click", function () {
-        ProductService.exportar();
-      });
+      .addEventListener("click", function () { ProductService.exportar(); });
 
-    // Importar — pedir confirmación primero
     _importInput.addEventListener("change", function () {
       if (_importInput.files.length) {
         EventBus.emit("producto:importar:pedir-confirmacion");
       }
     });
 
-    // Importar — ejecutar tras confirmación
     EventBus.on("producto:importar:confirmar", function () {
       var archivo = _importInput.files[0];
       ProductService.importar(archivo, function (resultado) {
@@ -185,17 +134,7 @@ App.ProductListModule = (function (EventBus, Store, PriceService, ProductService
       });
     });
 
-    // Dropdown backup
-    var btnBackup = document.getElementById("btnBackup");
-    var dropdown  = btnBackup.parentElement;
-
-    btnBackup.addEventListener("click", function (e) {
-      e.stopPropagation();
-      dropdown.classList.toggle("show");
-    });
-    document.addEventListener("click", function () {
-      dropdown.classList.remove("show");
-    });
+    // (dropdown backup eliminado — botones directos en sidebar)
 
     console.info("[ProductListModule] iniciado");
   }
