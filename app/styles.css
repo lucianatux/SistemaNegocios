@@ -1,5 +1,5 @@
 /* ==========================
-   VARIABLES DE COLOR
+   VARIABLES DE COLOR - MODO CLARO (por defecto)
    ========================== */
 
 :root {
@@ -12,6 +12,54 @@
   --color-texto: #222222;
   --color-texto-suave: #6f7178;
   --color-borde: #cccccc;
+
+  /* Colores específicos para elementos */
+  --color-header-bg: #079d8b;
+  --color-sidebar-bg: #ffffff;
+  --color-card-bg: #ffffff;
+  --color-input-bg: #ffffff;
+  --color-hover-bg: #e1f5ee;
+  --color-hover-text: #085041;
+  --color-seleccionado-bg: #e6f7f5;
+  --color-ticket-bg: #ffffff;
+  --color-ticket-footer-bg: #fafafa;
+  --color-modal-bg: #ffffff;
+  --color-promo-bg: #e8e1dc;
+  --color-venta-stat-bg: #f0faf7;
+  --color-shadow: rgba(0, 0, 0, 0.2);
+  --color-overlay: rgba(0, 0, 0, 0.55);
+}
+
+/* ==========================
+   MODO OSCURO
+   ========================== */
+
+[data-theme="dark"] {
+  --color-primario: #0ac5ad;
+  --color-secundario: #4a8fff;
+  --color-terciario: #f5dc7a;
+  --color-cuaternario: #3a3530;
+  --color-fondo: #1a1a1a;
+  --color-blanco: #2a2a2a;
+  --color-texto: #e8e8e8;
+  --color-texto-suave: #a0a0a0;
+  --color-borde: #404040;
+
+  /* Colores específicos para elementos */
+  --color-header-bg: #0a7d70;
+  --color-sidebar-bg: #252525;
+  --color-card-bg: #2a2a2a;
+  --color-input-bg: #1f1f1f;
+  --color-hover-bg: #1a4540;
+  --color-hover-text: #0ac5ad;
+  --color-seleccionado-bg: #1a3f3a;
+  --color-ticket-bg: #2a2a2a;
+  --color-ticket-footer-bg: #222222;
+  --color-modal-bg: #2a2a2a;
+  --color-promo-bg: #3a3530;
+  --color-venta-stat-bg: #1a3f3a;
+  --color-shadow: rgba(0, 0, 0, 0.5);
+  --color-overlay: rgba(0, 0, 0, 0.75);
 }
 
 /* ==========================
@@ -47,6 +95,9 @@ body {
   flex-direction: column;
   background-color: var(--color-fondo);
   color: var(--color-texto);
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 .app-body {
@@ -71,7 +122,7 @@ main {
    ========================== */
 
 header {
-  background-color: var(--color-primario);
+  background-color: var(--color-header-bg);
   color: var(--color-blanco);
   display: flex;
   align-items: center;
@@ -79,7 +130,8 @@ header {
   padding: 0 16px;
   height: 70px;
   flex-shrink: 0;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 6px var(--color-shadow);
+  transition: background-color 0.3s ease;
 }
 
 .marcaTero {
@@ -129,6 +181,10 @@ header {
   margin: 0px 5px;
 }
 
+[data-theme="dark"] .lutux-icon {
+  filter: invert(80%);
+}
+
 .shop-icon {
   width: 100px;
   object-fit: contain;
@@ -142,22 +198,52 @@ header {
 }
 
 /* ==========================
+   BOTÓN TEMA (NUEVO)
+   ========================== */
+
+#themeToggle {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: var(--color-blanco);
+  font-size: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+#themeToggle:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: scale(1.1);
+}
+
+#themeToggle:active {
+  transform: scale(0.95);
+}
+
+/* ==========================
    SIDEBAR
    ========================== */
 
 .sidebar {
   width: 190px;
   flex-shrink: 0;
-  background: #ffffff;
+  background: var(--color-sidebar-bg);
   border-right: 1px solid var(--color-borde);
   display: flex;
   flex-direction: column;
   overflow-y: auto;
+  transition: background-color 0.3s ease;
 }
 
 .nav-section {
   padding: 8px 0;
-  border-bottom: 1px solid #e8e8e8;
+  border-bottom: 1px solid var(--color-borde);
 }
 
 .nav-section-sistema {
@@ -193,16 +279,14 @@ header {
 }
 
 .nav-item:hover {
-  background: #e1f5ee;
-  color: #085041;
+  background: var(--color-hover-bg);
+  color: var(--color-hover-text);
   border-left-color: var(--color-primario);
 }
 
 .nav-item:active {
-  background: #c5ede3;
+  background: var(--color-seleccionado-bg);
 }
-
-/* (dropdown backup eliminado — opciones directas en sidebar) */
 
 /* ==========================
    BUSCADOR
@@ -215,6 +299,7 @@ header {
   background: var(--color-fondo);
   border-bottom: 1px solid var(--color-borde);
   flex-shrink: 0;
+  transition: background-color 0.3s ease;
 }
 
 #searchInput {
@@ -223,7 +308,11 @@ header {
   font-size: 15px;
   border: 1px solid var(--color-borde);
   border-radius: 5px;
-  background: #fff;
+  background: var(--color-input-bg);
+  color: var(--color-texto);
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 #searchInput:focus {
@@ -236,7 +325,11 @@ header {
   font-size: 13px;
   border: 1px solid var(--color-borde);
   border-radius: 5px;
-  background: white;
+  background: var(--color-input-bg);
+  color: var(--color-texto);
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 #categoryFilter:focus {
@@ -253,6 +346,7 @@ header {
   overflow-y: auto;
   background-color: var(--color-blanco);
   padding: 0 12px;
+  transition: background-color 0.3s ease;
 }
 
 #productList {
@@ -266,7 +360,8 @@ header {
   justify-content: space-between;
   align-items: center;
   padding: 10px 4px;
-  border-bottom: 1px solid #d8d8d8;
+  border-bottom: 1px solid var(--color-borde);
+  transition: background-color 0.2s ease;
 }
 
 .product-item:last-child {
@@ -328,6 +423,7 @@ header {
   font-size: 14px;
   border-radius: 6px;
   cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .btn-primario:hover {
@@ -349,6 +445,7 @@ header {
   font-weight: 600;
   border-radius: 6px;
   cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .btn-secundario:hover {
@@ -366,10 +463,11 @@ header {
   transition:
     background 0.15s,
     transform 0.1s;
+  color: var(--color-texto);
 }
 
 .btn-icono:hover {
-  background: rgba(0, 0, 0, 0.07);
+  background: var(--color-hover-bg);
 }
 
 .btn-icono:active {
@@ -386,20 +484,21 @@ header {
   left: 50%;
   transform: translate(-50%, -50%);
   padding: 14px;
-  background: #ffffff; /* Cambiado de terciario a blanco como otros modales */
+  background: var(--color-modal-bg);
   border-radius: 12px;
   width: 90%;
-  max-width: 500px; /* Aumentado para mejor legibilidad */
+  max-width: 500px;
   z-index: 998;
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25); /* Consistente con modal-contenido */
+  box-shadow: 0 10px 28px var(--color-shadow);
   max-height: 95vh;
   overflow-y: auto;
+  transition: background-color 0.3s ease;
 }
 
 #gestion h2 {
   margin-top: 0;
   margin-bottom: 8px;
-  color: var(--color-primario); /* Consistente con otros títulos */
+  color: var(--color-primario);
   font-size: 20px;
   font-weight: 600;
 }
@@ -423,10 +522,11 @@ header {
   font-size: 14px;
   border-radius: 6px;
   border: 2px solid var(--color-borde);
-  background: #fff;
+  background: var(--color-input-bg);
+  color: var(--color-texto);
   transition:
-    border-color 0.15s,
-    outline 0.15s;
+    all 0.15s,
+    background-color 0.3s ease;
 }
 
 .campo input:focus,
@@ -445,9 +545,10 @@ header {
 .bloque-gestion {
   margin-bottom: 10px;
   padding: 8px;
-  background: #f9f9f9; /* Fondo sutil para separar bloques */
+  background: var(--color-card-bg);
   border-radius: 8px;
   border: 2px solid var(--color-terciario);
+  transition: background-color 0.3s ease;
 }
 
 .bloque-gestion h3 {
@@ -476,9 +577,10 @@ header {
   justify-content: space-between;
   gap: 6px;
   padding: 7px 10px;
-  background: #ffffff;
+  background: var(--color-input-bg);
   border-radius: 6px;
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--color-borde);
+  transition: background-color 0.3s ease;
 }
 
 .categoria-nombre {
@@ -495,6 +597,9 @@ header {
   border: 1px solid var(--color-borde);
   text-align: right;
   font-size: 14px;
+  background: var(--color-input-bg);
+  color: var(--color-texto);
+  transition: background-color 0.3s ease;
 }
 
 .ganancia-categoria:focus {
@@ -515,7 +620,6 @@ header {
   line-height: 1.3;
 }
 
-/* Botón cerrar en el modal de gestión (si existe) */
 .gestion-cerrar {
   position: absolute;
   top: 16px;
@@ -539,11 +643,12 @@ header {
 .overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.55);
+  background: var(--color-overlay);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 2000;
+  transition: background-color 0.3s ease;
 }
 
 .overlay.oculto {
@@ -551,7 +656,7 @@ header {
 }
 
 .editor-contenido {
-  background: var(--color-blanco);
+  background: var(--color-modal-bg);
   width: 100%;
   max-width: 500px;
   padding: 24px 20px 20px;
@@ -559,6 +664,7 @@ header {
   position: relative;
   max-height: 90vh;
   overflow-y: auto;
+  transition: background-color 0.3s ease;
 }
 
 .editor-cerrar {
@@ -580,9 +686,11 @@ header {
 }
 
 .campo-precio-publico {
-  background: #f4f4f4;
+  background: var(--color-card-bg);
   border-radius: 6px;
   padding: 10px;
+  border: 1px solid var(--color-borde);
+  transition: background-color 0.3s ease;
 }
 
 .precio-publico {
@@ -597,6 +705,11 @@ header {
   background-color: #ffe5e9;
   padding: 6px 10px;
   border-radius: 6px;
+}
+
+[data-theme="dark"] .titulo-peligro {
+  background-color: #4a1a1f;
+  color: #ff6b7a;
 }
 
 /* ==========================
@@ -615,7 +728,7 @@ header {
   display: flex;
   align-items: center;
   gap: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 10px var(--color-shadow);
   z-index: 999;
   font-size: 14px;
 }
@@ -638,12 +751,13 @@ header {
   right: 0;
   width: 370px;
   height: 100%;
-  background: var(--color-cuaternario);
+  background: var(--color-promo-bg);
   padding: 10px;
   z-index: 1000;
-  box-shadow: -4px 0 15px rgba(0, 0, 0, 0.2);
+  box-shadow: -4px 0 15px var(--color-shadow);
   display: flex;
   flex-direction: column;
+  transition: background-color 0.3s ease;
 }
 
 .promo-header {
@@ -661,6 +775,9 @@ header {
   font-size: 15px;
   border-radius: 6px;
   border: 1px solid var(--color-borde);
+  background: var(--color-input-bg);
+  color: var(--color-texto);
+  transition: background-color 0.3s ease;
 }
 
 .promo-header button#cerrarPromo {
@@ -688,16 +805,17 @@ header {
 .promo-footer {
   flex-shrink: 0;
   padding-top: 8px;
-  border-top: 1px solid #d0c8c0;
+  border-top: 1px solid var(--color-borde);
 }
 
 .promo-info-vendedor {
   margin-top: 8px;
   padding: 8px 10px;
   font-size: 0.85em;
-  background: rgba(0, 0, 0, 0.05);
+  background: var(--color-card-bg);
   border-radius: 6px;
   line-height: 1.4;
+  transition: background-color 0.3s ease;
 }
 
 .promo-info-vendedor strong {
@@ -709,7 +827,7 @@ header {
   font-size: 0.8em;
   background: transparent;
   border: none;
-  color: #666;
+  color: var(--color-texto-suave);
   cursor: pointer;
   padding: 4px 0;
 }
@@ -722,11 +840,12 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: var(--color-blanco);
+  background-color: var(--color-card-bg);
   border-radius: 6px;
   padding: 8px 10px;
   margin-bottom: 8px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-borde);
+  transition: background-color 0.3s ease;
 }
 
 .promo-item div,
@@ -754,6 +873,9 @@ header {
   border: 1px solid var(--color-borde);
   text-align: center;
   margin: 0 6px;
+  background: var(--color-input-bg);
+  color: var(--color-texto);
+  transition: background-color 0.3s ease;
 }
 
 .promo-subtotal {
@@ -809,6 +931,9 @@ header {
   font-size: 14px;
   border-radius: 4px;
   border: 1px solid var(--color-borde);
+  background: var(--color-input-bg);
+  color: var(--color-texto);
+  transition: background-color 0.3s ease;
 }
 
 #totalAhorro,
@@ -822,6 +947,10 @@ header {
   font-size: 0.82em;
   color: #b00020;
   line-height: 1.2;
+}
+
+[data-theme="dark"] .promo-warning {
+  color: #ff6b7a;
 }
 
 #enviarWhatsapp {
@@ -848,16 +977,17 @@ header {
 .modal {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: var(--color-overlay);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 2500;
   backdrop-filter: blur(2px);
+  transition: background-color 0.3s ease;
 }
 
 .modal-contenido {
-  background: #fff;
+  background: var(--color-modal-bg);
   padding: 20px;
   width: 90%;
   max-width: 500px;
@@ -865,7 +995,8 @@ header {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 10px 28px var(--color-shadow);
+  transition: background-color 0.3s ease;
 }
 
 .modal-contenido h2 {
@@ -881,13 +1012,14 @@ header {
 }
 
 .modal-opcionales {
-  background: var(--color-cuaternario);
+  background: var(--color-promo-bg);
   border-radius: 8px;
   padding: 10px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 6px 12px;
   font-size: 13px;
+  transition: background-color 0.3s ease;
 }
 
 #mensajePreview {
@@ -899,9 +1031,10 @@ header {
   font-size: 14px;
   border: 1px solid var(--color-borde);
   border-radius: 8px;
-  background: #f9f9f9;
-  color: #111;
+  background: var(--color-input-bg);
+  color: var(--color-texto);
   line-height: 1.45;
+  transition: background-color 0.3s ease;
 }
 
 .modal-botones {
@@ -930,16 +1063,17 @@ header {
   right: 0;
   width: 370px;
   height: 100dvh;
-  background: #ffffff;
-  box-shadow: -4px 0 15px rgba(0, 0, 0, 0.15);
+  background: var(--color-ticket-bg);
+  box-shadow: -4px 0 15px var(--color-shadow);
   display: flex;
   flex-direction: column;
   z-index: 1000;
+  transition: background-color 0.3s ease;
 }
 
 .ticket-header {
   padding: 6px 16px;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--color-borde);
   position: relative;
   flex-shrink: 0;
 }
@@ -960,18 +1094,19 @@ header {
   padding: 0px;
   font-size: 15px;
   font-weight: 600;
+  color: var(--color-texto);
 }
 
 .ticket-direccion {
   margin: 2px 0 0;
   font-size: 11px;
-  color: #6b7280;
+  color: var(--color-texto-suave);
 }
 
 .ticket-fecha {
   font-size: 11px;
   margin-top: 4px;
-  color: #374151;
+  color: var(--color-texto);
 }
 
 .ticket-body {
@@ -992,7 +1127,7 @@ header {
   justify-content: space-between;
   align-items: center;
   padding: 8px 0;
-  border-bottom: 1px solid #e8e8e8;
+  border-bottom: 1px solid var(--color-borde);
   font-size: 13px;
 }
 
@@ -1003,6 +1138,7 @@ header {
 .ticket-item-nombre {
   font-weight: 500;
   margin-bottom: 2px;
+  color: var(--color-texto);
 }
 
 .ticket-item-detalle {
@@ -1020,6 +1156,9 @@ header {
   border: 1px solid var(--color-borde);
   border-radius: 4px;
   text-align: center;
+  background: var(--color-input-bg);
+  color: var(--color-texto);
+  transition: background-color 0.3s ease;
 }
 
 .ticket-eliminar {
@@ -1038,9 +1177,10 @@ header {
 
 .ticket-footer {
   padding: 14px 16px;
-  border-top: 1px solid #e5e7eb;
-  background: #fafafa;
+  border-top: 1px solid var(--color-borde);
+  background: var(--color-ticket-footer-bg);
   flex-shrink: 0;
+  transition: background-color 0.3s ease;
 }
 
 .ticket-resumen {
@@ -1053,10 +1193,11 @@ header {
   align-items: center;
   margin-bottom: 6px;
   font-size: 13px;
+  color: var(--color-texto);
 }
 
 .ticket-linea.first {
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--color-borde);
   padding-bottom: 6px;
   margin-bottom: 8px;
 }
@@ -1068,6 +1209,9 @@ header {
   border-radius: 4px;
   padding: 2px 6px;
   font-size: 13px;
+  background: var(--color-input-bg);
+  color: var(--color-texto);
+  transition: background-color 0.3s ease;
 }
 
 .total-final {
@@ -1079,8 +1223,8 @@ header {
 .ticket-gracias {
   text-align: center;
   font-size: 12px;
-  color: #6b7280;
-  border-top: 1px dashed #ccc;
+  color: var(--color-texto-suave);
+  border-top: 1px dashed var(--color-borde);
   padding-top: 8px;
   margin: 8px 0;
 }
@@ -1100,6 +1244,10 @@ header {
   animation: latido 1.6s infinite;
 }
 
+[data-theme="dark"] .corazon {
+  color: #ff6b7a;
+}
+
 @keyframes latido {
   0% {
     transform: scale(1);
@@ -1117,7 +1265,7 @@ header {
    ========================== */
 
 .product-item.seleccionado {
-  background-color: #e6f7f5;
+  background-color: var(--color-seleccionado-bg);
   border-left: 4px solid var(--color-primario);
   padding-left: 8px;
 }
@@ -1135,6 +1283,11 @@ footer {
   flex-shrink: 0;
   display: flex;
   justify-content: center;
+  transition: background-color 0.3s ease;
+}
+
+[data-theme="dark"] footer {
+  background-color: #1a1a1a;
 }
 
 footer a {
@@ -1229,6 +1382,7 @@ footer a:hover {
   display: flex;
   flex-direction: column;
   z-index: 10;
+  transition: background-color 0.3s ease;
 }
 
 .ventas-header {
@@ -1236,9 +1390,10 @@ footer a:hover {
   align-items: center;
   justify-content: space-between;
   padding: 12px 16px;
-  background: #fff;
+  background: var(--color-card-bg);
   border-bottom: 1px solid var(--color-borde);
   flex-shrink: 0;
+  transition: background-color 0.3s ease;
 }
 
 .ventas-header h2 {
@@ -1259,23 +1414,25 @@ footer a:hover {
 }
 
 .ventas-cerrar:hover {
-  background: rgba(0, 0, 0, 0.06);
+  background: var(--color-hover-bg);
 }
 
 .ventas-stats {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 8px;
   padding: 10px 14px;
-  background: #fff;
+  background: var(--color-card-bg);
   border-bottom: 1px solid var(--color-borde);
   flex-shrink: 0;
+  transition: background-color 0.3s ease;
 }
 
 .venta-stat {
-  background: #f0faf7;
+  background: var(--color-venta-stat-bg);
   border-radius: 6px;
   padding: 8px 10px;
+  transition: background-color 0.3s ease;
 }
 
 .venta-stat-label {
@@ -1294,13 +1451,18 @@ footer a:hover {
   color: var(--color-secundario);
 }
 
+.venta-stat-valor.verde {
+  color: #1e8035;
+}
+
 .ventas-filtros {
   display: flex;
   gap: 8px;
   padding: 8px 14px;
-  background: #fff;
+  background: var(--color-card-bg);
   border-bottom: 1px solid var(--color-borde);
   flex-shrink: 0;
+  transition: background-color 0.3s ease;
 }
 
 .ventas-filtros select {
@@ -1309,7 +1471,9 @@ footer a:hover {
   border: 1px solid var(--color-borde);
   border-radius: 5px;
   font-size: 13px;
-  background: #fff;
+  background: var(--color-input-bg);
+  color: var(--color-texto);
+  transition: background-color 0.3s ease;
 }
 
 .ventas-lista {
@@ -1326,11 +1490,12 @@ footer a:hover {
 }
 
 .venta-card {
-  background: #fff;
-  border: 1px solid #e0e0e0;
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-borde);
   border-radius: 7px;
   margin-bottom: 8px;
   overflow: hidden;
+  transition: background-color 0.3s ease;
 }
 
 .venta-card-header {
@@ -1381,6 +1546,16 @@ footer a:hover {
   color: #0c447c;
 }
 
+[data-theme="dark"] .badge-efectivo {
+  background: #1a4540;
+  color: #0ac5ad;
+}
+
+[data-theme="dark"] .badge-transferencia {
+  background: #1a2f4a;
+  color: #4a8fff;
+}
+
 .venta-total {
   font-weight: 700;
   font-size: 14px;
@@ -1398,13 +1573,14 @@ footer a:hover {
 }
 
 .venta-toggle:hover {
-  background: rgba(0, 0, 0, 0.06);
+  background: var(--color-hover-bg);
 }
 
 .venta-card-detalle {
   padding: 8px 12px;
-  background: #fafafa;
-  border-top: 1px solid #f0f0f0;
+  background: var(--color-ticket-footer-bg);
+  border-top: 1px solid var(--color-borde);
+  transition: background-color 0.3s ease;
 }
 
 .venta-item {
@@ -1413,7 +1589,7 @@ footer a:hover {
   padding: 4px 0;
   font-size: 12px;
   color: var(--color-texto-suave);
-  border-bottom: 1px dashed #eee;
+  border-bottom: 1px dashed var(--color-borde);
 }
 
 .venta-item:last-child {
@@ -1440,7 +1616,15 @@ footer a:hover {
   background: #ffe5e9;
 }
 
-/* Botón registrar venta en el ticket */
+[data-theme="dark"] .btn-venta-eliminar {
+  border-color: #ff6b7a;
+  color: #ff6b7a;
+}
+
+[data-theme="dark"] .btn-venta-eliminar:hover {
+  background: #4a1a1f;
+}
+
 .btn-registrar {
   background-color: #27a844 !important;
   border-color: #27a844 !important;
@@ -1454,7 +1638,6 @@ footer a:hover {
   border-color: #1e8035 !important;
 }
 
-/* Modal medio de pago */
 .modal-medio {
   max-width: 320px !important;
   text-align: center;
@@ -1476,7 +1659,7 @@ footer a:hover {
   padding: 14px 10px;
   border-radius: 8px;
   border: 2px solid var(--color-primario);
-  background: #fff;
+  background: var(--color-card-bg);
   color: var(--color-primario);
   font-size: 14px;
   font-weight: 600;
@@ -1502,6 +1685,7 @@ footer a:hover {
 .btn-medio-cancelar:hover {
   text-decoration: underline;
 }
+
 /* ==========================
    PESAJE
    ========================== */
@@ -1544,6 +1728,10 @@ footer a:hover {
   margin-bottom: 10px;
 }
 
+[data-theme="dark"] .campo-por-peso {
+  background: #3a3020;
+}
+
 .modal-pesaje {
   max-width: 300px !important;
   text-align: center;
@@ -1563,6 +1751,10 @@ footer a:hover {
   margin-bottom: 12px;
 }
 
+[data-theme="dark"] .pesaje-ref {
+  background: #1a2f4a;
+}
+
 .pesaje-input {
   width: 100%;
   padding: 10px;
@@ -1572,7 +1764,9 @@ footer a:hover {
   border-radius: 6px;
   text-align: center;
   color: var(--color-texto);
+  background: var(--color-input-bg);
   margin-bottom: 8px;
+  transition: background-color 0.3s ease;
 }
 
 .pesaje-resultado {
@@ -1581,4 +1775,155 @@ footer a:hover {
   color: var(--color-primario);
   margin-bottom: 14px;
   min-height: 22px;
+}
+
+/* ==========================
+   TABS DE PERÍODO
+   ========================== */
+
+.ventas-tabs {
+  display: flex;
+  background: var(--color-card-bg);
+  border-bottom: 1px solid var(--color-borde);
+  flex-shrink: 0;
+}
+
+.ventas-tab {
+  flex: 1;
+  padding: 9px;
+  text-align: center;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-texto-suave);
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.ventas-tab.activo {
+  color: var(--color-primario);
+  border-bottom-color: var(--color-primario);
+}
+
+.ventas-tab:hover {
+  background: var(--color-hover-bg);
+  color: var(--color-primario);
+}
+
+/* ==========================
+   STATS ADICIONALES
+   ========================== */
+
+.venta-stat.azul  { background: #e6f1fb; }
+.venta-stat.verde { background: #eaf3de; }
+.venta-stat.amber { background: #faeeda; }
+
+.venta-stat-valor.amber { color: #633806; }
+
+[data-theme="dark"] .venta-stat.azul  { background: #1a2f4a; }
+[data-theme="dark"] .venta-stat.verde { background: #1a3020; }
+[data-theme="dark"] .venta-stat.amber { background: #3a2a10; }
+
+[data-theme="dark"] .venta-stat-valor.amber { color: #f5c842; }
+
+/* ==========================
+   DESGLOSE POR MEDIO DE PAGO
+   ========================== */
+
+.ventas-desglose {
+  padding: 10px 14px;
+  background: var(--color-card-bg);
+  border-bottom: 1px solid var(--color-borde);
+  flex-shrink: 0;
+  transition: background-color 0.3s ease;
+}
+
+.desglose-titulo {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-texto-suave);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+.desglose-items {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.desglose-item {
+  background: var(--color-fondo);
+  border: 1px solid var(--color-borde);
+  border-radius: 6px;
+  padding: 8px 10px;
+  transition: background-color 0.3s ease;
+}
+
+.desglose-medio {
+  font-size: 11px;
+  color: var(--color-texto-suave);
+  margin-bottom: 4px;
+}
+
+.desglose-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 4px;
+}
+
+.desglose-monto {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-texto);
+}
+
+.desglose-sub {
+  font-size: 11px;
+  color: var(--color-texto-suave);
+}
+
+.barra-wrap {
+  height: 5px;
+  background: var(--color-borde);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.barra {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.barra-ef { background: var(--color-primario); }
+.barra-tr { background: var(--color-secundario); }
+
+/* ==========================
+   FILTRO MEDIO (solo lista)
+   ========================== */
+
+.ventas-filtros-medio {
+  display: flex;
+  padding: 8px 14px;
+  background: var(--color-card-bg);
+  border-bottom: 1px solid var(--color-borde);
+  flex-shrink: 0;
+  transition: background-color 0.3s ease;
+}
+
+.ventas-filtros-medio select {
+  flex: 1;
+  padding: 7px 10px;
+  border: 1px solid var(--color-borde);
+  border-radius: 5px;
+  font-size: 13px;
+  background: var(--color-input-bg);
+  color: var(--color-texto);
+  transition: background-color 0.3s ease;
 }

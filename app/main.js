@@ -14,7 +14,6 @@
 // =============================================================
 
 (function arrancar() {
-
   // 1. Core — Store necesita que data.js ya esté cargado
   App.Store.inicializar();
 
@@ -28,16 +27,18 @@
   App.TicketModule.init();
   App.VentasModule.init();
   App.PesajeModule.init();
+  App.LightdarkModule.init();
   App.SearchModule.init();
 
   // Conectar eventos de búsqueda con SearchModule
-  App.EventBus.on("busqueda:limpiar",   App.SearchModule.limpiar);
+  App.EventBus.on("busqueda:limpiar", App.SearchModule.limpiar);
   App.EventBus.on("busqueda:refiltrar", App.SearchModule.filtrar);
 
   // Primer render — todos los módulos ya están listos para escuchar
   App.SearchModule.filtrar();
 
   var cantProductos = App.Store.getProductos().length;
-  console.info("[Tero] App iniciada — " + cantProductos + " productos cargados.");
-
+  console.info(
+    "[Tero] App iniciada — " + cantProductos + " productos cargados.",
+  );
 })();

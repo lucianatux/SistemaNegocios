@@ -58,6 +58,7 @@ App.TicketModule = (function (EventBus, Store, PriceService) {
       nombre: producto.nombre,
       precio: PriceService.calcularDesdeStore(producto),
       cantidad: 1,
+      costo: producto.costo || 0,
     });
 
     _guardarEnStore();
@@ -203,6 +204,7 @@ App.TicketModule = (function (EventBus, Store, PriceService) {
         cantidad: item.cantidad,
         precioUnitario: item.precio,
         subtotal: item.precio * item.cantidad,
+        costo: item.costo || 0,
       };
     });
 

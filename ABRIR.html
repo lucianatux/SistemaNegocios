@@ -24,6 +24,7 @@
       <!--<h1 class="negocioNombre">
         <span class="shopname">Polirubro Estrella</span>
       </h1>-->
+      <button id="themeToggle" title="Cambiar tema">🌙</button>
     </header>
 
     <!-- ========== CUERPO: SIDEBAR + MAIN ========== -->
@@ -403,33 +404,84 @@
             <h2>📊 Registro de ventas</h2>
             <button id="cerrarVentas" class="ventas-cerrar">✕</button>
           </div>
+          <div class="ventas-tabs">
+            <button class="ventas-tab activo" data-periodo="hoy">Hoy</button>
+            <button class="ventas-tab" data-periodo="semana">Semana</button>
+            <button class="ventas-tab" data-periodo="mes">Mes</button>
+            <button class="ventas-tab" data-periodo="">Todo</button>
+          </div>
+
           <div class="ventas-stats">
             <div class="venta-stat">
-              <div class="venta-stat-label">Ventas hoy</div>
+              <div class="venta-stat-label">Ventas</div>
               <div class="venta-stat-valor" id="ventaStatCount">0</div>
             </div>
-            <div class="venta-stat">
-              <div class="venta-stat-label">Total hoy</div>
-              <div class="venta-stat-valor" id="ventaStatHoy">$0</div>
+            <div class="venta-stat azul">
+              <div class="venta-stat-label">Total vendido</div>
+              <div class="venta-stat-valor azul" id="ventaStatHoy">$0</div>
             </div>
-            <div class="venta-stat">
-              <div class="venta-stat-label">Esta semana</div>
-              <div class="venta-stat-valor azul" id="ventaStatSemana">$0</div>
+            <div class="venta-stat verde">
+              <div class="venta-stat-label">Ganancia estimada</div>
+              <div class="venta-stat-valor verde" id="ventaStatGanancia">
+                $0
+              </div>
+            </div>
+            <div class="venta-stat amber">
+              <div class="venta-stat-label">Margen promedio</div>
+              <div class="venta-stat-valor amber" id="ventaStatMargen">0%</div>
             </div>
           </div>
-          <div class="ventas-filtros">
-            <select id="ventaFiltroPeriodo">
-              <option value="hoy">Hoy</option>
-              <option value="semana">Esta semana</option>
-              <option value="mes">Este mes</option>
-              <option value="">Todo</option>
-            </select>
+
+          <div class="ventas-desglose">
+            <div class="desglose-titulo">Desglose por medio de pago</div>
+            <div class="desglose-items">
+              <div class="desglose-item">
+                <div class="desglose-medio">💵 Efectivo</div>
+                <div class="desglose-row">
+                  <span class="desglose-monto" id="desgloseEfectivoMonto"
+                    >$0</span
+                  >
+                  <span class="desglose-sub" id="desgloseEfectivoCount"
+                    >0 ventas</span
+                  >
+                </div>
+                <div class="barra-wrap">
+                  <div
+                    class="barra barra-ef"
+                    id="barraEfectivo"
+                    style="width: 0%"
+                  ></div>
+                </div>
+              </div>
+              <div class="desglose-item">
+                <div class="desglose-medio">📲 Transferencia</div>
+                <div class="desglose-row">
+                  <span class="desglose-monto" id="desgloseTransferenciaMonto"
+                    >$0</span
+                  >
+                  <span class="desglose-sub" id="desgloseTransferenciaCount"
+                    >0 ventas</span
+                  >
+                </div>
+                <div class="barra-wrap">
+                  <div
+                    class="barra barra-tr"
+                    id="barraTransferencia"
+                    style="width: 0%"
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ventas-filtros-medio">
             <select id="ventaFiltroMedio">
               <option value="">Todos los medios</option>
               <option value="efectivo">Efectivo</option>
               <option value="transferencia">Transferencia</option>
             </select>
           </div>
+
           <div id="ventasLista" class="ventas-lista"></div>
         </section>
 
@@ -506,6 +558,7 @@
     <script src="app/modules/TicketModule.js"></script>
     <script src="app/modules/VentasModule.js"></script>
     <script src="app/modules/PesajeModule.js"></script>
+    <script src="app/modules/LightdarkModule.js"></script>
     <script src="app/modules/SearchModule.js"></script>
 
     <!-- PUNTO DE ENTRADA — siempre último -->
