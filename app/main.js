@@ -26,6 +26,8 @@
   App.EditorModule.init();
   App.PromoModule.init();
   App.TicketModule.init();
+  App.VentasModule.init();
+  App.PesajeModule.init();
   App.SearchModule.init();
 
   // Conectar eventos de búsqueda con SearchModule

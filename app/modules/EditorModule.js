@@ -11,33 +11,33 @@
 var App = App || {};
 
 App.EditorModule = (function (EventBus, Store, ProductService, PriceService) {
-
   // Estado interno del módulo
-  var _modoEditor       = null;   // "crear" | "editar"
+  var _modoEditor = null; // "crear" | "editar"
   var _productoEditando = null;
-  var _accionPendiente  = null;   // { tipo, producto }
+  var _accionPendiente = null; // { tipo, producto }
 
   // Elementos DOM
-  var _overlay             = null;
+  var _overlay = null;
   var _overlayConfirmacion = null;
-  var _inputNombre         = null;
-  var _inputCodigo         = null;
-  var _inputCategoria      = null;
-  var _inputCosto          = null;
-  var _inputGanancia       = null;
-  var _precioPublico       = null;
-  var _tituloEditor        = null;
-  var _tituloConfirmacion  = null;
-  var _textoConfirmacion   = null;
+  var _inputNombre = null;
+  var _inputCodigo = null;
+  var _inputCategoria = null;
+  var _inputCosto = null;
+  var _inputGanancia = null;
+  var _precioPublico = null;
+  var _tituloEditor = null;
+  var _tituloConfirmacion = null;
+  var _textoConfirmacion = null;
+  var _inputPorPeso = null;
+  var _labelCosto = null;
 
   // ---------------------------------------------------------
   // _actualizarPrecioPublico — recalcula en tiempo real
   // ---------------------------------------------------------
   function _actualizarPrecioPublico() {
-    var costo     = parseFloat(_inputCosto.value);
-    var ganancia  = _inputGanancia.value === ""
-                      ? null
-                      : parseFloat(_inputGanancia.value);
+    var costo = parseFloat(_inputCosto.value);
+    var ganancia =
+      _inputGanancia.value === "" ? null : parseFloat(_inputGanancia.value);
 
     if (isNaN(costo)) {
       _precioPublico.textContent = "-";
@@ -45,15 +45,15 @@ App.EditorModule = (function (EventBus, Store, ProductService, PriceService) {
     }
 
     var productoTemp = {
-      costo    : costo,
-      ganancia : ganancia,
+      costo: costo,
+      ganancia: ganancia,
       categoria: _inputCategoria.value,
     };
 
     var precio = PriceService.calcular(
       productoTemp,
       Store.get("gananciaGlobal"),
-      Store.get("gananciasPorCategoria")
+      Store.get("gananciasPorCategoria"),
     );
 
     _precioPublico.textContent = "$ " + precio;
@@ -63,26 +63,34 @@ App.EditorModule = (function (EventBus, Store, ProductService, PriceService) {
   // abrirEditor
   // ---------------------------------------------------------
   function abrirEditor(modo, producto) {
-    _modoEditor       = modo;
+    _modoEditor = modo;
     _productoEditando = producto || null;
 
     if (modo === "crear") {
-      _tituloEditor.textContent    = "Nuevo producto";
-      _inputNombre.value           = "";
-      _inputCodigo.value           = "";
-      _inputCategoria.value        = "";
-      _inputCosto.value            = "";
-      _inputGanancia.value         = "";
-      _precioPublico.textContent   = "-";
+      _tituloEditor.textContent = "Nuevo producto";
+      _inputNombre.value = "";
+      _inputCodigo.value = "";
+      _inputCategoria.value = "";
+      _inputCosto.value = "";
+      _inputGanancia.value = "";
+      _precioPublico.textContent = "-";
+      document.getElementById("editPorPeso").checked = false;
+      document.getElementById("labelCosto").textContent = "Costo";
     }
 
     if (modo === "editar" && producto) {
-      _tituloEditor.textContent  = "Editando: " + producto.nombre;
-      _inputNombre.value         = producto.nombre;
-      _inputCodigo.value         = producto.codigo;
-      _inputCategoria.value      = producto.categoria;
-      _inputCosto.value          = producto.costo;
-      _inputGanancia.value       = producto.ganancia !== null ? producto.ganancia : "";
+      _tituloEditor.textContent = "Editando: " + producto.nombre;
+      _inputNombre.value = producto.nombre;
+      _inputCodigo.value = producto.codigo;
+      _inputCategoria.value = producto.categoria;
+      _inputCosto.value = producto.costo;
+      _inputGanancia.value =
+        producto.ganancia !== null ? producto.ganancia : "";
+      var esPorPeso = producto.porPeso === true;
+      document.getElementById("editPorPeso").checked = esPorPeso;
+      document.getElementById("labelCosto").textContent = esPorPeso
+        ? "Costo por gramo"
+        : "Costo";
       _actualizarPrecioPublico();
     }
 
@@ -94,7 +102,7 @@ App.EditorModule = (function (EventBus, Store, ProductService, PriceService) {
   // ---------------------------------------------------------
   function cerrarEditor() {
     _overlay.classList.add("oculto");
-    _modoEditor       = null;
+    _modoEditor = null;
     _productoEditando = null;
   }
 
@@ -103,11 +111,12 @@ App.EditorModule = (function (EventBus, Store, ProductService, PriceService) {
   // ---------------------------------------------------------
   function _guardar() {
     var datos = {
-      nombre   : _inputNombre.value,
-      codigo   : _inputCodigo.value,
+      nombre: _inputNombre.value,
+      codigo: _inputCodigo.value,
       categoria: _inputCategoria.value,
-      costo    : _inputCosto.value,
-      ganancia : _inputGanancia.value,
+      costo: _inputCosto.value,
+      ganancia: _inputGanancia.value,
+      porPeso: document.getElementById("editPorPeso").checked,
     };
 
     var resultado;
@@ -138,21 +147,22 @@ App.EditorModule = (function (EventBus, Store, ProductService, PriceService) {
 
     if (tipo === "editar") {
       _tituloConfirmacion.textContent = "Editar producto";
-      _textoConfirmacion.textContent  =
+      _textoConfirmacion.textContent =
         '¿Querés editar el producto "' + producto.nombre + '"?';
     }
 
     if (tipo === "eliminar") {
       _tituloConfirmacion.textContent = "Eliminar producto";
-      _textoConfirmacion.textContent  =
-        '¿Seguro que querés eliminar "' + producto.nombre +
+      _textoConfirmacion.textContent =
+        '¿Seguro que querés eliminar "' +
+        producto.nombre +
         '"? Esta acción no se puede deshacer.';
       _tituloConfirmacion.classList.add("titulo-peligro");
     }
 
     if (tipo === "importar") {
       _tituloConfirmacion.textContent = "Importar datos";
-      _textoConfirmacion.textContent  =
+      _textoConfirmacion.textContent =
         "⚠️ Esto reemplazará todos los productos actuales. ¿Querés continuar?";
     }
 
@@ -166,7 +176,7 @@ App.EditorModule = (function (EventBus, Store, ProductService, PriceService) {
 
   function _confirmar() {
     if (!_accionPendiente) return;
-    var tipo     = _accionPendiente.tipo;
+    var tipo = _accionPendiente.tipo;
     var producto = _accionPendiente.producto;
 
     if (tipo === "editar") {
@@ -189,37 +199,45 @@ App.EditorModule = (function (EventBus, Store, ProductService, PriceService) {
   // init
   // ---------------------------------------------------------
   function init() {
-    _overlay             = document.getElementById("editorProducto");
+    _overlay = document.getElementById("editorProducto");
     _overlayConfirmacion = document.getElementById("overlayConfirmacion");
-    _inputNombre         = document.getElementById("editNombre");
-    _inputCodigo         = document.getElementById("editCodigo");
-    _inputCategoria      = document.getElementById("editCategoria");
-    _inputCosto          = document.getElementById("editCosto");
-    _inputGanancia       = document.getElementById("editGanancia");
-    _precioPublico       = document.getElementById("editPrecioPublico");
-    _tituloEditor        = document.getElementById("productoEditando");
-    _tituloConfirmacion  = document.getElementById("confirmacionTitulo");
-    _textoConfirmacion   = document.getElementById("confirmacionTexto");
+    _inputNombre = document.getElementById("editNombre");
+    _inputCodigo = document.getElementById("editCodigo");
+    _inputCategoria = document.getElementById("editCategoria");
+    _inputCosto = document.getElementById("editCosto");
+    _inputGanancia = document.getElementById("editGanancia");
+    _precioPublico = document.getElementById("editPrecioPublico");
+    _tituloEditor = document.getElementById("productoEditando");
+    _tituloConfirmacion = document.getElementById("confirmacionTitulo");
+    _textoConfirmacion = document.getElementById("confirmacionTexto");
 
     // Precio público en tiempo real
-    _inputCosto.addEventListener("input",    _actualizarPrecioPublico);
+    _inputCosto.addEventListener("input", _actualizarPrecioPublico);
     _inputGanancia.addEventListener("input", _actualizarPrecioPublico);
     _inputCategoria.addEventListener("change", _actualizarPrecioPublico);
 
     // Botones del editor
-    document.getElementById("cerrarEditor")
+    document
+      .getElementById("cerrarEditor")
       .addEventListener("click", cerrarEditor);
-    document.getElementById("cancelarEdicion")
+    document
+      .getElementById("cancelarEdicion")
       .addEventListener("click", cerrarEditor);
-    document.getElementById("guardarProducto")
+    document
+      .getElementById("guardarProducto")
       .addEventListener("click", _guardar);
-    document.getElementById("btnAgregarProducto")
-      .addEventListener("click", function () { abrirEditor("crear"); });
+    document
+      .getElementById("btnAgregarProducto")
+      .addEventListener("click", function () {
+        abrirEditor("crear");
+      });
 
     // Botones de confirmación
-    document.getElementById("confirmarAccion")
+    document
+      .getElementById("confirmarAccion")
       .addEventListener("click", _confirmar);
-    document.getElementById("cancelarConfirmacion")
+    document
+      .getElementById("cancelarConfirmacion")
       .addEventListener("click", _cerrarConfirmacion);
 
     // Escuchar pedidos de confirmación desde la lista de productos
@@ -232,14 +250,22 @@ App.EditorModule = (function (EventBus, Store, ProductService, PriceService) {
       abrirConfirmacion("importar", null);
     });
 
+    document
+      .getElementById("editPorPeso")
+      .addEventListener("change", function () {
+        document.getElementById("labelCosto").textContent = this.checked
+          ? "Costo por gramo"
+          : "Costo";
+        _actualizarPrecioPublico();
+      });
+
     console.info("[EditorModule] iniciado");
   }
 
   return {
-    init              : init,
-    abrirEditor       : abrirEditor,
-    cerrarEditor      : cerrarEditor,
-    abrirConfirmacion : abrirConfirmacion,
+    init: init,
+    abrirEditor: abrirEditor,
+    cerrarEditor: cerrarEditor,
+    abrirConfirmacion: abrirConfirmacion,
   };
-
 })(App.EventBus, App.Store, App.ProductService, App.PriceService);

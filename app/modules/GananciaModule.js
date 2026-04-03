@@ -10,12 +10,11 @@
 var App = App || {};
 
 App.GananciaModule = (function (EventBus, Store) {
-
-  var _panel                   = null;
-  var _inputGlobal             = null;
-  var _inputsCategorias        = null;
-  var _banner                  = null;
-  var _bannerTimeout           = null;
+  var _panel = null;
+  var _inputGlobal = null;
+  var _inputsCategorias = null;
+  var _banner = null;
+  var _bannerTimeout = null;
 
   // ---------------------------------------------------------
   // abrir / cerrar panel
@@ -26,7 +25,7 @@ App.GananciaModule = (function (EventBus, Store) {
 
     var porCategoria = Store.get("gananciasPorCategoria");
     _inputsCategorias.forEach(function (input) {
-      var cat   = input.dataset.categoria;
+      var cat = input.dataset.categoria;
       input.value = porCategoria[cat] !== undefined ? porCategoria[cat] : "";
     });
   }
@@ -39,7 +38,7 @@ App.GananciaModule = (function (EventBus, Store) {
   // aplicar — lee inputs y actualiza el Store
   // ---------------------------------------------------------
   function aplicar() {
-    var global       = parseFloat(_inputGlobal.value) || 0;
+    var global = parseFloat(_inputGlobal.value) || 0;
     var porCategoria = {};
 
     _inputsCategorias.forEach(function (input) {
@@ -47,6 +46,22 @@ App.GananciaModule = (function (EventBus, Store) {
         porCategoria[input.dataset.categoria] = parseFloat(input.value);
       }
     });
+
+    // Verificar si hay promo o ticket en curso
+    var tienePromo = Store.get("promoActual").items.length > 0;
+    var tieneTicket = Store.get("ticketActual").items.length > 0;
+
+    if (tienePromo || tieneTicket) {
+      var aviso =
+        "⚠️ Si continuás, se limpiarán los registros de promo y ticket en curso.\n\n¿Continuar?";
+      if (!confirm(aviso)) return;
+
+      // Limpiar promo y ticket
+      Store.setPromo({ nombre: "", descuento: 0, items: [] });
+      Store.setTicket({ items: [] });
+      EventBus.emit("promo:limpiar");
+      EventBus.emit("ticket:limpiar");
+    }
 
     Store.setGanancia(global, porCategoria);
     EventBus.emit("busqueda:limpiar");
@@ -69,18 +84,16 @@ App.GananciaModule = (function (EventBus, Store) {
   // init
   // ---------------------------------------------------------
   function init() {
-    _panel            = document.getElementById("gestion");
-    _inputGlobal      = document.getElementById("gananciaGlobalInput");
+    _panel = document.getElementById("gestion");
+    _inputGlobal = document.getElementById("gananciaGlobalInput");
     _inputsCategorias = document.querySelectorAll(".ganancia-categoria");
-    _banner           = document.getElementById("bannerGanancia");
+    _banner = document.getElementById("bannerGanancia");
 
-    document.getElementById("btnGestion")
-      .addEventListener("click", abrir);
-    document.getElementById("cerrarGlobal")
-      .addEventListener("click", cerrar);
-    document.getElementById("aplicarGlobal")
-      .addEventListener("click", aplicar);
-    document.getElementById("cerrarBanner")
+    document.getElementById("btnGestion").addEventListener("click", abrir);
+    document.getElementById("cerrarGlobal").addEventListener("click", cerrar);
+    document.getElementById("aplicarGlobal").addEventListener("click", aplicar);
+    document
+      .getElementById("cerrarBanner")
       .addEventListener("click", function () {
         _banner.classList.add("oculto");
       });
@@ -89,9 +102,8 @@ App.GananciaModule = (function (EventBus, Store) {
   }
 
   return {
-    init  : init,
-    abrir : abrir,
+    init: init,
+    abrir: abrir,
     cerrar: cerrar,
   };
-
 })(App.EventBus, App.Store);

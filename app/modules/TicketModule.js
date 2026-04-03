@@ -1,28 +1,20 @@
 // =============================================================
 // TicketModule.js — Sistema de ticket de venta
 // =============================================================
-// Responsabilidades:
-//   - Gestionar el panel lateral del ticket
-//   - Agregar, editar cantidad y eliminar items
-//   - Calcular total con descuento y recargo
-//   - Imprimir y resetear para nueva venta
-// =============================================================
 
 var App = App || {};
 
 App.TicketModule = (function (EventBus, Store, PriceService) {
-
-  // Estado local del módulo
   var _ticket = { items: [] };
 
-  // Elementos DOM
-  var _panel          = null;
-  var _ticketItems    = null;
-  var _ticketTotal    = null;
-  var _ticketFinal    = null;
+  var _panel = null;
+  var _ticketItems = null;
+  var _ticketTotal = null;
+  var _ticketFinal = null;
   var _descuentoInput = null;
-  var _recargoInput   = null;
-  var _fechaEl        = null;
+  var _recargoInput = null;
+  var _fechaEl = null;
+  var _modalMedio = null;
 
   // ---------------------------------------------------------
   // abrir / cerrar
@@ -44,8 +36,12 @@ App.TicketModule = (function (EventBus, Store, PriceService) {
   function _mostrarFecha() {
     var ahora = new Date();
     _fechaEl.textContent = ahora.toLocaleString("es-AR", {
-      day: "2-digit", month: "2-digit", year: "numeric",
-      hour: "2-digit", minute: "2-digit", hour12: false,
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
     });
   }
 
@@ -59,8 +55,8 @@ App.TicketModule = (function (EventBus, Store, PriceService) {
     if (existe) return;
 
     _ticket.items.push({
-      nombre  : producto.nombre,
-      precio  : PriceService.calcularDesdeStore(producto),
+      nombre: producto.nombre,
+      precio: PriceService.calcularDesdeStore(producto),
       cantidad: 1,
     });
 
@@ -78,21 +74,28 @@ App.TicketModule = (function (EventBus, Store, PriceService) {
   }
 
   // ---------------------------------------------------------
-  // _calcularTotal
+  // _calcularTotalFinal — devuelve el número
   // ---------------------------------------------------------
-  function _calcularTotal() {
-    var subtotal  = _ticket.items.reduce(function (acc, item) {
+  function _calcularTotalFinal() {
+    var subtotal = _ticket.items.reduce(function (acc, item) {
       return acc + item.precio * item.cantidad;
     }, 0);
-
     var descuento = parseFloat(_descuentoInput.value) || 0;
-    var recargo   = parseFloat(_recargoInput.value)   || 0;
+    var recargo = parseFloat(_recargoInput.value) || 0;
+    var conDesc = subtotal - subtotal * (descuento / 100);
+    return Math.round(conDesc + conDesc * (recargo / 100));
+  }
 
-    var conDescuento = subtotal - subtotal * (descuento / 100);
-    var totalFinal   = conDescuento + conDescuento * (recargo / 100);
-
+  // ---------------------------------------------------------
+  // _actualizarTotalesDOM
+  // ---------------------------------------------------------
+  function _actualizarTotalesDOM() {
+    var subtotal = _ticket.items.reduce(function (acc, item) {
+      return acc + item.precio * item.cantidad;
+    }, 0);
     _ticketTotal.textContent = "$" + subtotal.toLocaleString("es-AR");
-    _ticketFinal.textContent = "$" + totalFinal.toLocaleString("es-AR");
+    _ticketFinal.textContent =
+      "$" + _calcularTotalFinal().toLocaleString("es-AR");
   }
 
   // ---------------------------------------------------------
@@ -106,63 +109,68 @@ App.TicketModule = (function (EventBus, Store, PriceService) {
         "<p class='ticket-vacio'>No hay productos en el ticket</p>";
       _ticketTotal.textContent = "$0";
       _ticketFinal.textContent = "$0";
-      _descuentoInput.value    = 0;
-      _recargoInput.value      = 0;
+      _descuentoInput.value = 0;
+      _recargoInput.value = 0;
       return;
     }
 
     _ticket.items.forEach(function (item, index) {
       var subtotal = item.precio * item.cantidad;
-      var fila     = document.createElement("div");
+      var fila = document.createElement("div");
       fila.classList.add("ticket-item");
 
       fila.innerHTML =
         '<div class="ticket-item-info">' +
-          '<div class="ticket-item-nombre">' + item.nombre + '</div>' +
-          '<div class="ticket-item-detalle">' +
-            '<input type="number" min="1" value="' + item.cantidad + '" ' +
-              'class="ticket-cantidad" data-index="' + index + '" />' +
-            ' x $' + item.precio.toLocaleString("es-AR") +
-            ' = $' + subtotal.toLocaleString("es-AR") +
-          '</div>' +
-        '</div>' +
-        '<button class="ticket-eliminar" data-index="' + index + '">✕</button>';
+        '<div class="ticket-item-nombre">' +
+        item.nombre +
+        "</div>" +
+        '<div class="ticket-item-detalle">' +
+        '<input type="number" min="1" value="' +
+        item.cantidad +
+        '" ' +
+        'class="ticket-cantidad" data-index="' +
+        index +
+        '" />' +
+        " x $" +
+        item.precio.toLocaleString("es-AR") +
+        " = $" +
+        subtotal.toLocaleString("es-AR") +
+        "</div>" +
+        "</div>" +
+        '<button class="ticket-eliminar" data-index="' +
+        index +
+        '">✕</button>';
 
       _ticketItems.appendChild(fila);
     });
 
-    // Eventos eliminar
     _ticketItems.querySelectorAll(".ticket-eliminar").forEach(function (btn) {
       btn.addEventListener("click", function () {
         _eliminar(parseInt(btn.dataset.index));
       });
     });
 
-    // Eventos cantidad
     _ticketItems.querySelectorAll(".ticket-cantidad").forEach(function (input) {
       input.addEventListener("input", function () {
-        var idx      = parseInt(input.dataset.index);
+        var idx = parseInt(input.dataset.index);
         var cantidad = parseInt(input.value) || 1;
         _ticket.items[idx].cantidad = cantidad;
         _guardarEnStore();
-        _calcularTotal();
+        _actualizarTotalesDOM();
       });
     });
 
     _guardarEnStore();
-    _calcularTotal();
+    _actualizarTotalesDOM();
   }
 
   // ---------------------------------------------------------
-  // _guardarEnStore
+  // _guardarEnStore / _restaurarDesdeStore
   // ---------------------------------------------------------
   function _guardarEnStore() {
     Store.setTicket(_ticket);
   }
 
-  // ---------------------------------------------------------
-  // _restaurarDesdeStore
-  // ---------------------------------------------------------
   function _restaurarDesdeStore() {
     var guardado = Store.get("ticketActual");
     if (guardado && guardado.items) {
@@ -172,53 +180,128 @@ App.TicketModule = (function (EventBus, Store, PriceService) {
   }
 
   // ---------------------------------------------------------
+  // _abrirModalMedioPago — modal para elegir medio antes de registrar
+  // ---------------------------------------------------------
+  function _abrirModalMedioPago() {
+    if (_ticket.items.length === 0) {
+      alert("El ticket está vacío");
+      return;
+    }
+    _modalMedio.classList.remove("oculto");
+  }
+
+  function _cerrarModalMedioPago() {
+    _modalMedio.classList.add("oculto");
+  }
+
+  function _confirmarRegistro(medioPago) {
+    var totalFinal = _calcularTotalFinal();
+
+    var itemsParaVenta = _ticket.items.map(function (item) {
+      return {
+        nombre: item.nombre,
+        cantidad: item.cantidad,
+        precioUnitario: item.precio,
+        subtotal: item.precio * item.cantidad,
+      };
+    });
+
+    EventBus.emit("ventas:registrar", {
+      items: itemsParaVenta,
+      total: totalFinal,
+      medioPago: medioPago,
+    });
+
+    _cerrarModalMedioPago();
+    alert("Venta registrada correctamente");
+  }
+
+  // ---------------------------------------------------------
   // init
   // ---------------------------------------------------------
   function init() {
-    _panel          = document.getElementById("ticketPanel");
-    _ticketItems    = document.getElementById("ticketItems");
-    _ticketTotal    = document.getElementById("ticketTotal");
-    _ticketFinal    = document.getElementById("ticketTotalFinal");
+    _panel = document.getElementById("ticketPanel");
+    _ticketItems = document.getElementById("ticketItems");
+    _ticketTotal = document.getElementById("ticketTotal");
+    _ticketFinal = document.getElementById("ticketTotalFinal");
     _descuentoInput = document.getElementById("ticketDescuento");
-    _recargoInput   = document.getElementById("ticketRecargo");
-    _fechaEl        = document.getElementById("ticketFecha");
+    _recargoInput = document.getElementById("ticketRecargo");
+    _fechaEl = document.getElementById("ticketFecha");
+    _modalMedio = document.getElementById("modalMedioPago");
 
-    document.getElementById("btnTicket")
-      .addEventListener("click", abrir);
-    document.getElementById("cerrarTicket")
-      .addEventListener("click", cerrar);
+    document.getElementById("btnTicket").addEventListener("click", abrir);
+    document.getElementById("cerrarTicket").addEventListener("click", cerrar);
 
-    _descuentoInput.addEventListener("input", _calcularTotal);
-    _recargoInput.addEventListener("input",   _calcularTotal);
+    _descuentoInput.addEventListener("input", _actualizarTotalesDOM);
+    _recargoInput.addEventListener("input", _actualizarTotalesDOM);
 
-    document.getElementById("btnImprimir").addEventListener("click", function () {
-      _mostrarFecha();
-      window.print();
-    });
+    document
+      .getElementById("btnImprimir")
+      .addEventListener("click", function () {
+        _mostrarFecha();
+        window.print();
+      });
 
-    document.getElementById("btnNuevaVenta").addEventListener("click", function () {
-      _ticket = { items: [] };
-      _guardarEnStore();
-      _render();
-      _mostrarFecha();
-    });
+    document
+      .getElementById("btnNuevaVenta")
+      .addEventListener("click", function () {
+        _ticket = { items: [] };
+        _guardarEnStore();
+        _render();
+        _mostrarFecha();
+      });
 
-    // Escuchar producto agregado desde la lista
+    // Botón registrar venta → abre modal de medio de pago
+    document
+      .getElementById("btnRegistrarVenta")
+      .addEventListener("click", _abrirModalMedioPago);
+
+    // Botones del modal de medio de pago
+    document
+      .getElementById("btnPagoEfectivo")
+      .addEventListener("click", function () {
+        _confirmarRegistro("efectivo");
+      });
+    document
+      .getElementById("btnPagoTransferencia")
+      .addEventListener("click", function () {
+        _confirmarRegistro("transferencia");
+      });
+    document
+      .getElementById("cerrarModalMedio")
+      .addEventListener("click", _cerrarModalMedioPago);
+
     EventBus.on("ticket:agregar-producto", function (datos) {
       agregarProducto(datos.producto);
     });
 
-    // Restaurar ticket guardado
     _restaurarDesdeStore();
+
+    // Escuchar limpieza externa (ej: cambio de ganancias)
+    EventBus.on("ticket:limpiar", function () {
+      _ticket = { items: [] };
+      _render();
+    });
+    EventBus.on(
+      "ticket:agregar-producto-calculado",
+      function (productoCalculado) {
+        var existe = _ticket.items.find(function (item) {
+          return item.nombre === productoCalculado.nombre;
+        });
+        if (existe) return;
+        _ticket.items.push(productoCalculado);
+        _guardarEnStore();
+        _render();
+      },
+    );
 
     console.info("[TicketModule] iniciado");
   }
 
   return {
-    init           : init,
-    abrir          : abrir,
-    cerrar         : cerrar,
+    init: init,
+    abrir: abrir,
+    cerrar: cerrar,
     agregarProducto: agregarProducto,
   };
-
 })(App.EventBus, App.Store, App.PriceService);

@@ -94,6 +94,7 @@ App.ProductService = (function (Store, PriceService, EventBus) {
       ganancia : (datos.ganancia === "" || datos.ganancia === null || datos.ganancia === undefined)
                    ? null
                    : parseFloat(datos.ganancia),
+      porPeso  : datos.porPeso === true,
     };
   }
 

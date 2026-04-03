@@ -3,15 +3,15 @@
    ========================== */
 
 :root {
-  --color-primario:    #079d8b;
-  --color-secundario:  #07489d;
-  --color-terciario:   #ebcd73;
+  --color-primario: #079d8b;
+  --color-secundario: #07489d;
+  --color-terciario: #ebcd73;
   --color-cuaternario: #e8e1dc;
-  --color-fondo:       #e3e3e3;
-  --color-blanco:      #eee;
-  --color-texto:       #222222;
-  --color-texto-suave: #54565c;
-  --color-borde:       #cccccc;
+  --color-fondo: #e3e3e3;
+  --color-blanco: #eee;
+  --color-texto: #222222;
+  --color-texto-suave: #6f7178;
+  --color-borde: #cccccc;
 }
 
 /* ==========================
@@ -36,7 +36,8 @@
    LAYOUT PRINCIPAL
    ========================== */
 
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
 }
@@ -106,8 +107,8 @@ header {
 }
 
 .subtitle {
-  font-size: 1.1rem;
-  opacity: 0.9;
+  font-size: 1.3rem;
+  font-family: "Buda", "Times New Roman", Times, serif;
 }
 
 .shopname {
@@ -121,9 +122,23 @@ header {
   object-fit: contain;
 }
 
+.lutux-icon {
+  width: 18px;
+  object-fit: contain;
+  filter: invert(40%);
+  margin: 0px 5px;
+}
+
 .shop-icon {
   width: 100px;
   object-fit: contain;
+}
+
+.shop-icon-ticket {
+  width: 60px;
+  object-fit: contain;
+  padding: 0px;
+  margin: 0px;
 }
 
 /* ==========================
@@ -172,7 +187,9 @@ header {
   border-left: 3px solid transparent;
   text-align: left;
   cursor: pointer;
-  transition: background 0.15s, color 0.15s;
+  transition:
+    background 0.15s,
+    color 0.15s;
 }
 
 .nav-item:hover {
@@ -346,7 +363,9 @@ header {
   font-size: 16px;
   padding: 5px;
   border-radius: 5px;
-  transition: background 0.15s, transform 0.1s;
+  transition:
+    background 0.15s,
+    transform 0.1s;
 }
 
 .btn-icono:hover {
@@ -366,89 +385,151 @@ header {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  padding: 18px 22px;
-  background: var(--color-terciario);
+  padding: 14px;
+  background: #ffffff; /* Cambiado de terciario a blanco como otros modales */
   border-radius: 12px;
   width: 90%;
-  max-width: 420px;
+  max-width: 500px; /* Aumentado para mejor legibilidad */
   z-index: 998;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
-  max-height: 90vh;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25); /* Consistente con modal-contenido */
+  max-height: 95vh;
   overflow-y: auto;
 }
 
-h2 {
+#gestion h2 {
   margin-top: 0;
-  margin-bottom: 15px;
-  color: var(--color-texto);
+  margin-bottom: 8px;
+  color: var(--color-primario); /* Consistente con otros títulos */
+  font-size: 20px;
+  font-weight: 600;
 }
 
 .campo {
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .campo label {
   display: block;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-texto);
 }
 
 .campo input,
 .campo select {
   width: 100%;
-  padding: 8px;
-  font-size: 15px;
-  border-radius: 5px;
-  border: 1px solid var(--color-borde);
+  padding: 7px 10px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 2px solid var(--color-borde);
+  background: #fff;
+  transition:
+    border-color 0.15s,
+    outline 0.15s;
+}
+
+.campo input:focus,
+.campo select:focus {
+  outline: 2px solid var(--color-primario);
+  border-color: var(--color-primario);
 }
 
 .acciones {
-  margin-top: 15px;
+  margin-top: 10px;
   display: flex;
-  gap: 8px;
+  gap: 6px;
+  justify-content: flex-end;
 }
 
 .bloque-gestion {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+  padding: 8px;
+  background: #f9f9f9; /* Fondo sutil para separar bloques */
+  border-radius: 8px;
+  border: 2px solid var(--color-terciario);
+}
+
+.bloque-gestion h3 {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-texto);
+  margin: 0 0 8px 0;
 }
 
 .bloque-gestion .descripcion {
-  font-size: 0.9rem;
-  opacity: 0.75;
-  margin-bottom: 12px;
+  font-size: 13px;
+  color: var(--color-texto-suave);
+  margin-bottom: 8px;
+  line-height: 1.4;
 }
 
 .categorias-ganancia {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 6px;
 }
 
 .fila-categoria {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 6px;
+  padding: 7px 10px;
+  background: #ffffff;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
 }
 
 .categoria-nombre {
   flex: 1;
   font-weight: 500;
+  font-size: 14px;
+  color: var(--color-texto);
 }
 
 .ganancia-categoria {
   width: 120px;
+  padding: 6px 10px;
+  border-radius: 5px;
+  border: 1px solid var(--color-borde);
   text-align: right;
+  font-size: 14px;
+}
+
+.ganancia-categoria:focus {
+  outline: 2px solid var(--color-primario);
+  border-color: var(--color-primario);
 }
 
 #gananciaGlobalInput {
-  max-width: 80px;
+  max-width: 100px;
+  padding: 6px 10px;
 }
 
 .ayuda {
-  font-size: 0.78em;
-  color: #666;
+  font-size: 12px;
+  color: var(--color-texto-suave);
   display: block;
-  margin-top: 4px;
+  margin-top: 6px;
+  line-height: 1.3;
+}
+
+/* Botón cerrar en el modal de gestión (si existe) */
+.gestion-cerrar {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  font-size: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-texto-suave);
+  transition: color 0.15s;
+}
+
+.gestion-cerrar:hover {
+  color: var(--color-texto);
 }
 
 /* ==========================
@@ -857,7 +938,7 @@ h2 {
 }
 
 .ticket-header {
-  padding: 14px 16px;
+  padding: 6px 16px;
   border-bottom: 1px solid #e5e7eb;
   position: relative;
   flex-shrink: 0;
@@ -876,6 +957,7 @@ h2 {
 
 .ticket-negocio {
   margin: 0;
+  padding: 0px;
   font-size: 15px;
   font-weight: 600;
 }
@@ -1019,9 +1101,15 @@ h2 {
 }
 
 @keyframes latido {
-  0%   { transform: scale(1); }
-  50%  { transform: scale(1.15); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 /* ==========================
@@ -1039,16 +1127,18 @@ h2 {
    ========================== */
 
 footer {
-  background-color: var(--color-primario);
+  background-color: var(--color-texto);
   padding: 8px 15px;
   text-align: center;
   font-size: 13px;
-  color: var(--color-fondo);
+  color: var(--color-texto-suave);
   flex-shrink: 0;
+  display: flex;
+  justify-content: center;
 }
 
 footer a {
-  color: #d2f9b0;
+  color: var(--color-texto-suave);
   text-decoration: none;
   font-weight: 600;
 }
@@ -1074,7 +1164,8 @@ footer a:hover {
     margin: 10mm;
   }
 
-  html, body {
+  html,
+  body {
     height: auto;
   }
 
@@ -1122,4 +1213,372 @@ footer a:hover {
     width: auto !important;
     appearance: none;
   }
+}
+
+/* ==========================
+   REGISTRO DE VENTAS
+   ========================== */
+
+.ventas-panel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--color-fondo);
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+}
+
+.ventas-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: #fff;
+  border-bottom: 1px solid var(--color-borde);
+  flex-shrink: 0;
+}
+
+.ventas-header h2 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+  color: var(--color-texto);
+}
+
+.ventas-cerrar {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  color: var(--color-texto-suave);
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.ventas-cerrar:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.ventas-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  padding: 10px 14px;
+  background: #fff;
+  border-bottom: 1px solid var(--color-borde);
+  flex-shrink: 0;
+}
+
+.venta-stat {
+  background: #f0faf7;
+  border-radius: 6px;
+  padding: 8px 10px;
+}
+
+.venta-stat-label {
+  font-size: 11px;
+  color: var(--color-texto-suave);
+  margin-bottom: 3px;
+}
+
+.venta-stat-valor {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--color-primario);
+}
+
+.venta-stat-valor.azul {
+  color: var(--color-secundario);
+}
+
+.ventas-filtros {
+  display: flex;
+  gap: 8px;
+  padding: 8px 14px;
+  background: #fff;
+  border-bottom: 1px solid var(--color-borde);
+  flex-shrink: 0;
+}
+
+.ventas-filtros select {
+  flex: 1;
+  padding: 7px 10px;
+  border: 1px solid var(--color-borde);
+  border-radius: 5px;
+  font-size: 13px;
+  background: #fff;
+}
+
+.ventas-lista {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px 14px;
+}
+
+.ventas-vacio {
+  color: var(--color-texto-suave);
+  font-size: 13px;
+  text-align: center;
+  margin-top: 24px;
+}
+
+.venta-card {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 7px;
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+
+.venta-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 9px 12px;
+  cursor: default;
+}
+
+.venta-card-izq {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.venta-num {
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--color-texto);
+}
+
+.venta-meta {
+  font-size: 11px;
+  color: var(--color-texto-suave);
+}
+
+.venta-card-der {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.venta-badge {
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.badge-efectivo {
+  background: #e1f5ee;
+  color: #085041;
+}
+
+.badge-transferencia {
+  background: #e6f1fb;
+  color: #0c447c;
+}
+
+.venta-total {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--color-secundario);
+}
+
+.venta-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 11px;
+  color: var(--color-texto-suave);
+  padding: 4px;
+  border-radius: 4px;
+}
+
+.venta-toggle:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.venta-card-detalle {
+  padding: 8px 12px;
+  background: #fafafa;
+  border-top: 1px solid #f0f0f0;
+}
+
+.venta-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  font-size: 12px;
+  color: var(--color-texto-suave);
+  border-bottom: 1px dashed #eee;
+}
+
+.venta-item:last-child {
+  border-bottom: none;
+}
+
+.venta-acciones {
+  margin-top: 8px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-venta-eliminar {
+  background: none;
+  border: 1px solid #b00020;
+  color: #b00020;
+  border-radius: 5px;
+  padding: 4px 10px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.btn-venta-eliminar:hover {
+  background: #ffe5e9;
+}
+
+/* Botón registrar venta en el ticket */
+.btn-registrar {
+  background-color: #27a844 !important;
+  border-color: #27a844 !important;
+  width: 100%;
+  padding: 5px;
+  margin: 5px 0px;
+}
+
+.btn-registrar:hover {
+  background-color: #1e8035 !important;
+  border-color: #1e8035 !important;
+}
+
+/* Modal medio de pago */
+.modal-medio {
+  max-width: 320px !important;
+  text-align: center;
+}
+
+.modal-medio h2 {
+  font-size: 17px;
+  margin-bottom: 16px;
+}
+
+.medio-opciones {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.btn-medio {
+  flex: 1;
+  padding: 14px 10px;
+  border-radius: 8px;
+  border: 2px solid var(--color-primario);
+  background: #fff;
+  color: var(--color-primario);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btn-medio:hover {
+  background: var(--color-primario);
+  color: #fff;
+}
+
+.btn-medio-cancelar {
+  background: none;
+  border: none;
+  color: var(--color-texto-suave);
+  font-size: 13px;
+  cursor: pointer;
+  padding: 6px;
+  width: 100%;
+}
+
+.btn-medio-cancelar:hover {
+  text-decoration: underline;
+}
+/* ==========================
+   PESAJE
+   ========================== */
+
+.badge-peso {
+  font-size: 10px;
+  background: var(--color-primario);
+  color: var(--color-blanco);
+  padding: 1px 7px;
+  border-radius: 8px;
+  font-weight: 600;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+.price-unit {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--color-texto-suave);
+}
+
+.label-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.label-checkbox input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.campo-por-peso {
+  background: #faeeda;
+  border-radius: 6px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.modal-pesaje {
+  max-width: 300px !important;
+  text-align: center;
+}
+
+.modal-pesaje h2 {
+  font-size: 16px;
+  margin-bottom: 6px;
+}
+
+.pesaje-ref {
+  font-size: 13px;
+  color: var(--color-secundario);
+  background: #e6f1fb;
+  padding: 5px 10px;
+  border-radius: 5px;
+  margin-bottom: 12px;
+}
+
+.pesaje-input {
+  width: 100%;
+  padding: 10px;
+  font-size: 28px;
+  font-weight: 700;
+  border: 2px solid var(--color-primario);
+  border-radius: 6px;
+  text-align: center;
+  color: var(--color-texto);
+  margin-bottom: 8px;
+}
+
+.pesaje-resultado {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-primario);
+  margin-bottom: 14px;
+  min-height: 22px;
 }

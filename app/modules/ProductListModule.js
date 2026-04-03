@@ -4,20 +4,25 @@
 
 var App = App || {};
 
-App.ProductListModule = (function (EventBus, Store, PriceService, ProductService) {
-
-  var _productList  = null;
-  var _importInput  = null;
+App.ProductListModule = (function (
+  EventBus,
+  Store,
+  PriceService,
+  ProductService,
+) {
+  var _productList = null;
+  var _importInput = null;
 
   function render(lista) {
     _productList.innerHTML = "";
 
     if (!lista || lista.length === 0) {
-      _productList.innerHTML = "<li style='padding:16px;color:#888;font-size:14px'>No se encontraron productos</li>";
+      _productList.innerHTML =
+        "<li style='padding:16px;color:#888;font-size:14px'>No se encontraron productos</li>";
       return;
     }
 
-    var modoPromo  = Store.get("modoPromo");
+    var modoPromo = Store.get("modoPromo");
     var modoTicket = Store.get("modoTicket");
 
     lista.forEach(function (producto) {
@@ -30,24 +35,50 @@ App.ProductListModule = (function (EventBus, Store, PriceService, ProductService
       if (modoPromo) {
         var btnPromoItem = document.createElement("button");
         btnPromoItem.classList.add("btn-icono");
-        btnPromoItem.textContent = "🎁";
-        btnPromoItem.title = "Agregar a promo";
-        btnPromoItem.addEventListener("click", function (e) {
-          e.stopPropagation();
-          EventBus.emit("promo:agregar-producto", { producto: producto });
-        });
+
+        if (producto.porPeso) {
+          btnPromoItem.textContent = "⚖️";
+          btnPromoItem.title = "Pesar y agregar a promo";
+          btnPromoItem.addEventListener("click", function (e) {
+            e.stopPropagation();
+            EventBus.emit("pesaje:abrir", {
+              producto: producto,
+              destino: "promo",
+            });
+          });
+        } else {
+          btnPromoItem.textContent = "🎁";
+          btnPromoItem.title = "Agregar a promo";
+          btnPromoItem.addEventListener("click", function (e) {
+            e.stopPropagation();
+            EventBus.emit("promo:agregar-producto", { producto: producto });
+          });
+        }
         leftGroup.appendChild(btnPromoItem);
       }
 
       if (modoTicket) {
         var btnTicketItem = document.createElement("button");
         btnTicketItem.classList.add("btn-icono");
-        btnTicketItem.textContent = "🧾";
-        btnTicketItem.title = "Agregar al ticket";
-        btnTicketItem.addEventListener("click", function (e) {
-          e.stopPropagation();
-          EventBus.emit("ticket:agregar-producto", { producto: producto });
-        });
+
+        if (producto.porPeso) {
+          btnTicketItem.textContent = "⚖️";
+          btnTicketItem.title = "Pesar y agregar al ticket";
+          btnTicketItem.addEventListener("click", function (e) {
+            e.stopPropagation();
+            EventBus.emit("pesaje:abrir", {
+              producto: producto,
+              destino: "ticket",
+            });
+          });
+        } else {
+          btnTicketItem.textContent = "🧾";
+          btnTicketItem.title = "Agregar al ticket";
+          btnTicketItem.addEventListener("click", function (e) {
+            e.stopPropagation();
+            EventBus.emit("ticket:agregar-producto", { producto: producto });
+          });
+        }
         leftGroup.appendChild(btnTicketItem);
       }
 
@@ -57,6 +88,12 @@ App.ProductListModule = (function (EventBus, Store, PriceService, ProductService
       var nombre = document.createElement("div");
       nombre.classList.add("product-name");
       nombre.textContent = producto.nombre;
+      if (producto.porPeso) {
+        var badge = document.createElement("span");
+        badge.classList.add("badge-peso");
+        badge.textContent = "⚖️ por 100gr";
+        nombre.appendChild(badge);
+      }
 
       var meta = document.createElement("div");
       meta.classList.add("product-meta");
@@ -69,11 +106,17 @@ App.ProductListModule = (function (EventBus, Store, PriceService, ProductService
       var precio = document.createElement("div");
       precio.classList.add("product-price");
       precio.textContent = "$ " + PriceService.calcularDesdeStore(producto);
+      if (producto.porPeso) {
+        var unit = document.createElement("span");
+        unit.classList.add("price-unit");
+        unit.textContent = "/100gr";
+        precio.appendChild(unit);
+      }
 
-      var acciones    = document.createElement("div");
+      var acciones = document.createElement("div");
       acciones.classList.add("product-actions");
 
-      var btnEditar   = document.createElement("button");
+      var btnEditar = document.createElement("button");
       btnEditar.classList.add("btn-icono");
       btnEditar.textContent = "✏️";
       btnEditar.title = "Editar";
@@ -85,12 +128,18 @@ App.ProductListModule = (function (EventBus, Store, PriceService, ProductService
 
       btnEditar.addEventListener("click", function (e) {
         e.stopPropagation();
-        EventBus.emit("editor:confirmar", { tipo: "editar", producto: producto });
+        EventBus.emit("editor:confirmar", {
+          tipo: "editar",
+          producto: producto,
+        });
       });
 
       btnEliminar.addEventListener("click", function (e) {
         e.stopPropagation();
-        EventBus.emit("editor:confirmar", { tipo: "eliminar", producto: producto });
+        EventBus.emit("editor:confirmar", {
+          tipo: "eliminar",
+          producto: producto,
+        });
       });
 
       acciones.appendChild(btnEditar);
@@ -107,13 +156,24 @@ App.ProductListModule = (function (EventBus, Store, PriceService, ProductService
     _productList = document.getElementById("productList");
     _importInput = document.getElementById("importarInput");
 
-    EventBus.on("productos:filtrados", function (datos) { render(datos.lista); });
-    EventBus.on("store:modoPromo:cambiado",  function () { EventBus.emit("busqueda:refiltrar"); });
-    EventBus.on("store:modoTicket:cambiado", function () { EventBus.emit("busqueda:refiltrar"); });
-    EventBus.on("store:ganancia:cambiado",   function () { EventBus.emit("busqueda:refiltrar"); });
+    EventBus.on("productos:filtrados", function (datos) {
+      render(datos.lista);
+    });
+    EventBus.on("store:modoPromo:cambiado", function () {
+      EventBus.emit("busqueda:refiltrar");
+    });
+    EventBus.on("store:modoTicket:cambiado", function () {
+      EventBus.emit("busqueda:refiltrar");
+    });
+    EventBus.on("store:ganancia:cambiado", function () {
+      EventBus.emit("busqueda:refiltrar");
+    });
 
-    document.getElementById("exportarBtn")
-      .addEventListener("click", function () { ProductService.exportar(); });
+    document
+      .getElementById("exportarBtn")
+      .addEventListener("click", function () {
+        ProductService.exportar();
+      });
 
     _importInput.addEventListener("change", function () {
       if (_importInput.files.length) {
@@ -140,5 +200,4 @@ App.ProductListModule = (function (EventBus, Store, PriceService, ProductService
   }
 
   return { init: init, render: render };
-
 })(App.EventBus, App.Store, App.PriceService, App.ProductService);
