@@ -37,6 +37,7 @@
             ➕ Agregar producto
           </button>
           <button id="btnGestion" class="nav-item">💰 Ganancia</button>
+          <button id="btnStock" class="nav-item">📦 Stock</button>
         </div>
 
         <div class="nav-section">
@@ -228,6 +229,24 @@
                 id="editGanancia"
                 min="0"
                 placeholder="Vacío = usa ganancia global"
+              />
+            </div>
+            <div class="campo" id="campoStock">
+              <label>Stock actual</label>
+              <input
+                type="number"
+                id="editStock"
+                min="0"
+                placeholder="Vacío = sin stock definido"
+              />
+            </div>
+            <div class="campo" id="campoStockMinimo">
+              <label>Stock mínimo (alerta)</label>
+              <input
+                type="number"
+                id="editStockMinimo"
+                min="0"
+                placeholder="Vacío = sin alerta"
               />
             </div>
             <div class="acciones">
@@ -523,6 +542,165 @@
             </div>
           </div>
         </div>
+        <!-- PANEL STOCK -->
+        <section id="stockPanel" class="ventas-panel oculto">
+          <div class="ventas-header">
+            <h2>📦 Stock e inventario</h2>
+            <button id="cerrarStock" class="ventas-cerrar">✕</button>
+          </div>
+
+          <div class="ventas-stats">
+            <div class="venta-stat">
+              <div class="venta-stat-label">Con stock definido</div>
+              <div class="venta-stat-valor" id="stockStatDefinido">0</div>
+            </div>
+            <div class="venta-stat" style="background: #fff0f0">
+              <div class="venta-stat-label">Stock bajo</div>
+              <div
+                class="venta-stat-valor"
+                style="color: #b00020"
+                id="stockStatBajo"
+              >
+                0
+              </div>
+            </div>
+            <div class="venta-stat" style="background: #f5f5f5">
+              <div class="venta-stat-label">Sin definir</div>
+              <div
+                class="venta-stat-valor"
+                style="color: #888"
+                id="stockStatSinDefinir"
+              >
+                0
+              </div>
+            </div>
+          </div>
+
+          <div class="stock-filtros">
+            <input
+              type="text"
+              id="stockBuscador"
+              placeholder="Buscar producto..."
+            />
+            <button class="stock-filtro-btn activo" data-filtro="todos">
+              Todos
+            </button>
+            <button class="stock-filtro-btn" data-filtro="bajo">⚠️ Bajo</button>
+            <button class="stock-filtro-btn" data-filtro="sin">
+              Sin definir
+            </button>
+          </div>
+
+          <div id="stockLista" class="ventas-lista"></div>
+        </section>
+
+        <!-- MODAL REPOSICIÓN -->
+        <div id="modalReposicion" class="modal oculto">
+          <div class="modal-contenido modal-medio">
+            <h2 id="reposicionNombre">Reponer stock</h2>
+            <p
+              id="reposicionActual"
+              style="
+                color: var(--color-texto-suave);
+                font-size: 13px;
+                margin-bottom: 12px;
+              "
+            ></p>
+            <input
+              type="number"
+              id="reposicionCantidad"
+              class="pesaje-input"
+              placeholder="0"
+              min="1"
+            />
+            <p
+              id="reposicionUnidad"
+              style="
+                font-size: 12px;
+                color: var(--color-texto-suave);
+                margin-bottom: 12px;
+              "
+            ></p>
+            <div
+              class="modal-botones"
+              style="justify-content: center; gap: 10px"
+            >
+              <button id="cerrarModalReposicion" class="btn-secundario">
+                Cancelar
+              </button>
+              <button id="confirmarReposicion" class="btn-primario">
+                Confirmar entrada
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- MODAL EDITAR STOCK -->
+        <div id="modalEditarStock" class="modal oculto">
+          <div class="modal-contenido modal-medio">
+            <h2 id="editarStockNombre">Definir stock</h2>
+            <div
+              style="
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+                margin: 12px 0;
+              "
+            >
+              <div>
+                <label
+                  style="
+                    font-size: 12px;
+                    color: var(--color-texto-suave);
+                    display: block;
+                    margin-bottom: 4px;
+                  "
+                >
+                  Stock actual
+                </label>
+                <input
+                  type="number"
+                  id="editarStockActual"
+                  class="pesaje-input"
+                  style="font-size: 20px"
+                  min="0"
+                  placeholder="0"
+                />
+              </div>
+              <div>
+                <label
+                  style="
+                    font-size: 12px;
+                    color: var(--color-texto-suave);
+                    display: block;
+                    margin-bottom: 4px;
+                  "
+                >
+                  Stock mínimo (alerta)
+                </label>
+                <input
+                  type="number"
+                  id="editarStockMinimo"
+                  class="pesaje-input"
+                  style="font-size: 20px"
+                  min="0"
+                  placeholder="Sin alerta"
+                />
+              </div>
+            </div>
+            <div
+              class="modal-botones"
+              style="justify-content: center; gap: 10px"
+            >
+              <button id="cerrarModalEditarStock" class="btn-secundario">
+                Cancelar
+              </button>
+              <button id="confirmarEditarStock" class="btn-primario">
+                Guardar
+              </button>
+            </div>
+          </div>
+        </div>
       </main>
     </div>
 
@@ -558,6 +736,7 @@
     <script src="app/modules/TicketModule.js"></script>
     <script src="app/modules/VentasModule.js"></script>
     <script src="app/modules/PesajeModule.js"></script>
+    <script src="app/modules/StockModule.js"></script>
     <script src="app/modules/LightdarkModule.js"></script>
     <script src="app/modules/SearchModule.js"></script>
 

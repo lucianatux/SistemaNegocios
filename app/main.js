@@ -26,6 +26,7 @@
   App.PromoModule.init();
   App.TicketModule.init();
   App.VentasModule.init();
+  App.StockModule.init();
   App.PesajeModule.init();
   App.LightdarkModule.init();
   App.SearchModule.init();

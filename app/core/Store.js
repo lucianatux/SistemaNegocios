@@ -22,38 +22,36 @@
 var App = App || {};
 
 App.Store = (function (EventBus, Storage) {
-
   // ---------------------------------------------------------
   // Estado interno — solo se accede vía get() y set()
   // ---------------------------------------------------------
   var _state = {
-
     // ---- Catálogo ----
-    productos             : [],
+    productos: [],
 
     // ---- Precios ----
-    gananciaGlobal        : 0,
-    gananciasPorCategoria : {},
+    gananciaGlobal: 0,
+    gananciasPorCategoria: {},
 
     // ---- Modos de UI ----
     // Determina qué botones aparecen en cada producto de la lista
-    modoTicket            : false,
-    modoPromo             : false,
+    modoTicket: false,
+    modoPromo: false,
 
     // ---- Editor de producto ----
     // "crear" | "editar" | null
-    modoEditor            : null,
-    productoEditando      : null,
+    modoEditor: null,
+    productoEditando: null,
 
     // ---- Confirmaciones ----
     // { tipo, producto } | null
-    accionPendiente       : null,
+    accionPendiente: null,
 
     // ---- Promo ----
     promoActual: {
-      nombre   : "",
+      nombre: "",
       descuento: 0,
-      items    : [],
+      items: [],
     },
 
     // ---- Ticket ----
@@ -61,9 +59,10 @@ App.Store = (function (EventBus, Storage) {
       items: [],
     },
 
-    // ---- UI varios ----
-    infoVendedorVisible   : false,
+    stockData: {}, // { "codigo-producto": { stock: 10, stockMinimo: 5 } }
 
+    // ---- UI varios ----
+    infoVendedorVisible: false,
   };
 
   // ---------------------------------------------------------
@@ -74,13 +73,14 @@ App.Store = (function (EventBus, Storage) {
     var datos = Storage.cargarDatos();
 
     if (datos) {
-      _state.productos             = datos.productos             || [];
-      _state.gananciaGlobal        = datos.gananciaGlobal        || 0;
+      _state.productos = datos.productos || [];
+      _state.gananciaGlobal = datos.gananciaGlobal || 0;
       _state.gananciasPorCategoria = datos.gananciasPorCategoria || {};
+      _state.stockData = datos.stockData || {};
     } else {
       // Primera vez: cargar datos iniciales desde data.js
       if (typeof DATA !== "undefined") {
-        _state.productos      = DATA.productos                    || [];
+        _state.productos = DATA.productos || [];
         _state.gananciaGlobal = DATA.configuracion.gananciaGlobal || 0;
       }
     }
@@ -110,9 +110,10 @@ App.Store = (function (EventBus, Storage) {
 
   function _persistirDatos() {
     Storage.guardarDatos({
-      productos             : _state.productos,
-      gananciaGlobal        : _state.gananciaGlobal,
-      gananciasPorCategoria : _state.gananciasPorCategoria,
+      productos: _state.productos,
+      gananciaGlobal: _state.gananciaGlobal,
+      gananciasPorCategoria: _state.gananciasPorCategoria,
+      stockData: _state.stockData,
     });
   }
 
@@ -190,12 +191,12 @@ App.Store = (function (EventBus, Storage) {
   // setGanancia — Actualiza márgenes y persiste
   // ---------------------------------------------------------
   function setGanancia(global, porCategoria) {
-    _state.gananciaGlobal        = global;
+    _state.gananciaGlobal = global;
     _state.gananciasPorCategoria = porCategoria || {};
     _persistirDatos();
     EventBus.emit("store:ganancia:cambiado", {
-      gananciaGlobal        : _state.gananciaGlobal,
-      gananciasPorCategoria : _state.gananciasPorCategoria,
+      gananciaGlobal: _state.gananciaGlobal,
+      gananciasPorCategoria: _state.gananciasPorCategoria,
     });
   }
 
@@ -228,18 +229,28 @@ App.Store = (function (EventBus, Storage) {
   // API pública
   // inicializar() se llama desde main.js, después de que data.js cargó.
   return {
-    inicializar       : inicializar,
-    get               : get,
-    set               : set,
-    getAll            : getAll,
-    getProductos      : getProductos,
-    setProductos      : setProductos,
-    agregarProducto   : agregarProducto,
+    inicializar: inicializar,
+    get: get,
+    set: set,
+    getAll: getAll,
+    getProductos: getProductos,
+    setProductos: setProductos,
+    agregarProducto: agregarProducto,
     actualizarProducto: actualizarProducto,
-    eliminarProducto  : eliminarProducto,
-    setGanancia       : setGanancia,
-    setPromo          : setPromo,
-    setTicket         : setTicket,
+    eliminarProducto: eliminarProducto,
+    setGanancia: setGanancia,
+    setPromo: setPromo,
+    setTicket: setTicket,
+    getStock: function (codigo) {
+      return _state.stockData[codigo] || null;
+    },
+    setStock: function (codigo, datos) {
+      _state.stockData[codigo] = datos;
+      _persistirDatos();
+      EventBus.emit("store:stock:cambiado", { codigo: codigo, datos: datos });
+    },
+    getStockData: function () {
+      return _state.stockData;
+    },
   };
-
 })(App.EventBus, App.Storage);

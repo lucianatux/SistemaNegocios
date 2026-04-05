@@ -113,6 +113,24 @@ App.ProductListModule = (function (
         precio.appendChild(unit);
       }
 
+      // Badge de stock en lista
+      var stockInfo = App.StockModule
+        ? App.StockModule.getStock(producto.codigo)
+        : null;
+      if (
+        stockInfo &&
+        stockInfo.stock !== null &&
+        stockInfo.stock !== undefined
+      ) {
+        var stockBadge = document.createElement("span");
+        stockBadge.classList.add("product-stock");
+        var esBajo = App.StockModule && App.StockModule.esBajo(stockInfo);
+        stockBadge.classList.add(esBajo ? "bajo" : "ok");
+        var unidad = producto.porPeso ? "g" : "u.";
+        stockBadge.textContent = stockInfo.stock + " " + unidad;
+        precio.appendChild(stockBadge);
+      }
+
       var acciones = document.createElement("div");
       acciones.classList.add("product-actions");
 
@@ -166,6 +184,9 @@ App.ProductListModule = (function (
       EventBus.emit("busqueda:refiltrar");
     });
     EventBus.on("store:ganancia:cambiado", function () {
+      EventBus.emit("busqueda:refiltrar");
+    });
+    EventBus.on("stock:actualizado", function () {
       EventBus.emit("busqueda:refiltrar");
     });
 

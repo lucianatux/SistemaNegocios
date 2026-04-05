@@ -1927,3 +1927,172 @@ footer a:hover {
   color: var(--color-texto);
   transition: background-color 0.3s ease;
 }
+
+/* ==========================
+   STOCK
+   ========================== */
+
+.stock-filtros {
+  display: flex;
+  gap: 6px;
+  padding: 8px 12px;
+  background: var(--color-card-bg);
+  border-bottom: 1px solid var(--color-borde);
+  flex-shrink: 0;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.stock-filtros input {
+  flex: 1;
+  min-width: 120px;
+  padding: 5px 10px;
+  border: 1px solid var(--color-borde);
+  border-radius: 20px;
+  font-size: 12px;
+  background: var(--color-input-bg);
+  color: var(--color-texto);
+}
+
+.stock-filtro-btn {
+  padding: 5px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--color-borde);
+  background: var(--color-card-bg);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-texto-suave);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s;
+}
+
+.stock-filtro-btn.activo {
+  background: var(--color-primario);
+  color: #fff;
+  border-color: var(--color-primario);
+}
+
+.stock-item {
+  display: flex;
+  align-items: center;
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--color-borde);
+  gap: 8px;
+  background: var(--color-card-bg);
+}
+
+.stock-item:last-child {
+  border-bottom: none;
+}
+
+.stock-item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.stock-item-nombre {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-texto);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stock-item-meta {
+  font-size: 11px;
+  color: var(--color-texto-suave);
+  margin-top: 1px;
+}
+
+.stock-badge {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.stock-badge.ok    { background: #e1f5ee; color: #085041; }
+.stock-badge.bajo  { background: #fff0f0; color: #b00020; }
+.stock-badge.sin   { background: var(--color-fondo); color: var(--color-texto-suave); font-weight: 400; font-size: 11px; }
+
+[data-theme="dark"] .stock-badge.ok   { background: #1a4540; color: #0ac5ad; }
+[data-theme="dark"] .stock-badge.bajo { background: #4a1a1f; color: #ff6b7a; }
+
+.stock-minimo {
+  font-size: 11px;
+  color: var(--color-texto-suave);
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-width: 50px;
+}
+
+.stock-acciones {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.btn-stock {
+  padding: 4px 8px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 0.15s;
+}
+
+.btn-stock.verde {
+  background: var(--color-primario);
+  color: #fff;
+}
+
+.btn-stock.verde:hover {
+  background: var(--color-secundario);
+}
+
+.btn-stock.neutro {
+  background: var(--color-fondo);
+  color: var(--color-texto-suave);
+  border: 1px solid var(--color-borde);
+}
+
+.btn-stock.neutro:hover {
+  background: var(--color-hover-bg);
+  color: var(--color-hover-text);
+}
+
+.stock-separador {
+  font-size: 11px;
+  color: var(--color-texto-suave);
+  padding: 6px 12px;
+  background: var(--color-fondo);
+  border-bottom: 1px solid var(--color-borde);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Badge de stock en lista de productos */
+.product-stock {
+  font-size: 11px;
+  padding: 1px 6px;
+  border-radius: 8px;
+  font-weight: 600;
+  margin-left: 4px;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.product-stock.ok   { background: #e1f5ee; color: #085041; }
+.product-stock.bajo { background: #fff0f0; color: #b00020; }
+
+[data-theme="dark"] .product-stock.ok   { background: #1a4540; color: #0ac5ad; }
+[data-theme="dark"] .product-stock.bajo { background: #4a1a1f; color: #ff6b7a; }

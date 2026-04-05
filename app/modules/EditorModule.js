@@ -76,6 +76,8 @@ App.EditorModule = (function (EventBus, Store, ProductService, PriceService) {
       _precioPublico.textContent = "-";
       document.getElementById("editPorPeso").checked = false;
       document.getElementById("labelCosto").textContent = "Costo";
+      document.getElementById("editStock").value = "";
+      document.getElementById("editStockMinimo").value = "";
     }
 
     if (modo === "editar" && producto) {
@@ -92,6 +94,13 @@ App.EditorModule = (function (EventBus, Store, ProductService, PriceService) {
         ? "Costo por gramo"
         : "Costo";
       _actualizarPrecioPublico();
+      var stockInfo = App.StockModule
+        ? App.StockModule.getStock(producto.codigo)
+        : null;
+      document.getElementById("editStock").value =
+        stockInfo && stockInfo.stock != null ? stockInfo.stock : "";
+      document.getElementById("editStockMinimo").value =
+        stockInfo && stockInfo.stockMinimo != null ? stockInfo.stockMinimo : "";
     }
 
     _overlay.classList.remove("oculto");
@@ -127,6 +136,17 @@ App.EditorModule = (function (EventBus, Store, ProductService, PriceService) {
 
     if (_modoEditor === "editar") {
       resultado = ProductService.actualizar(_productoEditando, datos);
+    }
+
+    var stockVal = document.getElementById("editStock").value;
+    var minimoVal = document.getElementById("editStockMinimo").value;
+    var codigo = document.getElementById("editCodigo").value.trim();
+
+    if (App.StockModule && codigo) {
+      App.Store.setStock(codigo, {
+        stock: stockVal !== "" ? parseFloat(stockVal) : null,
+        stockMinimo: minimoVal !== "" ? parseFloat(minimoVal) : null,
+      });
     }
 
     if (!resultado.ok) {
