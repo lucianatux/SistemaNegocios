@@ -14,7 +14,8 @@ App.TicketModule = (function (EventBus, Store, PriceService) {
   var _descuentoInput = null;
   var _recargoInput = null;
   var _fechaEl = null;
-  var _modalMedio = null;
+  var _modalCerrarVenta = null;
+  var _medioSeleccionado = "efectivo";
 
   // ---------------------------------------------------------
   // abrir / cerrar
@@ -180,23 +181,101 @@ App.TicketModule = (function (EventBus, Store, PriceService) {
     }
   }
 
-  // ---------------------------------------------------------
-  // _abrirModalMedioPago — modal para elegir medio antes de registrar
-  // ---------------------------------------------------------
-  function _abrirModalMedioPago() {
+  function _abrirModalCerrarVenta() {
     if (_ticket.items.length === 0) {
       alert("El ticket está vacío");
       return;
     }
-    _modalMedio.classList.remove("oculto");
+
+    var total = _calcularTotalFinal();
+    document.getElementById("cerrarVentaTotal").textContent =
+      "$" + total.toLocaleString("es-AR");
+
+    // Resetear estado del modal
+    _medioSeleccionado = "efectivo";
+    document.querySelectorAll(".cerrar-medio-btn").forEach(function (b) {
+      b.classList.toggle("activo", b.dataset.medio === "efectivo");
+    });
+    document.getElementById("cerrarVentaMonto").value = "";
+    document.getElementById("cerrarVentaTotalCheck").checked = false;
+    document.getElementById("cerrarFiadoSeccion").style.display = "none";
+    document.getElementById("cerrarFiadoPendiente").textContent = "";
+
+    // Poblar selector de clientes
+    App.EventBus.emit("clientes:poblar-selector");
+
+    _modalCerrarVenta.classList.remove("oculto");
   }
 
-  function _cerrarModalMedioPago() {
-    _modalMedio.classList.add("oculto");
+  function _cerrarModalCerrarVenta() {
+    _modalCerrarVenta.classList.add("oculto");
   }
 
-  function _confirmarRegistro(medioPago) {
-    var totalFinal = _calcularTotalFinal();
+  function _actualizarModalCerrarVenta() {
+    var total = _calcularTotalFinal();
+    var esFiado = _medioSeleccionado === "fiado";
+    var montoInput =
+      parseFloat(document.getElementById("cerrarVentaMonto").value) || 0;
+    var pagoTotal = document.getElementById("cerrarVentaTotalCheck").checked;
+
+    // Sección monto — oculta solo si es fiado total
+    document.getElementById("cerrarMontoSeccion").style.display = esFiado
+      ? "none"
+      : "block";
+
+    // Sección fiado — ahora SIEMPRE visible, pero el título cambia
+    document.getElementById("cerrarFiadoSeccion").style.display = "block";
+
+    var hayPendiente =
+      !esFiado && !pagoTotal && montoInput > 0 && montoInput < total;
+    var pendiente = esFiado ? total : hayPendiente ? total - montoInput : 0;
+
+    // Cambiar título según si hay pendiente o no
+    document.querySelector(
+      "#cerrarFiadoSeccion .cerrar-sec-titulo",
+    ).textContent =
+      pendiente > 0
+        ? "Saldo pendiente → fiado"
+        : "Asociar a un cliente (opcional)";
+
+    // Mostrar pendiente solo si corresponde
+    if (pendiente > 0) {
+      document.getElementById("cerrarFiadoPendiente").textContent =
+        "Queda pendiente: $" + pendiente.toLocaleString("es-AR");
+    } else {
+      document.getElementById("cerrarFiadoPendiente").textContent = "";
+    }
+  }
+
+  function _confirmarCerrarVenta() {
+    var total = _calcularTotalFinal();
+    var esFiado = _medioSeleccionado === "fiado";
+    var montoInput =
+      parseFloat(document.getElementById("cerrarVentaMonto").value) || 0;
+    var pagoTotal = document.getElementById("cerrarVentaTotalCheck").checked;
+    var clienteId = document.getElementById("cerrarVentaCliente").value;
+
+    var montoPagado = esFiado ? 0 : pagoTotal ? total : montoInput;
+    var pendiente = total - montoPagado;
+
+    // Si hay fiado, necesita cliente
+    if (pendiente > 0 && !clienteId) {
+      alert("Seleccioná un cliente para cargar el fiado");
+      return;
+    }
+    // Si no hay pendiente y hay cliente → asociar la compra al historial del cliente
+    if (pendiente === 0 && clienteId) {
+      var descAsociada = _ticket.items
+        .map(function (i) {
+          return i.nombre + " x" + i.cantidad;
+        })
+        .join(", ");
+      App.EventBus.emit("clientes:registrar-compra", {
+        clienteId: clienteId,
+        monto: montoPagado,
+        descripcion: descAsociada,
+      });
+    }
 
     var itemsParaVenta = _ticket.items.map(function (item) {
       return {
@@ -208,14 +287,42 @@ App.TicketModule = (function (EventBus, Store, PriceService) {
       };
     });
 
-    EventBus.emit("ventas:registrar", {
-      items: itemsParaVenta,
-      total: totalFinal,
-      medioPago: medioPago,
-    });
+    // Registrar venta si hubo pago
+    if (montoPagado > 0) {
+      App.EventBus.emit("ventas:registrar", {
+        items: itemsParaVenta,
+        total: montoPagado,
+        medioPago: _medioSeleccionado,
+      });
+    }
 
-    _cerrarModalMedioPago();
-    alert("Venta registrada correctamente");
+    // Registrar fiado si quedó pendiente
+    if (pendiente > 0 && clienteId) {
+      var desc = _ticket.items
+        .map(function (i) {
+          return i.nombre + " x" + i.cantidad;
+        })
+        .join(", ");
+
+      App.EventBus.emit("clientes:registrar-fiado", {
+        clienteId: clienteId,
+        monto: pendiente,
+        descripcion: desc,
+        items: itemsParaVenta,
+      });
+    }
+
+    // Si fue fiado total, igual registrar en ventas para el historial
+    if (esFiado && clienteId) {
+      App.EventBus.emit("ventas:registrar", {
+        items: itemsParaVenta,
+        total: total,
+        medioPago: "fiado",
+      });
+    }
+
+    _cerrarModalCerrarVenta();
+    alert("Venta cerrada correctamente");
   }
 
   // ---------------------------------------------------------
@@ -229,7 +336,7 @@ App.TicketModule = (function (EventBus, Store, PriceService) {
     _descuentoInput = document.getElementById("ticketDescuento");
     _recargoInput = document.getElementById("ticketRecargo");
     _fechaEl = document.getElementById("ticketFecha");
-    _modalMedio = document.getElementById("modalMedioPago");
+    _modalCerrarVenta = document.getElementById("modalCerrarVenta");
 
     document.getElementById("btnTicket").addEventListener("click", abrir);
     document.getElementById("cerrarTicket").addEventListener("click", cerrar);
@@ -253,37 +360,66 @@ App.TicketModule = (function (EventBus, Store, PriceService) {
         _mostrarFecha();
       });
 
-    // Botón registrar venta → abre modal de medio de pago
+    // Botón cerrar venta → abre modal unificado
     document
-      .getElementById("btnRegistrarVenta")
-      .addEventListener("click", _abrirModalMedioPago);
+      .getElementById("btnCerrarVenta")
+      .addEventListener("click", _abrirModalCerrarVenta);
+    document
+      .getElementById("cerrarModalCerrarVenta")
+      .addEventListener("click", _cerrarModalCerrarVenta);
+    document
+      .getElementById("confirmarCerrarVenta")
+      .addEventListener("click", _confirmarCerrarVenta);
 
-    // Botones del modal de medio de pago
-    document
-      .getElementById("btnPagoEfectivo")
-      .addEventListener("click", function () {
-        _confirmarRegistro("efectivo");
+    // Botones de medio de pago
+    document.querySelectorAll(".cerrar-medio-btn").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        document.querySelectorAll(".cerrar-medio-btn").forEach(function (b) {
+          b.classList.remove("activo");
+        });
+        this.classList.add("activo");
+        _medioSeleccionado = this.dataset.medio;
+        _actualizarModalCerrarVenta();
       });
-    document
-      .getElementById("btnPagoTransferencia")
-      .addEventListener("click", function () {
-        _confirmarRegistro("transferencia");
-      });
-    document
-      .getElementById("cerrarModalMedio")
-      .addEventListener("click", _cerrarModalMedioPago);
+    });
 
+    // Input monto y checkbox
+    document
+      .getElementById("cerrarVentaMonto")
+      .addEventListener("input", _actualizarModalCerrarVenta);
+    document
+      .getElementById("cerrarVentaTotalCheck")
+      .addEventListener("change", function () {
+        if (this.checked) {
+          document.getElementById("cerrarVentaMonto").value =
+            _calcularTotalFinal();
+        }
+        _actualizarModalCerrarVenta();
+      });
+
+    document
+      .getElementById("btnNuevoClienteDesdeVenta")
+      .addEventListener("click", function () {
+        var nombre = prompt("Nombre del cliente:");
+        if (!nombre || !nombre.trim()) return;
+        var notas =
+          prompt("Notas opcionales (dejá vacío si no querés agregar):") || "";
+        var cli = App.ClientesModule.agregarCliente(
+          nombre.trim(),
+          notas.trim(),
+        );
+
+        // Poblar selector y seleccionar el nuevo cliente
+        App.EventBus.emit("clientes:poblar-selector");
+        document.getElementById("cerrarVentaCliente").value = cli.id;
+        _actualizarModalCerrarVenta();
+      });
+
+    // Eventos producto desde lista
     EventBus.on("ticket:agregar-producto", function (datos) {
       agregarProducto(datos.producto);
     });
 
-    _restaurarDesdeStore();
-
-    // Escuchar limpieza externa (ej: cambio de ganancias)
-    EventBus.on("ticket:limpiar", function () {
-      _ticket = { items: [] };
-      _render();
-    });
     EventBus.on(
       "ticket:agregar-producto-calculado",
       function (productoCalculado) {
@@ -296,6 +432,14 @@ App.TicketModule = (function (EventBus, Store, PriceService) {
         _render();
       },
     );
+
+    // Limpiar ticket cuando cambia el margen de ganancia
+    EventBus.on("ticket:limpiar", function () {
+      _ticket = { items: [] };
+      _render();
+    });
+
+    _restaurarDesdeStore();
 
     console.info("[TicketModule] iniciado");
   }

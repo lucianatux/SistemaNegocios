@@ -45,6 +45,7 @@
           <button id="btnTicket" class="nav-item">🧾 Ticket</button>
           <button id="btnPromo" class="nav-item">🎁 Promo</button>
           <button id="btnVentas" class="nav-item">📊 Registro</button>
+          <button id="btnClientes" class="nav-item">👥 Clientes</button>
         </div>
 
         <div class="nav-section nav-section-sistema">
@@ -405,10 +406,11 @@
               Gracias por tu compra <span class="corazon">♥</span>
             </p>
             <div class="ticket-acciones" style="margin-top: 4px">
-              <button id="btnRegistrarVenta" class="btn-primario btn-registrar">
-                ✅ Registrar venta
+              <button id="btnCerrarVenta" class="btn-primario btn-registrar">
+                💳 Cerrar venta
               </button>
             </div>
+
             <div class="ticket-acciones">
               <button id="btnImprimir" class="btn-primario">Imprimir</button>
               <button id="btnNuevaVenta" class="btn-primario">
@@ -701,6 +703,396 @@
             </div>
           </div>
         </div>
+        <!-- PANEL CLIENTES -->
+        <section id="clientesPanel" class="ventas-panel oculto">
+          <div class="ventas-header">
+            <h2>👥 Clientes</h2>
+            <div style="display: flex; align-items: center; gap: 8px">
+              <button
+                id="btnNuevoCliente"
+                class="btn-primario"
+                style="font-size: 12px; padding: 4px 10px"
+              >
+                + Nuevo
+              </button>
+              <button id="cerrarClientes" class="ventas-cerrar">✕</button>
+            </div>
+          </div>
+
+          <div class="ventas-stats">
+            <div class="venta-stat">
+              <div class="venta-stat-label">Total clientes</div>
+              <div class="venta-stat-valor" id="clienteStatTotal">0</div>
+            </div>
+            <div class="venta-stat" style="background: #fff0f0">
+              <div class="venta-stat-label">Total deuda</div>
+              <div
+                class="venta-stat-valor"
+                style="color: #b00020"
+                id="clienteStatDeuda"
+              >
+                $0
+              </div>
+            </div>
+          </div>
+
+          <div class="stock-filtros">
+            <input
+              type="text"
+              id="clienteBuscador"
+              placeholder="Buscar cliente..."
+            />
+            <button class="cliente-filtro-btn activo" data-filtro="todos">
+              Todos
+            </button>
+            <button class="cliente-filtro-btn" data-filtro="deuda">
+              Con deuda
+            </button>
+            <button class="cliente-filtro-btn" data-filtro="aldia">
+              Al día
+            </button>
+          </div>
+
+          <div id="clientesLista" class="ventas-lista"></div>
+        </section>
+
+        <!-- FICHA CLIENTE -->
+        <div id="fichaClienteModal" class="modal oculto">
+          <div class="modal-contenido ficha-cliente-modal">
+            <div class="ficha-header">
+              <div>
+                <h2 id="fichaClienteNombre">Cliente</h2>
+                <p
+                  id="fichaClienteNotas"
+                  style="font-size: 12px; color: var(--color-texto-suave)"
+                ></p>
+              </div>
+              <button id="cerrarFichaCliente" class="editor-cerrar">✕</button>
+            </div>
+
+            <div id="fichaSaldoBox" class="ficha-saldo-box">
+              <span class="ficha-saldo-label">Saldo</span>
+              <span id="fichaSaldo" class="ficha-saldo-monto">$0</span>
+            </div>
+
+            <div class="ficha-acciones">
+              <button id="btnRegistrarPago" class="btn-primario">
+                💵 Registrar pago
+              </button>
+              <button id="btnCargarDeuda" class="btn-primario btn-azul">
+                📋 Cargar deuda
+              </button>
+              <button id="btnEditarCliente" class="btn-secundario">
+                ✏️ Editar
+              </button>
+              <button id="btnEliminarCliente" class="btn-secundario btn-danger">
+                🗑️
+              </button>
+            </div>
+
+            <div class="ficha-historial">
+              <div class="ficha-hist-titulo">Historial</div>
+              <div id="fichaHistorial"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- MODAL NUEVO / EDITAR CLIENTE -->
+        <div id="modalCliente" class="modal oculto">
+          <div class="modal-contenido modal-medio">
+            <h2 id="modalClienteTitulo">Nuevo cliente</h2>
+            <div
+              style="
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                margin: 12px 0;
+              "
+            >
+              <div>
+                <label
+                  style="
+                    font-size: 12px;
+                    color: var(--color-texto-suave);
+                    display: block;
+                    margin-bottom: 4px;
+                  "
+                  >Nombre</label
+                >
+                <input
+                  type="text"
+                  id="clienteNombreInput"
+                  style="
+                    width: 100%;
+                    padding: 8px;
+                    border: 1px solid var(--color-borde);
+                    border-radius: 6px;
+                    font-size: 14px;
+                    background: var(--color-input-bg);
+                    color: var(--color-texto);
+                  "
+                  placeholder="Nombre del cliente"
+                />
+              </div>
+              <div>
+                <label
+                  style="
+                    font-size: 12px;
+                    color: var(--color-texto-suave);
+                    display: block;
+                    margin-bottom: 4px;
+                  "
+                  >Notas (opcional)</label
+                >
+                <input
+                  type="text"
+                  id="clienteNotasInput"
+                  style="
+                    width: 100%;
+                    padding: 8px;
+                    border: 1px solid var(--color-borde);
+                    border-radius: 6px;
+                    font-size: 14px;
+                    background: var(--color-input-bg);
+                    color: var(--color-texto);
+                  "
+                  placeholder="Ej: viene los jueves, mayorista..."
+                />
+              </div>
+            </div>
+            <div
+              class="modal-botones"
+              style="justify-content: center; gap: 10px"
+            >
+              <button id="cerrarModalCliente" class="btn-secundario">
+                Cancelar
+              </button>
+              <button id="confirmarModalCliente" class="btn-primario">
+                Guardar
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- MODAL REGISTRAR PAGO -->
+        <div id="modalPago" class="modal oculto">
+          <div class="modal-contenido modal-medio">
+            <h2>💵 Registrar pago</h2>
+            <p
+              id="modalPagoDeuda"
+              style="
+                font-size: 13px;
+                color: var(--color-texto-suave);
+                margin-bottom: 12px;
+              "
+            ></p>
+
+            <div style="margin-bottom: 12px">
+              <div class="cerrar-sec-titulo" style="margin-bottom: 8px">
+                ¿Cómo pagó?
+              </div>
+              <div class="cerrar-medios">
+                <button class="pago-medio-btn activo" data-medio="efectivo">
+                  💵 Efectivo
+                </button>
+                <button class="pago-medio-btn" data-medio="transferencia">
+                  📲 Transferencia
+                </button>
+              </div>
+            </div>
+
+            <input
+              type="number"
+              id="modalPagoMonto"
+              class="pesaje-input"
+              style="font-size: 20px"
+              placeholder="0"
+              min="0"
+            />
+            <p
+              style="
+                font-size: 11px;
+                color: var(--color-texto-suave);
+                margin: 6px 0 12px;
+              "
+            >
+              Dejá vacío para cancelar la deuda completa
+            </p>
+            <div
+              class="modal-botones"
+              style="justify-content: center; gap: 10px"
+            >
+              <button id="cerrarModalPago" class="btn-secundario">
+                Cancelar
+              </button>
+              <button id="confirmarModalPago" class="btn-primario">
+                Confirmar pago
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- MODAL CARGAR DEUDA MANUAL -->
+        <div id="modalDeuda" class="modal oculto">
+          <div class="modal-contenido modal-medio">
+            <h2>📋 Cargar deuda</h2>
+            <div
+              style="
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                margin: 12px 0;
+              "
+            >
+              <div>
+                <label
+                  style="
+                    font-size: 12px;
+                    color: var(--color-texto-suave);
+                    display: block;
+                    margin-bottom: 4px;
+                  "
+                  >Monto</label
+                >
+                <input
+                  type="number"
+                  id="modalDeudaMonto"
+                  class="pesaje-input"
+                  style="font-size: 20px"
+                  placeholder="0"
+                  min="0"
+                />
+              </div>
+              <div>
+                <label
+                  style="
+                    font-size: 12px;
+                    color: var(--color-texto-suave);
+                    display: block;
+                    margin-bottom: 4px;
+                  "
+                  >Descripción (opcional)</label
+                >
+                <input
+                  type="text"
+                  id="modalDeudaDesc"
+                  style="
+                    width: 100%;
+                    padding: 8px;
+                    border: 1px solid var(--color-borde);
+                    border-radius: 6px;
+                    font-size: 14px;
+                    background: var(--color-input-bg);
+                    color: var(--color-texto);
+                  "
+                  placeholder="Ej: mercadería del martes"
+                />
+              </div>
+            </div>
+            <div
+              class="modal-botones"
+              style="justify-content: center; gap: 10px"
+            >
+              <button id="cerrarModalDeuda" class="btn-secundario">
+                Cancelar
+              </button>
+              <button id="confirmarModalDeuda" class="btn-primario">
+                Cargar deuda
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- MODAL CERRAR VENTA (reemplaza modal medio de pago) -->
+        <div id="modalCerrarVenta" class="modal oculto">
+          <div class="modal-contenido modal-cerrar-venta">
+            <h2>💳 Cerrar venta</h2>
+
+            <div class="cerrar-total-box">
+              <span>Total a cobrar</span>
+              <span id="cerrarVentaTotal" class="cerrar-total-monto">$0</span>
+            </div>
+
+            <div class="cerrar-seccion">
+              <div class="cerrar-sec-titulo">¿Cómo pagó?</div>
+              <div class="cerrar-medios">
+                <button class="cerrar-medio-btn activo" data-medio="efectivo">
+                  💵 Efectivo
+                </button>
+                <button class="cerrar-medio-btn" data-medio="transferencia">
+                  📲 Transferencia
+                </button>
+                <button class="cerrar-medio-btn" data-medio="fiado">
+                  📋 Fiado
+                </button>
+              </div>
+            </div>
+
+            <div class="cerrar-seccion" id="cerrarMontoSeccion">
+              <div class="cerrar-sec-titulo">Monto abonado</div>
+              <input
+                type="number"
+                id="cerrarVentaMonto"
+                class="pesaje-input"
+                style="font-size: 20px; margin-bottom: 6px"
+                placeholder="0"
+              />
+              <label class="label-checkbox" style="font-size: 12px">
+                <input type="checkbox" id="cerrarVentaTotalCheck" />
+                Pagó el total completo
+              </label>
+            </div>
+
+            <div
+              class="cerrar-seccion cerrar-fiado-sec"
+              id="cerrarFiadoSeccion"
+            >
+              <div class="cerrar-sec-titulo">Saldo pendiente → fiado</div>
+              <select
+                id="cerrarVentaCliente"
+                style="
+                  width: 100%;
+                  padding: 8px;
+                  border: 1px solid var(--color-borde);
+                  border-radius: 6px;
+                  font-size: 13px;
+                  background: var(--color-input-bg);
+                  color: var(--color-texto);
+                  margin-bottom: 6px;
+                "
+              >
+                <option value="">Seleccionar cliente...</option>
+              </select>
+              <button
+                id="btnNuevoClienteDesdeVenta"
+                style="
+                  background: none;
+                  border: none;
+                  color: var(--color-primario);
+                  font-size: 12px;
+                  cursor: pointer;
+                  padding: 2px 0;
+                  text-align: left;
+                "
+              >
+                + Registrar cliente nuevo
+              </button>
+              <div id="cerrarFiadoPendiente" class="cerrar-pendiente-box"></div>
+            </div>
+
+            <div
+              class="modal-botones"
+              style="justify-content: center; gap: 10px; padding: 10px 0 0"
+            >
+              <button id="cerrarModalCerrarVenta" class="btn-secundario">
+                Cancelar
+              </button>
+              <button id="confirmarCerrarVenta" class="btn-primario">
+                Confirmar y cerrar venta
+              </button>
+            </div>
+          </div>
+        </div>
       </main>
     </div>
 
@@ -737,6 +1129,7 @@
     <script src="app/modules/VentasModule.js"></script>
     <script src="app/modules/PesajeModule.js"></script>
     <script src="app/modules/StockModule.js"></script>
+    <script src="app/modules/ClientesModule.js"></script>
     <script src="app/modules/LightdarkModule.js"></script>
     <script src="app/modules/SearchModule.js"></script>
 
