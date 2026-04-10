@@ -2404,3 +2404,33 @@ footer a:hover {
 [data-theme="dark"] .cerrar-pendiente-box {
   background: #4a1a1f;
 }
+
+/* Botones medio de pago — modal registrar pago cliente */
+.pago-medio-btn {
+  flex: 1;
+  padding: 8px 4px;
+  border-radius: 6px;
+  border: 2px solid var(--color-borde);
+  background: var(--color-card-bg);
+  color: var(--color-texto-suave);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: center;
+}
+
+.pago-medio-btn.activo {
+  border-color: var(--color-primario);
+  color: var(--color-primario);
+  background: #e1f5ee;
+}
+
+[data-theme="dark"] .pago-medio-btn.activo {
+  background: #1a4540;
+}
+
+.pago-medio-btn:hover:not(.activo) {
+  border-color: var(--color-borde);
+  background: var(--color-hover-bg);
+}

@@ -121,6 +121,8 @@ App.TicketModule = (function (EventBus, Store, PriceService) {
       var fila = document.createElement("div");
       fila.classList.add("ticket-item");
 
+      var subtotalId = "subtotal-" + index;
+
       fila.innerHTML =
         '<div class="ticket-item-info">' +
         '<div class="ticket-item-nombre">' +
@@ -135,8 +137,11 @@ App.TicketModule = (function (EventBus, Store, PriceService) {
         '" />' +
         " x $" +
         item.precio.toLocaleString("es-AR") +
-        " = $" +
+        ' = <span id="' +
+        subtotalId +
+        '">$' +
         subtotal.toLocaleString("es-AR") +
+        "</span>" +
         "</div>" +
         "</div>" +
         '<button class="ticket-eliminar" data-index="' +
@@ -153,13 +158,28 @@ App.TicketModule = (function (EventBus, Store, PriceService) {
     });
 
     _ticketItems.querySelectorAll(".ticket-cantidad").forEach(function (input) {
-      input.addEventListener("input", function () {
+      function actualizar() {
         var idx = parseInt(input.dataset.index);
         var cantidad = parseInt(input.value) || 1;
+        if (cantidad < 1) {
+          cantidad = 1;
+          input.value = 1;
+        }
         _ticket.items[idx].cantidad = cantidad;
+
+        // Actualizar subtotal de esta fila en tiempo real
+        var span = document.getElementById("subtotal-" + idx);
+        if (span) {
+          var sub = _ticket.items[idx].precio * cantidad;
+          span.textContent = "$" + sub.toLocaleString("es-AR");
+        }
+
         _guardarEnStore();
         _actualizarTotalesDOM();
-      });
+      }
+
+      input.addEventListener("input", actualizar);
+      input.addEventListener("change", actualizar);
     });
 
     _guardarEnStore();
@@ -289,10 +309,23 @@ App.TicketModule = (function (EventBus, Store, PriceService) {
 
     // Registrar venta si hubo pago
     if (montoPagado > 0) {
+      var clienteSeleccionado = document.getElementById("cerrarVentaCliente");
+      var clienteId = clienteSeleccionado ? clienteSeleccionado.value : "";
+      var clienteNombre = "";
+      if (clienteId && App.ClientesModule) {
+        var clientes = App.ClientesModule.getClientes();
+        var cli = clientes.find(function (c) {
+          return c.id === clienteId;
+        });
+        if (cli) clienteNombre = cli.nombre;
+      }
+
       App.EventBus.emit("ventas:registrar", {
         items: itemsParaVenta,
         total: montoPagado,
         medioPago: _medioSeleccionado,
+        clienteId: clienteId || null,
+        clienteNombre: clienteNombre || null,
       });
     }
 
@@ -318,6 +351,8 @@ App.TicketModule = (function (EventBus, Store, PriceService) {
         items: itemsParaVenta,
         total: total,
         medioPago: "fiado",
+        clienteId: clienteId,
+        clienteNombre: clienteNombre,
       });
     }
 

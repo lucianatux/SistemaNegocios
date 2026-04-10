@@ -12,6 +12,7 @@ App.ProductListModule = (function (
 ) {
   var _productList = null;
   var _importInput = null;
+  var _ultimoSeleccionado = null;
 
   function render(lista) {
     _productList.innerHTML = "";
@@ -167,6 +168,21 @@ App.ProductListModule = (function (
       li.appendChild(precio);
       li.appendChild(acciones);
       _productList.appendChild(li);
+      li.addEventListener("click", function () {
+        // Quitar selección anterior
+        document
+          .querySelectorAll(".product-item.seleccionado")
+          .forEach(function (el) {
+            el.classList.remove("seleccionado");
+          });
+        // Si ya estaba seleccionado, deseleccionar (toggle)
+        if (this === _ultimoSeleccionado) {
+          _ultimoSeleccionado = null;
+        } else {
+          li.classList.add("seleccionado");
+          _ultimoSeleccionado = li;
+        }
+      });
     });
   }
 
@@ -187,6 +203,9 @@ App.ProductListModule = (function (
       EventBus.emit("busqueda:refiltrar");
     });
     EventBus.on("stock:actualizado", function () {
+      EventBus.emit("busqueda:refiltrar");
+    });
+    EventBus.on("store:stock:cambiado", function () {
       EventBus.emit("busqueda:refiltrar");
     });
 

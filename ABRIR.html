@@ -42,9 +42,9 @@
 
         <div class="nav-section">
           <div class="nav-label">Ventas</div>
-          <button id="btnTicket" class="nav-item">🧾 Ticket</button>
+          <button id="btnTicket" class="nav-item">🧾 Venta</button>
           <button id="btnPromo" class="nav-item">🎁 Promo</button>
-          <button id="btnVentas" class="nav-item">📊 Registro</button>
+          <button id="btnVentas" class="nav-item">📊 Estadísticas</button>
           <button id="btnClientes" class="nav-item">👥 Clientes</button>
         </div>
 
@@ -407,7 +407,7 @@
             </p>
             <div class="ticket-acciones" style="margin-top: 4px">
               <button id="btnCerrarVenta" class="btn-primario btn-registrar">
-                💳 Cerrar venta
+                💳 Registrar venta
               </button>
             </div>
 
@@ -537,10 +537,10 @@
             />
             <p id="pesajeResultado" class="pesaje-resultado"></p>
             <div class="modal-botones">
+              <button id="confirmarPesaje" class="btn-primario">Agregar</button>
               <button id="cerrarModalPesaje" class="btn-secundario">
                 Cancelar
               </button>
-              <button id="confirmarPesaje" class="btn-primario">Agregar</button>
             </div>
           </div>
         </div>
@@ -627,11 +627,11 @@
               class="modal-botones"
               style="justify-content: center; gap: 10px"
             >
-              <button id="cerrarModalReposicion" class="btn-secundario">
-                Cancelar
-              </button>
               <button id="confirmarReposicion" class="btn-primario">
                 Confirmar entrada
+              </button>
+              <button id="cerrarModalReposicion" class="btn-secundario">
+                Cancelar
               </button>
             </div>
           </div>
@@ -694,11 +694,11 @@
               class="modal-botones"
               style="justify-content: center; gap: 10px"
             >
-              <button id="cerrarModalEditarStock" class="btn-secundario">
-                Cancelar
-              </button>
               <button id="confirmarEditarStock" class="btn-primario">
                 Guardar
+              </button>
+              <button id="cerrarModalEditarStock" class="btn-secundario">
+                Cancelar
               </button>
             </div>
           </div>
@@ -790,6 +790,16 @@
               </button>
             </div>
 
+            <div
+              style="
+                padding: 10px 16px;
+                border-bottom: 1px solid var(--color-borde);
+              "
+            >
+              <div class="ficha-hist-titulo">📊 Estadísticas de compra</div>
+              <div id="fichaEstadisticas"></div>
+            </div>
+
             <div class="ficha-historial">
               <div class="ficha-hist-titulo">Historial</div>
               <div id="fichaHistorial"></div>
@@ -864,11 +874,11 @@
               class="modal-botones"
               style="justify-content: center; gap: 10px"
             >
-              <button id="cerrarModalCliente" class="btn-secundario">
-                Cancelar
-              </button>
               <button id="confirmarModalCliente" class="btn-primario">
                 Guardar
+              </button>
+              <button id="cerrarModalCliente" class="btn-secundario">
+                Cancelar
               </button>
             </div>
           </div>
@@ -922,11 +932,11 @@
               class="modal-botones"
               style="justify-content: center; gap: 10px"
             >
-              <button id="cerrarModalPago" class="btn-secundario">
-                Cancelar
-              </button>
               <button id="confirmarModalPago" class="btn-primario">
                 Confirmar pago
+              </button>
+              <button id="cerrarModalPago" class="btn-secundario">
+                Cancelar
               </button>
             </div>
           </div>
@@ -993,11 +1003,11 @@
               class="modal-botones"
               style="justify-content: center; gap: 10px"
             >
-              <button id="cerrarModalDeuda" class="btn-secundario">
-                Cancelar
-              </button>
               <button id="confirmarModalDeuda" class="btn-primario">
                 Cargar deuda
+              </button>
+              <button id="cerrarModalDeuda" class="btn-secundario">
+                Cancelar
               </button>
             </div>
           </div>
@@ -1006,7 +1016,7 @@
         <!-- MODAL CERRAR VENTA (reemplaza modal medio de pago) -->
         <div id="modalCerrarVenta" class="modal oculto">
           <div class="modal-contenido modal-cerrar-venta">
-            <h2>💳 Cerrar venta</h2>
+            <h2>💳 Registrar venta</h2>
 
             <div class="cerrar-total-box">
               <span>Total a cobrar</span>
@@ -1084,11 +1094,11 @@
               class="modal-botones"
               style="justify-content: center; gap: 10px; padding: 10px 0 0"
             >
+              <button id="confirmarCerrarVenta" class="btn-primario">
+                Confirmar y registrar venta
+              </button>
               <button id="cerrarModalCerrarVenta" class="btn-secundario">
                 Cancelar
-              </button>
-              <button id="confirmarCerrarVenta" class="btn-primario">
-                Confirmar y cerrar venta
               </button>
             </div>
           </div>

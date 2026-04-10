@@ -218,6 +218,45 @@ App.ClientesModule = (function (EventBus, Storage) {
   // ---------------------------------------------------------
   // Ficha cliente
   // ---------------------------------------------------------
+  function _calcularEstadisticasCliente(cli) {
+    var ventas = App.VentasModule
+      ? App.VentasModule.getVentas().filter(function (v) {
+          return v.clienteId === cli.id;
+        })
+      : [];
+
+    var hoy = new Date();
+    var mes =
+      hoy.getFullYear() + "-" + String(hoy.getMonth() + 1).padStart(2, "0");
+    var anio = String(hoy.getFullYear());
+
+    var esMes = function (v) {
+      return v.fecha.startsWith(mes);
+    };
+    var esAnio = function (v) {
+      return v.fecha.startsWith(anio);
+    };
+
+    var ventasMes = ventas.filter(esMes);
+    var ventasAnio = ventas.filter(esAnio);
+
+    return {
+      totalVentas: ventas.length,
+      mes: {
+        count: ventasMes.length,
+        total: ventasMes.reduce(function (a, v) {
+          return a + v.total;
+        }, 0),
+      },
+      anio: {
+        count: ventasAnio.length,
+        total: ventasAnio.reduce(function (a, v) {
+          return a + v.total;
+        }, 0),
+      },
+    };
+  }
+
   function _abrirFicha(cli) {
     _clienteActivo = cli;
     var modal = document.getElementById("fichaClienteModal");
@@ -227,6 +266,7 @@ App.ClientesModule = (function (EventBus, Storage) {
 
     _renderFichaSaldo(cli);
     _renderHistorial(cli);
+    _renderEstadisticasCliente(cli);
     modal.classList.remove("oculto");
   }
 
@@ -385,6 +425,45 @@ App.ClientesModule = (function (EventBus, Storage) {
 
       el.appendChild(wrap);
     });
+  }
+
+  function _renderEstadisticasCliente(cli) {
+    var el = document.getElementById("fichaEstadisticas");
+    if (!el) return;
+
+    var stats = _calcularEstadisticasCliente(cli);
+
+    if (stats.totalVentas === 0) {
+      el.innerHTML =
+        "<p style='font-size:12px;color:var(--color-texto-suave);text-align:center'>Sin compras registradas</p>";
+      return;
+    }
+
+    el.innerHTML =
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">' +
+      '<div class="venta-stat" style="background:var(--color-fondo)">' +
+      '<div class="venta-stat-label">Este mes</div>' +
+      '<div class="venta-stat-valor" style="font-size:14px">' +
+      stats.mes.count +
+      " compras" +
+      "</div>" +
+      '<div style="font-size:12px;color:var(--color-secundario);font-weight:700">' +
+      "$" +
+      stats.mes.total.toLocaleString("es-AR") +
+      "</div>" +
+      "</div>" +
+      '<div class="venta-stat" style="background:var(--color-fondo)">' +
+      '<div class="venta-stat-label">Este año</div>' +
+      '<div class="venta-stat-valor" style="font-size:14px">' +
+      stats.anio.count +
+      " compras" +
+      "</div>" +
+      '<div style="font-size:12px;color:var(--color-secundario);font-weight:700">' +
+      "$" +
+      stats.anio.total.toLocaleString("es-AR") +
+      "</div>" +
+      "</div>" +
+      "</div>";
   }
 
   function _actualizarFichaAbierta(cli) {
