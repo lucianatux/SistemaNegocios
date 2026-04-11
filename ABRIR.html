@@ -50,6 +50,7 @@
 
         <div class="nav-section nav-section-sistema">
           <div class="nav-label">Sistema</div>
+          <button id="btnEtiquetas" class="nav-item">🏷️ Etiquetas</button>
           <button id="exportarBtn" class="nav-item">💾 Exportar datos</button>
           <label for="importarInput" class="nav-item">📂 Importar datos</label>
           <input
@@ -87,6 +88,51 @@
         <section id="lista-articulos">
           <ul id="productList"></ul>
         </section>
+
+        <!-- MODO DOS COLUMNAS -->
+        <div class="modo-columnas" id="modoColumnas">
+          <!-- Top bar -->
+          <div class="modo-topbar">
+            <div class="modo-topbar-izq">
+              <img src="app/logos/terocircle.png" alt="Tero" class="app-icon" />
+              <span class="modo-topbar-titulo">TERO Gestión</span>
+              <span class="modo-topbar-badge" id="modoTopbarBadge"
+                >🛒 Venta</span
+              >
+            </div>
+            <button class="modo-topbar-cerrar" id="modoTopbarCerrar">✕</button>
+          </div>
+
+          <!-- Columnas -->
+          <div class="modo-columnas-body">
+            <!-- Columna izquierda: buscador + lista -->
+            <div class="modo-col-izq">
+              <div class="modo-buscador">
+                <input
+                  type="text"
+                  id="modoBuscadorInput"
+                  placeholder="Buscar por nombre o código..."
+                  autocomplete="off"
+                />
+                <select id="modoCategoryFilter">
+                  <option value="">Todas</option>
+                  <option value="Libreria">Librería</option>
+                  <option value="Reposteria">Repostería</option>
+                  <option value="Cotillon">Cotillón</option>
+                  <option value="Regaleria">Regalería</option>
+                  <option value="Electronica">Electrónica</option>
+                  <option value="Descartables">Descartables</option>
+                </select>
+              </div>
+              <div class="modo-lista">
+                <ul id="modoProductList"></ul>
+              </div>
+            </div>
+
+            <!-- Columna derecha: ticket o promo (se monta acá dinámicamente) -->
+            <div class="modo-col-der" id="modoColDer"></div>
+          </div>
+        </div>
 
         <!-- ===== OVERLAYS Y PANELES (position:fixed, pueden estar en cualquier lugar) ===== -->
 
@@ -1103,6 +1149,51 @@
             </div>
           </div>
         </div>
+        <!-- PANEL ETIQUETAS -->
+        <section id="etiquetasPanel" class="ventas-panel oculto">
+          <div class="ventas-header">
+            <h2>🏷️ Imprimir etiquetas</h2>
+            <button id="cerrarEtiquetas" class="ventas-cerrar">✕</button>
+          </div>
+
+          <div class="etiquetas-controles">
+            <div class="etiquetas-filtros">
+              <input
+                type="text"
+                id="etiquetaBuscador"
+                placeholder="Buscar producto..."
+              />
+              <select id="etiquetaCategoria">
+                <option value="">Todas las categorías</option>
+                <option value="Libreria">Librería</option>
+                <option value="Reposteria">Repostería</option>
+                <option value="Cotillon">Cotillón</option>
+                <option value="Regaleria">Regalería</option>
+                <option value="Electronica">Electrónica</option>
+                <option value="Descartables">Descartables</option>
+              </select>
+            </div>
+            <div class="etiquetas-acciones">
+              <button id="btnSeleccionarTodos" class="btn-secundario">
+                Seleccionar todos
+              </button>
+              <button id="btnDeseleccionarTodos" class="btn-secundario">
+                Limpiar
+              </button>
+              <button id="btnImprimirEtiquetas" class="btn-primario">
+                🖨️ Imprimir etiquetas
+              </button>
+            </div>
+            <div class="etiquetas-contador">
+              <span id="etiquetasSeleccionadas">0 productos seleccionados</span>
+            </div>
+          </div>
+
+          <div id="etiquetasLista" class="ventas-lista"></div>
+        </section>
+
+        <!-- AREA DE IMPRESION DE ETIQUETAS (oculta, solo para print) -->
+        <div id="etiquetasImprimir" style="display: none"></div>
       </main>
     </div>
 
@@ -1129,6 +1220,7 @@
 
     <!-- DATOS -->
     <script src="app/data.js"></script>
+    <script src="app/libs/JsBarcode.all.min.js"></script>
 
     <!-- MÓDULOS -->
     <script src="app/modules/ProductListModule.js"></script>
@@ -1140,6 +1232,8 @@
     <script src="app/modules/PesajeModule.js"></script>
     <script src="app/modules/StockModule.js"></script>
     <script src="app/modules/ClientesModule.js"></script>
+    <script src="app/modules/ModoColumnasModule.js"></script>
+    <script src="app/modules/EtiquetasModule.js"></script>
     <script src="app/modules/LightdarkModule.js"></script>
     <script src="app/modules/SearchModule.js"></script>
 

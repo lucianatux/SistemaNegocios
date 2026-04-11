@@ -22,13 +22,15 @@ App.TicketModule = (function (EventBus, Store, PriceService) {
   // ---------------------------------------------------------
   function abrir() {
     Store.set("modoTicket", true);
-    _panel.classList.remove("oculto");
+    _activarModoColumnas();
+    _restaurarDesdeStore();
+    _render();
     _mostrarFecha();
   }
 
   function cerrar() {
     Store.set("modoTicket", false);
-    _panel.classList.add("oculto");
+    _desactivarModoColumnas();
   }
 
   // ---------------------------------------------------------
@@ -358,6 +360,36 @@ App.TicketModule = (function (EventBus, Store, PriceService) {
 
     _cerrarModalCerrarVenta();
     alert("Venta cerrada correctamente");
+  }
+
+  function _activarModoColumnas() {
+    document.body.classList.add("modo-venta");
+    document.getElementById("modoTopbarBadge").textContent = "🛒 Venta";
+
+    // Mover el ticketPanel a la columna derecha
+    var colDer = document.getElementById("modoColDer");
+    colDer.appendChild(_panel);
+    _panel.classList.remove("oculto");
+    _panel.style.position = "static";
+    _panel.style.width = "100%";
+    _panel.style.height = "100%";
+    _panel.style.boxShadow = "none";
+
+    // Inicializar buscador del modo
+    App.ModoColumnasModule.iniciarBuscador();
+  }
+
+  function _desactivarModoColumnas() {
+    document.body.classList.remove("modo-venta");
+
+    // Devolver el ticketPanel al main
+    var main = document.querySelector("main");
+    main.appendChild(_panel);
+    _panel.classList.add("oculto");
+    _panel.style.position = "";
+    _panel.style.width = "";
+    _panel.style.height = "";
+    _panel.style.boxShadow = "";
   }
 
   // ---------------------------------------------------------

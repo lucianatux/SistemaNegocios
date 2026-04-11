@@ -1,0 +1,145 @@
+// =============================================================
+// ModoColumnasModule.js — Buscador y lista en modo dos columnas
+// =============================================================
+
+var App = App || {};
+
+App.ModoColumnasModule = (function (EventBus, Store, PriceService, ProductService) {
+
+  var _lista    = null;
+  var _input    = null;
+  var _select   = null;
+  var _busqueda = "";
+  var _categoria = "";
+
+  function _productosFiltrados() {
+    return ProductService.filtrar(_busqueda, _categoria);
+  }
+
+  function _render() {
+    if (!_lista) return;
+    _lista.innerHTML = "";
+
+    var productos  = _productosFiltrados();
+    var modoTicket = Store.get("modoTicket");
+    var modoPromo  = Store.get("modoPromo");
+
+    if (productos.length === 0) {
+      _lista.innerHTML = "<li style='padding:16px;color:var(--color-texto-suave);font-size:14px'>No se encontraron productos</li>";
+      return;
+    }
+
+    productos.forEach(function (producto) {
+      var li = document.createElement("li");
+      li.classList.add("product-item");
+
+      var leftGroup = document.createElement("div");
+      leftGroup.classList.add("product-left");
+
+      var info = document.createElement("div");
+      info.classList.add("product-info");
+
+      var nombre = document.createElement("div");
+      nombre.classList.add("product-name");
+      nombre.textContent = producto.nombre;
+      if (producto.porPeso) {
+        var badge = document.createElement("span");
+        badge.classList.add("badge-peso");
+        badge.textContent = "⚖️ por 100gr";
+        nombre.appendChild(badge);
+      }
+
+      var meta = document.createElement("div");
+      meta.classList.add("product-meta");
+      meta.textContent = "Cód: " + producto.codigo + " · " + producto.categoria;
+
+      info.appendChild(nombre);
+      info.appendChild(meta);
+      leftGroup.appendChild(info);
+
+      var precio = document.createElement("div");
+      precio.classList.add("product-price");
+      precio.textContent = "$ " + PriceService.calcularDesdeStore(producto);
+      if (producto.porPeso) {
+        var unit = document.createElement("span");
+        unit.classList.add("price-unit");
+        unit.textContent = "/100gr";
+        precio.appendChild(unit);
+      }
+
+      // Botón agregar
+      var btnAgregar = document.createElement("button");
+      btnAgregar.classList.add("btn-agregar-modo");
+
+      if (producto.porPeso) {
+        btnAgregar.textContent = "⚖️ Pesar";
+        btnAgregar.addEventListener("click", function () {
+          var destino = modoTicket ? "ticket" : "promo";
+          EventBus.emit("pesaje:abrir", { producto: producto, destino: destino });
+        });
+      } else if (modoTicket) {
+        btnAgregar.textContent = "+";
+        btnAgregar.addEventListener("click", function () {
+          EventBus.emit("ticket:agregar-producto", { producto: producto });
+        });
+      } else if (modoPromo) {
+        btnAgregar.textContent = "🎁";
+        btnAgregar.addEventListener("click", function () {
+          EventBus.emit("promo:agregar-producto", { producto: producto });
+        });
+      }
+
+      li.appendChild(leftGroup);
+      li.appendChild(precio);
+      li.appendChild(btnAgregar);
+      _lista.appendChild(li);
+    });
+  }
+
+  function iniciarBuscador() {
+    _lista  = document.getElementById("modoProductList");
+    _input  = document.getElementById("modoBuscadorInput");
+    _select = document.getElementById("modoCategoryFilter");
+
+    _busqueda  = "";
+    _categoria = "";
+    _input.value  = "";
+    _select.value = "";
+
+    _input.oninput = function () {
+      _busqueda = this.value;
+      _render();
+    };
+
+    _select.onchange = function () {
+      _categoria = this.value;
+      _render();
+    };
+
+    _render();
+  }
+
+  function init() {
+    // Botón X del topbar — cierra ticket o promo según el modo activo
+    document.getElementById("modoTopbarCerrar").addEventListener("click", function () {
+      if (Store.get("modoTicket")) {
+        App.TicketModule.cerrar();
+      } else if (Store.get("modoPromo")) {
+        App.PromoModule.cerrar();
+      }
+    });
+
+    // Re-renderizar si cambia el catálogo o el stock
+    EventBus.on("store:productos:cambiado", function () {
+      if (Store.get("modoTicket") || Store.get("modoPromo")) _render();
+    });
+    EventBus.on("stock:actualizado", function () {
+      if (Store.get("modoTicket") || Store.get("modoPromo")) _render();
+    });
+
+    console.info("[ModoColumnasModule] iniciado");
+  }
+
+  return { init: init, iniciarBuscador: iniciarBuscador };
+
+})(App.EventBus, App.Store, App.PriceService, App.ProductService);

@@ -44,14 +44,33 @@ App.PromoModule = (function (EventBus, Store, PriceService) {
   // ---------------------------------------------------------
   function abrir() {
     Store.set("modoPromo", true);
+    document.body.classList.add("modo-promo");
+    document.getElementById("modoTopbarBadge").textContent = "🎁 Promo";
+
+    var colDer = document.getElementById("modoColDer");
+    colDer.appendChild(_panel);
     _panel.classList.remove("oculto");
+    _panel.style.position = "static";
+    _panel.style.width = "100%";
+    _panel.style.height = "100%";
+    _panel.style.boxShadow = "none";
+
+    App.ModoColumnasModule.iniciarBuscador();
     _restaurarDesdeStore();
     _render();
   }
 
   function cerrar() {
     Store.set("modoPromo", false);
+    document.body.classList.remove("modo-promo");
+
+    var main = document.querySelector("main");
+    main.appendChild(_panel);
     _panel.classList.add("oculto");
+    _panel.style.position = "";
+    _panel.style.width = "";
+    _panel.style.height = "";
+    _panel.style.boxShadow = "";
   }
 
   // ---------------------------------------------------------
@@ -208,15 +227,21 @@ App.PromoModule = (function (EventBus, Store, PriceService) {
       cantidad.min = 1;
       cantidad.value = item.cantidad;
       cantidad.classList.add("promo-cantidad");
-      cantidad.addEventListener("input", function () {
-        var val = parseInt(cantidad.value);
-        if (isNaN(val) || val < 1) val = 1;
+      function actualizarCantidad() {
+        var val = parseInt(cantidad.value) || 1;
+        if (val < 1) {
+          val = 1;
+          cantidad.value = 1;
+        }
         _promo.items[index].cantidad = val;
-        cantidad.value = val;
+        subtotal.textContent =
+          "Subtotal: $" + (item.precio * val).toLocaleString("es-AR");
         _actualizarTotales();
         _guardarEnStore();
-      });
+      }
 
+      cantidad.addEventListener("input", actualizarCantidad);
+      cantidad.addEventListener("change", actualizarCantidad);
       var subtotal = document.createElement("div");
       subtotal.classList.add("promo-subtotal");
       subtotal.textContent = "Subtotal: $" + item.precio * item.cantidad;

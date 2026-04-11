@@ -29,6 +29,8 @@
   App.ClientesModule.init();
   App.StockModule.init();
   App.PesajeModule.init();
+  App.EtiquetasModule.init();
+  App.ModoColumnasModule.init();
   App.LightdarkModule.init();
   App.SearchModule.init();
 
