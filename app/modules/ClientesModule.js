@@ -13,6 +13,7 @@ App.ClientesModule = (function (EventBus, Storage) {
   var _ordenAlfabetico = false;
 
   var CLAVE = "tero_clientes";
+  var _ultimoPagoClienteId = null; // para linkear con ventaId cuando llegue ventas:registrada
 
   function _guardar() {
     Storage.guardar(CLAVE, _clientes);
@@ -116,7 +117,8 @@ App.ClientesModule = (function (EventBus, Storage) {
     });
     _guardar();
 
-    // Registrar en ventas como entrada nueva (Bug 4: pasar clienteId y clienteNombre)
+    // Registrar en ventas — guardamos el clienteId para linkear el ventaId al volver
+    _ultimoPagoClienteId = cli.id;
     EventBus.emit("ventas:registrar", {
       items: [
         {
@@ -305,7 +307,7 @@ App.ClientesModule = (function (EventBus, Storage) {
       return;
     }
 
-    cli.historial.forEach(function (mov) {
+    cli.historial.forEach(function (mov, indice) {
       var esPago = mov.tipo === "pago";
       var esCompra = mov.tipo === "compra";
       var esFiado = mov.tipo === "fiado";
@@ -330,8 +332,23 @@ App.ClientesModule = (function (EventBus, Storage) {
       fila.style.borderBottom = "none";
       fila.style.cursor = tieneDetalle ? "pointer" : "default";
 
+      // Botón eliminar movimiento
+      var btnElim = document.createElement("button");
+      btnElim.textContent = "🗑️";
+      btnElim.title = "Eliminar movimiento";
+      btnElim.style.cssText =
+        "background:none;border:none;cursor:pointer;font-size:13px;" +
+        "padding:0 4px;color:var(--color-texto-suave);flex-shrink:0;" +
+        "opacity:0.5;transition:opacity 0.15s";
+      btnElim.onmouseenter = function () { this.style.opacity = "1"; };
+      btnElim.onmouseleave = function () { this.style.opacity = "0.5"; };
+      btnElim.addEventListener("click", function (e) {
+        e.stopPropagation();
+        _eliminarMovimiento(cli, indice);
+      });
+
       fila.innerHTML =
-        "<div>" +
+        "<div style='flex:1'>" +
         '<div class="hist-tipo">' +
         desc +
         (tieneDetalle
@@ -352,6 +369,7 @@ App.ClientesModule = (function (EventBus, Storage) {
         mov.monto.toLocaleString("es-AR") +
         "</div>";
 
+      fila.appendChild(btnElim);
       wrap.appendChild(fila);
 
       // Detalle expandible (solo fiados con items)
@@ -475,6 +493,39 @@ App.ClientesModule = (function (EventBus, Storage) {
       "</div>";
   }
 
+
+  // ---------------------------------------------------------
+  // Eliminar movimiento del historial
+  // ---------------------------------------------------------
+  function _eliminarMovimiento(cli, indice) {
+    var mov = cli.historial[indice];
+    if (!mov) return;
+
+    var confirmMsg = "¿Eliminar este movimiento del historial?";
+    if (!confirm(confirmMsg)) return;
+
+    // Recalcular saldo según tipo
+    if (mov.tipo === "fiado") {
+      cli.saldo += mov.monto; // se le quita la deuda
+      if (cli.saldo > 0) cli.saldo = 0;
+    } else if (mov.tipo === "pago") {
+      cli.saldo -= mov.monto; // vuelve a deber
+    }
+    // compra: no afecta saldo
+
+    // Si tiene ventaId, ofrecer eliminar también de estadísticas
+    if (mov.tipo === "pago" && mov.ventaId) {
+      if (confirm("¿También eliminás la venta correspondiente en estadísticas?")) {
+        EventBus.emit("ventas:eliminar", { ventaId: mov.ventaId });
+      }
+    }
+
+    cli.historial.splice(indice, 1);
+    _guardar();
+    _renderFichaSaldo(cli);
+    _renderHistorial(cli);
+    _renderTodo();
+  }
 
   // ---------------------------------------------------------
   // Imprimir ficha individual de cliente
@@ -948,6 +999,20 @@ App.ClientesModule = (function (EventBus, Storage) {
         datos.descripcion,
         datos.items,
       );
+    });
+
+    // Cuando ventas:registrada responde, linkeamos el ventaId al movimiento de pago
+    EventBus.on("ventas:registrada", function (datos) {
+      if (!_ultimoPagoClienteId || !datos || !datos.venta) return;
+      var cli = _buscarPorId(_ultimoPagoClienteId);
+      _ultimoPagoClienteId = null;
+      if (!cli || !cli.historial.length) return;
+      // El pago más reciente es el primero (unshift)
+      var movReciente = cli.historial[0];
+      if (movReciente && movReciente.tipo === "pago" && !movReciente.ventaId) {
+        movReciente.ventaId = datos.venta.id;
+        _guardar();
+      }
     });
 
     EventBus.on("clientes:registrar-compra", function (datos) {

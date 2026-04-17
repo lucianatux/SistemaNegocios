@@ -375,6 +375,14 @@ App.VentasModule = (function (EventBus, Storage) {
       registrar(datos);
     });
 
+    // Eliminar venta por id (desde historial de cliente)
+    EventBus.on("ventas:eliminar", function (datos) {
+      if (!datos || !datos.ventaId) return;
+      _ventas = _ventas.filter(function (v) { return v.id !== datos.ventaId; });
+      _guardar();
+      if (_panelActivo) _renderTodo();
+    });
+
     // Actualizar stats si el panel está abierto cuando se registra una venta
     EventBus.on("ventas:registrada", function () {
       if (_panelActivo) _renderTodo();
