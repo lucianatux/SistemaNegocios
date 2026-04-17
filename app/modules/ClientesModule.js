@@ -473,6 +473,77 @@ App.ClientesModule = (function (EventBus, Storage) {
       "</div>";
   }
 
+
+  // ---------------------------------------------------------
+  // Imprimir ficha individual de cliente
+  // ---------------------------------------------------------
+  function _imprimirFichaCliente(cli) {
+    var tieneDeuda = cli.saldo < 0;
+    var fecha = new Date().toLocaleDateString("es-AR");
+
+    var filasHistorial = (cli.historial || []).map(function (mov) {
+      var esPago = mov.tipo === "pago";
+      var esCompra = mov.tipo === "compra";
+      var tipo = esPago ? "Pago" : esCompra ? "Compra" : "Fiado";
+      var desc = mov.descripcion ? " - " + mov.descripcion : "";
+      var color = (esPago || esCompra) ? "#2a7a2a" : "#b00020";
+      var signo = (esPago || esCompra) ? "+" : "-";
+
+      var detalleItems = "";
+      if (mov.tipo === "fiado" && mov.items && mov.items.length > 0) {
+        detalleItems =
+          "<ul style=\"margin:4px 0 0 16px;padding:0;font-size:11px;color:#555\">" +
+          mov.items.map(function (item) {
+            return "<li>" + item.nombre + " x" + item.cantidad +
+              " - $" + item.subtotal.toLocaleString("es-AR") + "</li>";
+          }).join("") +
+          "</ul>";
+      }
+
+      return "<tr>" +
+        "<td style=\"padding:6px 8px;border-bottom:1px solid #eee;vertical-align:top\">" +
+        "<div>" + tipo + desc + "</div>" + detalleItems + "</td>" +
+        "<td style=\"padding:6px 8px;border-bottom:1px solid #eee;color:#888;font-size:12px;white-space:nowrap;vertical-align:top\">" +
+        _formatFecha(mov.fecha) + " " + mov.hora + "</td>" +
+        "<td style=\"padding:6px 8px;border-bottom:1px solid #eee;text-align:right;font-weight:700;color:" +
+        color + ";white-space:nowrap;vertical-align:top\">" +
+        signo + "$" + mov.monto.toLocaleString("es-AR") + "</td>" +
+        "</tr>";
+    }).join("");
+
+    var ventana = window.open("", "_blank");
+    ventana.document.write(
+      "<!DOCTYPE html><html><head><meta charset=\"utf-8\"><title>Ficha de " + cli.nombre + "</title>" +
+      "<style>" +
+      "body{font-family:sans-serif;padding:24px;color:#222;max-width:600px;margin:0 auto}" +
+      "h2{margin:0 0 4px}" +
+      ".notas{color:#888;font-size:13px;margin:0 0 16px}" +
+      ".saldo-box{padding:12px 16px;border-radius:8px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center}" +
+      ".saldo-deuda{background:#fff0f0;border:1px solid #f5c0c0}" +
+      ".saldo-ok{background:#f0fff0;border:1px solid #b0ddb0}" +
+      ".saldo-monto{font-size:22px;font-weight:700}" +
+      "table{border-collapse:collapse;width:100%}" +
+      "th{text-align:left;padding:8px;background:#f5f5f5;border-bottom:2px solid #ddd;font-size:13px}" +
+      "@media print{button{display:none}}" +
+      "</style></head><body>" +
+      "<button onclick=\"window.print()\" style=\"margin-bottom:20px;padding:8px 16px;cursor:pointer\">Imprimir</button>" +
+      "<h2>" + cli.nombre + "</h2>" +
+      "<p class=\"notas\">" + (cli.notas || "") + "</p>" +
+      "<div class=\"saldo-box " + (tieneDeuda ? "saldo-deuda" : "saldo-ok") + "\">" +
+      "<span style=\"font-size:14px\">" + (tieneDeuda ? "Deuda actual" : "Estado") + "</span>" +
+      "<span class=\"saldo-monto\" style=\"color:" + (tieneDeuda ? "#b00020" : "#2a7a2a") + "\">" +
+      (tieneDeuda ? "-$" + Math.abs(cli.saldo).toLocaleString("es-AR") : "Al dia") +
+      "</span></div>" +
+      "<p style=\"font-size:12px;color:#888;margin-bottom:12px\">Generado el " + fecha + "</p>" +
+      (filasHistorial
+        ? "<table><thead><tr><th>Movimiento</th><th>Fecha</th><th style=\"text-align:right\">Monto</th></tr></thead><tbody>" +
+          filasHistorial + "</tbody></table>"
+        : "<p style=\"color:#888;font-size:13px\">Sin movimientos registrados</p>") +
+      "</body></html>"
+    );
+    ventana.document.close();
+  }
+
   function _actualizarFichaAbierta(cli) {
     var modal = document.getElementById("fichaClienteModal");
     if (
@@ -751,12 +822,6 @@ App.ClientesModule = (function (EventBus, Storage) {
       });
     }
 
-    // Imprimir saldos
-    var btnImprimir = document.getElementById("btnImprimirSaldos");
-    if (btnImprimir) {
-      btnImprimir.addEventListener("click", _imprimirSaldos);
-    }
-
     // Exportar datos completos
     var btnExportar = document.getElementById("btnExportarClientes");
     if (btnExportar) {
@@ -831,6 +896,14 @@ App.ClientesModule = (function (EventBus, Storage) {
     document
       .getElementById("btnEliminarCliente")
       .addEventListener("click", _eliminarCliente);
+
+    // Imprimir ficha del cliente
+    var btnImprimirFicha = document.getElementById("btnImprimirFicha");
+    if (btnImprimirFicha) {
+      btnImprimirFicha.addEventListener("click", function () {
+        if (_clienteActivo) _imprimirFichaCliente(_clienteActivo);
+      });
+    }
 
     // Modal cliente
     document
