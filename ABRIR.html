@@ -471,7 +471,7 @@
         <!-- PANEL VENTAS -->
         <section id="ventasPanel" class="ventas-panel oculto">
           <div class="ventas-header">
-            <h2>📊 Registro de ventas</h2>
+            <h2>📊 Estadísticas</h2>
             <button id="cerrarVentas" class="ventas-cerrar">✕</button>
           </div>
           <div class="ventas-tabs">
@@ -480,7 +480,9 @@
             <button class="ventas-tab" data-periodo="mes">Mes</button>
             <button class="ventas-tab" data-periodo="">Todo</button>
           </div>
-
+          <div id="ventasTabsMeses" class="ventas-tabs-meses">
+              <select id="ventaAnioSelect" class="ventas-anio-select"></select>
+          </div>
           <div class="ventas-stats">
             <div class="venta-stat">
               <div class="venta-stat-label">Ventas</div>
@@ -549,6 +551,9 @@
               <option value="">Todos los medios</option>
               <option value="efectivo">Efectivo</option>
               <option value="transferencia">Transferencia</option>
+            </select>
+            <select id="ventaFiltroCliente">
+              <option value="">Todos los clientes</option>
             </select>
           </div>
 
@@ -870,9 +875,7 @@
               <button id="btnImprimirFicha" class="btn-secundario">
                 🖨️ Imprimir
               </button>
-              <button id="btnEditarCliente" class="btn-secundario">
-                ✏️
-              </button>
+              <button id="btnEditarCliente" class="btn-secundario">✏️</button>
               <button id="btnEliminarCliente" class="btn-secundario btn-danger">
                 🗑️
               </button>

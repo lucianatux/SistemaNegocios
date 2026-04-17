@@ -1370,6 +1370,13 @@ footer a:hover {
     display: none !important;
   }
 
+  .ticket-item, .ticket-header, .ticket-linea.first {
+    border-bottom: 1px solid #eee;
+  }
+  .ticket-footer{
+    border-top: 1px solid #eee;
+  }
+
   * {
     animation: none !important;
   }
@@ -2911,4 +2918,35 @@ body.modo-promo #cerrarPromo {
   border-top: 1px solid var(--color-borde);
   margin-top: 4px;
   padding-top: 4px;
+}
+.ventas-tabs-meses {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 6px 12px;
+  border-bottom: 1px solid var(--color-borde);
+}
+.ventas-tab-mes {
+  padding: 4px 10px;
+  font-size: 12px;
+  border: 1px solid var(--color-borde);
+  border-radius: 12px;
+  background: none;
+  cursor: pointer;
+  color: var(--color-texto-suave);
+}
+.ventas-tab-mes.activo {
+  background: var(--color-primario);
+  color: white;
+  border-color: var(--color-primario);
+}
+.ventas-anio-select {
+  padding: 3px 8px;
+  font-size: 12px;
+  border: 1px solid var(--color-borde);
+  border-radius: 12px;
+  background: var(--color-input-bg);
+  color: var(--color-texto);
+  cursor: pointer;
+  margin-right: 6px;
 }

@@ -22,6 +22,9 @@ App.VentasModule = (function (EventBus, Storage) {
   var _desgloseTriCount = null;
   var _barraEf = null;
   var _barratr = null;
+  var _filtroCliente = null;
+  var _anioSeleccionado = new Date().getFullYear();
+  var _nombresMeses = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
 
   var CLAVE = "tero_ventas";
 
@@ -64,6 +67,13 @@ App.VentasModule = (function (EventBus, Storage) {
   }
 
   function _ventasDelPeriodo(periodo) {
+    // Período mes específico: "mes-2025-04"
+    if (periodo && periodo.startsWith("mes-")) {
+      var mesStr = periodo.slice(4); // "2025-04"
+      return _ventas.filter(function (v) {
+        return v.fecha.startsWith(mesStr);
+      });
+    }
     var desde = _desdeParaPeriodo(periodo);
     return _ventas.filter(function (v) {
       return !desde || v.fecha >= desde;
@@ -71,9 +81,12 @@ App.VentasModule = (function (EventBus, Storage) {
   }
 
   function _ventasFiltradas() {
-    var medio = _filtroMedio ? _filtroMedio.value : "";
+    var medio    = _filtroMedio    ? _filtroMedio.value    : "";
+    var clienteId = _filtroCliente ? _filtroCliente.value  : "";
     return _ventasDelPeriodo(_periodoActivo).filter(function (v) {
-      return !medio || v.medioPago === medio;
+      var okMedio   = !medio     || v.medioPago === medio;
+      var okCliente = !clienteId || v.clienteId === clienteId;
+      return okMedio && okCliente;
     });
   }
 
@@ -321,11 +334,90 @@ App.VentasModule = (function (EventBus, Storage) {
   }
 
   // ---------------------------------------------------------
+  // _poblarFiltroClientes
+  // ---------------------------------------------------------
+  function _poblarFiltroClientes() {
+    if (!_filtroCliente) return;
+    var clientes = App.ClientesModule ? App.ClientesModule.getClientes() : [];
+    // Solo clientes que aparecen en alguna venta
+    var idsConVentas = {};
+    _ventas.forEach(function (v) {
+      if (v.clienteId) idsConVentas[v.clienteId] = v.clienteNombre;
+    });
+    _filtroCliente.innerHTML = '<option value="">Todos los clientes</option>';
+    Object.keys(idsConVentas).forEach(function (id) {
+      var opt = document.createElement("option");
+      opt.value = id;
+      opt.textContent = idsConVentas[id] || id;
+      _filtroCliente.appendChild(opt);
+    });
+  }
+
+  // ---------------------------------------------------------
+  // _aniosConVentas / _generarTabsMeses / _poblarSelectorAnio
+  // ---------------------------------------------------------
+  function _aniosConVentas() {
+    var anios = {};
+    _ventas.forEach(function (v) {
+      anios[v.fecha.slice(0, 4)] = true;
+    });
+    anios[new Date().getFullYear()] = true;
+    return Object.keys(anios).sort().reverse();
+  }
+
+  function _generarTabsMeses() {
+    var contenedorMeses = document.getElementById("ventasTabsMeses");
+    if (!contenedorMeses) return;
+    // Preservar el select, limpiar solo los botones de mes
+    var botonesViejos = contenedorMeses.querySelectorAll(".ventas-tab-mes");
+    botonesViejos.forEach(function (b) { b.remove(); });
+
+    var anioActual = new Date().getFullYear();
+    var mesActual  = new Date().getMonth();
+    var limite     = (_anioSeleccionado === anioActual) ? mesActual : 11;
+
+    for (var m = 0; m <= limite; m++) {
+      (function (mes) {
+        var btn = document.createElement("button");
+        btn.classList.add("ventas-tab-mes");
+        btn.textContent = _nombresMeses[mes];
+        var mesStr = _anioSeleccionado + "-" + String(mes + 1).padStart(2, "0");
+        btn.addEventListener("click", function () {
+          document.querySelectorAll(".ventas-tab, .ventas-tab-mes").forEach(function (t) {
+            t.classList.remove("activo");
+          });
+          btn.classList.add("activo");
+          _periodoActivo = "mes-" + mesStr;
+          _renderTodo();
+        });
+        contenedorMeses.appendChild(btn);
+      })(m);
+    }
+  }
+
+  function _poblarSelectorAnio() {
+    var selectorAnio = document.getElementById("ventaAnioSelect");
+    if (!selectorAnio) return;
+    var anios = _aniosConVentas();
+    selectorAnio.innerHTML = "";
+    anios.forEach(function (anio) {
+      var opt = document.createElement("option");
+      opt.value = anio;
+      opt.textContent = anio;
+      if (parseInt(anio) === _anioSeleccionado) opt.selected = true;
+      selectorAnio.appendChild(opt);
+    });
+  }
+
+  // ---------------------------------------------------------
   // abrir / cerrar
   // ---------------------------------------------------------
   function abrir() {
     _panelActivo = true;
     _panel.classList.remove("oculto");
+    _poblarSelectorAnio();
+    _generarTabsMeses();
+    _poblarFiltroClientes();
     _renderTodo();
   }
 
@@ -351,16 +443,17 @@ App.VentasModule = (function (EventBus, Storage) {
     _desgloseEfCount = document.getElementById("desgloseEfectivoCount");
     _desgloseTriMonto = document.getElementById("desgloseTransferenciaMonto");
     _desgloseTriCount = document.getElementById("desgloseTransferenciaCount");
-    _barraEf = document.getElementById("barraEfectivo");
-    _barratr = document.getElementById("barraTransferencia");
+    _barraEf        = document.getElementById("barraEfectivo");
+    _barratr        = document.getElementById("barraTransferencia");
+    _filtroCliente  = document.getElementById("ventaFiltroCliente");
 
     document.getElementById("btnVentas").addEventListener("click", abrir);
     document.getElementById("cerrarVentas").addEventListener("click", cerrar);
 
-    // Tabs de período
+    // Tabs de período fijas
     document.querySelectorAll(".ventas-tab").forEach(function (tab) {
       tab.addEventListener("click", function () {
-        document.querySelectorAll(".ventas-tab").forEach(function (t) {
+        document.querySelectorAll(".ventas-tab, .ventas-tab-mes").forEach(function (t) {
           t.classList.remove("activo");
         });
         this.classList.add("activo");
@@ -369,7 +462,26 @@ App.VentasModule = (function (EventBus, Storage) {
       });
     });
 
-    if (_filtroMedio) _filtroMedio.addEventListener("change", _renderLista);
+    // Listener selector de año (se registra una sola vez en init)
+    var selectorAnio = document.getElementById("ventaAnioSelect");
+    if (selectorAnio) {
+      selectorAnio.addEventListener("change", function () {
+        _anioSeleccionado = parseInt(this.value);
+        if (_periodoActivo.startsWith("mes-") && !_periodoActivo.startsWith("mes-" + _anioSeleccionado)) {
+          _periodoActivo = "hoy";
+          document.querySelectorAll(".ventas-tab, .ventas-tab-mes").forEach(function (t) {
+            t.classList.remove("activo");
+          });
+          var tabHoy = document.querySelector(".ventas-tab[data-periodo='hoy']");
+          if (tabHoy) tabHoy.classList.add("activo");
+        }
+        _generarTabsMeses();
+        _renderTodo();
+      });
+    }
+
+    if (_filtroMedio)   _filtroMedio.addEventListener("change", _renderLista);
+    if (_filtroCliente) _filtroCliente.addEventListener("change", _renderLista);
 
     EventBus.on("ventas:registrar", function (datos) {
       registrar(datos);
