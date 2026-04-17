@@ -1309,7 +1309,9 @@ footer a:hover {
   .sidebar,
   #buscador,
   #lista-articulos,
-  footer {
+  footer,
+  .modo-topbar,
+  .modo-col-izq {
     display: none !important;
   }
 
@@ -1329,6 +1331,21 @@ footer a:hover {
   main {
     display: block;
     overflow: visible;
+  }
+
+  /* En modo dos columnas, mostrar solo la columna del ticket */
+  .modo-columnas {
+    display: block !important;
+    height: auto !important;
+  }
+
+  .modo-columnas-body {
+    display: block !important;
+  }
+
+  .modo-col-der {
+    width: 100% !important;
+    display: block !important;
   }
 
   .ticket-panel {
