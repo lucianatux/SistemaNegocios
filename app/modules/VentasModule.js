@@ -106,6 +106,8 @@ App.VentasModule = (function (EventBus, Storage) {
       medioPago: medioPago,
       clienteId: datos.clienteId || null,
       clienteNombre: datos.clienteNombre || null,
+      ajustes: datos.ajustes || null,
+      soloHistorial: datos.soloHistorial || false,
     };
 
     _ventas.unshift(venta);
@@ -129,10 +131,12 @@ App.VentasModule = (function (EventBus, Storage) {
   // _calcularStats — sobre un array de ventas
   // ---------------------------------------------------------
   function _calcularStats(lista) {
-    var total = lista.reduce(function (a, v) {
+    // Bug 2: fiados totales (soloHistorial) no se contabilizan
+    var contables = lista.filter(function (v) { return !v.soloHistorial; });
+    var total = contables.reduce(function (a, v) {
       return a + v.total;
     }, 0);
-    var costo = lista.reduce(function (a, v) {
+    var costo = contables.reduce(function (a, v) {
       return (
         a +
         v.items.reduce(function (b, item) {
@@ -143,7 +147,7 @@ App.VentasModule = (function (EventBus, Storage) {
     var ganancia = total - Math.round(costo);
     var margen = total > 0 ? Math.round((ganancia / total) * 100) : 0;
     return {
-      count: lista.length,
+      count: contables.length,
       total: total,
       ganancia: ganancia,
       margen: margen,
@@ -164,11 +168,12 @@ App.VentasModule = (function (EventBus, Storage) {
       _statGanancia.textContent = "$" + stats.ganancia.toLocaleString("es-AR");
     if (_statMargen) _statMargen.textContent = stats.margen + "%";
 
-    // Desglose por medio
-    var ef = lista.filter(function (v) {
+    // Desglose por medio — excluir fiados (soloHistorial)
+    var contables = lista.filter(function (v) { return !v.soloHistorial; });
+    var ef = contables.filter(function (v) {
       return v.medioPago === "efectivo";
     });
-    var tr = lista.filter(function (v) {
+    var tr = contables.filter(function (v) {
       return v.medioPago === "transferencia";
     });
     var mEf = ef.reduce(function (a, v) {
@@ -212,37 +217,34 @@ App.VentasModule = (function (EventBus, Storage) {
       var card = document.createElement("div");
       card.classList.add("venta-card");
 
+      // Bug 2: badge según medio (incluyendo fiado)
       var badgeClass =
-        venta.medioPago === "efectivo"
-          ? "badge-efectivo"
-          : "badge-transferencia";
+        venta.medioPago === "efectivo"   ? "badge-efectivo" :
+        venta.medioPago === "fiado"      ? "badge-fiado"    :
+                                           "badge-transferencia";
       var badgeText =
-        venta.medioPago === "efectivo" ? "Efectivo" : "Transferencia";
+        venta.medioPago === "efectivo"   ? "Efectivo" :
+        venta.medioPago === "fiado"      ? "📋 Fiado" :
+                                           "Transferencia";
       var fechaFmt = _formatearFecha(venta.fecha);
 
       var header = document.createElement("div");
       header.classList.add("venta-card-header");
+      if (venta.soloHistorial) header.classList.add("venta-card-fiado");
       header.innerHTML =
         '<div class="venta-card-izq">' +
         '<span class="venta-meta"> · ' +
-        fechaFmt +
-        " " +
-        venta.hora +
+        fechaFmt + " " + venta.hora +
+        // Bug 4: nombre del cliente en el header igual que ventas normales
         (venta.clienteNombre ? " · 👤 " + venta.clienteNombre : "") +
         "</span>" +
         "</div>" +
         '<div class="venta-card-der">' +
-        '<span class="venta-badge ' +
-        badgeClass +
-        '">' +
-        badgeText +
-        "</span>" +
-        '<span class="venta-total">$' +
+        '<span class="venta-badge ' + badgeClass + '">' + badgeText + "</span>" +
+        '<span class="venta-total' + (venta.soloHistorial ? " venta-total-fiado" : "") + '">$' +
         venta.total.toLocaleString("es-AR") +
         "</span>" +
-        '<button class="venta-toggle" data-id="' +
-        venta.id +
-        '">▶</button>' +
+        '<button class="venta-toggle" data-id="' + venta.id + '">▶</button>' +
         "</div>";
 
       var detalle = document.createElement("div");
@@ -252,25 +254,41 @@ App.VentasModule = (function (EventBus, Storage) {
         .map(function (item) {
           return (
             '<div class="venta-item">' +
-            "<span>" +
-            item.nombre +
-            " x" +
-            item.cantidad +
-            "</span>" +
-            "<span>$" +
-            item.subtotal.toLocaleString("es-AR") +
-            "</span>" +
+            "<span>" + item.nombre + " x" + item.cantidad + "</span>" +
+            "<span>$" + item.subtotal.toLocaleString("es-AR") + "</span>" +
             "</div>"
           );
         })
         .join("");
 
+      // Bug 3: mostrar ajustes solo si los hay
+      var ajustesHTML = "";
+      if (venta.ajustes) {
+        var aj = venta.ajustes;
+        ajustesHTML += '<div class="venta-item venta-item-ajuste">' +
+          "<span>Subtotal</span><span>$" + aj.subtotalItems.toLocaleString("es-AR") + "</span></div>";
+        if (aj.descuento > 0) {
+          var montoDesc = Math.round(aj.subtotalItems * aj.descuento / 100);
+          ajustesHTML += '<div class="venta-item venta-item-ajuste venta-item-descuento">' +
+            "<span>Descuento " + aj.descuento + "%</span><span>-$" +
+            montoDesc.toLocaleString("es-AR") + "</span></div>";
+        }
+        if (aj.recargo > 0) {
+          var baseRecargo = aj.subtotalItems - Math.round(aj.subtotalItems * aj.descuento / 100);
+          var montoRecargo = Math.round(baseRecargo * aj.recargo / 100);
+          ajustesHTML += '<div class="venta-item venta-item-ajuste venta-item-recargo">' +
+            "<span>Recargo " + aj.recargo + "%</span><span>+$" +
+            montoRecargo.toLocaleString("es-AR") + "</span></div>";
+        }
+        ajustesHTML += '<div class="venta-item venta-item-total">' +
+          "<span><strong>Total final</strong></span><span><strong>$" +
+          aj.totalFinal.toLocaleString("es-AR") + "</strong></span></div>";
+      }
+
       detalle.innerHTML =
-        itemsHTML +
+        itemsHTML + ajustesHTML +
         '<div class="venta-acciones">' +
-        '<button class="btn-venta-eliminar" data-id="' +
-        venta.id +
-        '">🗑️ Eliminar venta</button>' +
+        '<button class="btn-venta-eliminar" data-id="' + venta.id + '">🗑️ Eliminar venta</button>' +
         "</div>";
 
       header

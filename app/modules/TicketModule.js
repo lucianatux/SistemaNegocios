@@ -270,27 +270,40 @@ App.TicketModule = (function (EventBus, Store, PriceService) {
   }
 
   function _confirmarCerrarVenta() {
+    var subtotalItems = _ticket.items.reduce(function (acc, item) {
+      return acc + item.precio * item.cantidad;
+    }, 0);
     var total = _calcularTotalFinal();
-    var esFiado = _medioSeleccionado === "fiado";
-    var montoInput =
-      parseFloat(document.getElementById("cerrarVentaMonto").value) || 0;
-    var pagoTotal = document.getElementById("cerrarVentaTotalCheck").checked;
-    var clienteId = document.getElementById("cerrarVentaCliente").value;
+    var descuento = parseFloat(_descuentoInput.value) || 0;
+    var recargo   = parseFloat(_recargoInput.value)   || 0;
+
+    var esFiado   = _medioSeleccionado === "fiado";
+    var montoInput = parseFloat(document.getElementById("cerrarVentaMonto").value) || 0;
+    var pagoTotal  = document.getElementById("cerrarVentaTotalCheck").checked;
+    var clienteId  = document.getElementById("cerrarVentaCliente").value;
 
     var montoPagado = esFiado ? 0 : pagoTotal ? total : montoInput;
-    var pendiente = total - montoPagado;
+    var pendiente   = total - montoPagado;
+
+    // Resolver nombre del cliente UNA sola vez, antes de todos los bloques
+    var clienteNombre = "";
+    if (clienteId && App.ClientesModule) {
+      var cli = App.ClientesModule.getClientes().find(function (c) {
+        return c.id === clienteId;
+      });
+      if (cli) clienteNombre = cli.nombre;
+    }
 
     // Si hay fiado, necesita cliente
     if (pendiente > 0 && !clienteId) {
       alert("Seleccioná un cliente para cargar el fiado");
       return;
     }
+
     // Si no hay pendiente y hay cliente → asociar la compra al historial del cliente
     if (pendiente === 0 && clienteId) {
       var descAsociada = _ticket.items
-        .map(function (i) {
-          return i.nombre + " x" + i.cantidad;
-        })
+        .map(function (i) { return i.nombre + " x" + i.cantidad; })
         .join(", ");
       App.EventBus.emit("clientes:registrar-compra", {
         clienteId: clienteId,
@@ -309,36 +322,34 @@ App.TicketModule = (function (EventBus, Store, PriceService) {
       };
     });
 
+    // Adjuntar ajustes solo si los hay (Bug 3)
+    var ajustes = null;
+    if (descuento > 0 || recargo > 0) {
+      ajustes = {
+        subtotalItems: subtotalItems,
+        descuento: descuento,
+        recargo: recargo,
+        totalFinal: total,
+      };
+    }
+
     // Registrar venta si hubo pago
     if (montoPagado > 0) {
-      var clienteSeleccionado = document.getElementById("cerrarVentaCliente");
-      var clienteId = clienteSeleccionado ? clienteSeleccionado.value : "";
-      var clienteNombre = "";
-      if (clienteId && App.ClientesModule) {
-        var clientes = App.ClientesModule.getClientes();
-        var cli = clientes.find(function (c) {
-          return c.id === clienteId;
-        });
-        if (cli) clienteNombre = cli.nombre;
-      }
-
       App.EventBus.emit("ventas:registrar", {
         items: itemsParaVenta,
         total: montoPagado,
         medioPago: _medioSeleccionado,
         clienteId: clienteId || null,
         clienteNombre: clienteNombre || null,
+        ajustes: ajustes,
       });
     }
 
     // Registrar fiado si quedó pendiente
     if (pendiente > 0 && clienteId) {
       var desc = _ticket.items
-        .map(function (i) {
-          return i.nombre + " x" + i.cantidad;
-        })
+        .map(function (i) { return i.nombre + " x" + i.cantidad; })
         .join(", ");
-
       App.EventBus.emit("clientes:registrar-fiado", {
         clienteId: clienteId,
         monto: pendiente,
@@ -347,14 +358,16 @@ App.TicketModule = (function (EventBus, Store, PriceService) {
       });
     }
 
-    // Si fue fiado total, igual registrar en ventas para el historial
+    // Fiado total → registrar en ventas pero marcado como no contabilizable (Bug 2)
     if (esFiado && clienteId) {
       App.EventBus.emit("ventas:registrar", {
         items: itemsParaVenta,
         total: total,
         medioPago: "fiado",
         clienteId: clienteId,
-        clienteNombre: clienteNombre,
+        clienteNombre: clienteNombre,   // Bug 1: ahora siempre está resuelto
+        ajustes: ajustes,
+        soloHistorial: true,            // Bug 2: no se contabiliza
       });
     }
 

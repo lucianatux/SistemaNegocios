@@ -116,11 +116,11 @@ App.ClientesModule = (function (EventBus, Storage) {
     });
     _guardar();
 
-    // Registrar en ventas como entrada nueva
+    // Registrar en ventas como entrada nueva (Bug 4: pasar clienteId y clienteNombre)
     EventBus.emit("ventas:registrar", {
       items: [
         {
-          nombre: "Pago de deuda — " + cli.nombre,
+          nombre: "Pago de deuda",
           cantidad: 1,
           precioUnitario: montoReal,
           subtotal: montoReal,
@@ -129,6 +129,8 @@ App.ClientesModule = (function (EventBus, Storage) {
       ],
       total: montoReal,
       medioPago: medioPago || "efectivo",
+      clienteId: cli.id,
+      clienteNombre: cli.nombre,
     });
 
     _actualizarFichaAbierta(cli);

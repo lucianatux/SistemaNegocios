@@ -1833,17 +1833,33 @@ footer a:hover {
    STATS ADICIONALES
    ========================== */
 
-.venta-stat.azul  { background: #e6f1fb; }
-.venta-stat.verde { background: #eaf3de; }
-.venta-stat.amber { background: #faeeda; }
+.venta-stat.azul {
+  background: #e6f1fb;
+}
+.venta-stat.verde {
+  background: #eaf3de;
+}
+.venta-stat.amber {
+  background: #faeeda;
+}
 
-.venta-stat-valor.amber { color: #633806; }
+.venta-stat-valor.amber {
+  color: #633806;
+}
 
-[data-theme="dark"] .venta-stat.azul  { background: #1a2f4a; }
-[data-theme="dark"] .venta-stat.verde { background: #1a3020; }
-[data-theme="dark"] .venta-stat.amber { background: #3a2a10; }
+[data-theme="dark"] .venta-stat.azul {
+  background: #1a2f4a;
+}
+[data-theme="dark"] .venta-stat.verde {
+  background: #1a3020;
+}
+[data-theme="dark"] .venta-stat.amber {
+  background: #3a2a10;
+}
 
-[data-theme="dark"] .venta-stat-valor.amber { color: #f5c842; }
+[data-theme="dark"] .venta-stat-valor.amber {
+  color: #f5c842;
+}
 
 /* ==========================
    DESGLOSE POR MEDIO DE PAGO
@@ -1918,8 +1934,12 @@ footer a:hover {
   transition: width 0.3s ease;
 }
 
-.barra-ef { background: var(--color-primario); }
-.barra-tr { background: var(--color-secundario); }
+.barra-ef {
+  background: var(--color-primario);
+}
+.barra-tr {
+  background: var(--color-secundario);
+}
 
 /* ==========================
    FILTRO MEDIO (solo lista)
@@ -2035,12 +2055,29 @@ footer a:hover {
   flex-shrink: 0;
 }
 
-.stock-badge.ok    { background: #e1f5ee; color: #085041; }
-.stock-badge.bajo  { background: #fff0f0; color: #b00020; }
-.stock-badge.sin   { background: var(--color-fondo); color: var(--color-texto-suave); font-weight: 400; font-size: 11px; }
+.stock-badge.ok {
+  background: #e1f5ee;
+  color: #085041;
+}
+.stock-badge.bajo {
+  background: #fff0f0;
+  color: #b00020;
+}
+.stock-badge.sin {
+  background: var(--color-fondo);
+  color: var(--color-texto-suave);
+  font-weight: 400;
+  font-size: 11px;
+}
 
-[data-theme="dark"] .stock-badge.ok   { background: #1a4540; color: #0ac5ad; }
-[data-theme="dark"] .stock-badge.bajo { background: #4a1a1f; color: #ff6b7a; }
+[data-theme="dark"] .stock-badge.ok {
+  background: #1a4540;
+  color: #0ac5ad;
+}
+[data-theme="dark"] .stock-badge.bajo {
+  background: #4a1a1f;
+  color: #ff6b7a;
+}
 
 .stock-minimo {
   font-size: 11px;
@@ -2108,11 +2145,23 @@ footer a:hover {
   white-space: nowrap;
 }
 
-.product-stock.ok   { background: #e1f5ee; color: #085041; }
-.product-stock.bajo { background: #fff0f0; color: #b00020; }
+.product-stock.ok {
+  background: #e1f5ee;
+  color: #085041;
+}
+.product-stock.bajo {
+  background: #fff0f0;
+  color: #b00020;
+}
 
-[data-theme="dark"] .product-stock.ok   { background: #1a4540; color: #0ac5ad; }
-[data-theme="dark"] .product-stock.bajo { background: #4a1a1f; color: #ff6b7a; }
+[data-theme="dark"] .product-stock.ok {
+  background: #1a4540;
+  color: #0ac5ad;
+}
+[data-theme="dark"] .product-stock.bajo {
+  background: #4a1a1f;
+  color: #ff6b7a;
+}
 
 /* ==========================
    CLIENTES
@@ -2194,8 +2243,14 @@ footer a:hover {
   white-space: nowrap;
 }
 
-.cliente-saldo.deuda { color: #b00020; }
-.cliente-saldo.aldia { color: var(--color-primario); font-weight: 400; font-size: 11px; }
+.cliente-saldo.deuda {
+  color: #b00020;
+}
+.cliente-saldo.aldia {
+  color: var(--color-primario);
+  font-weight: 400;
+  font-size: 11px;
+}
 
 /* Ficha cliente */
 .ficha-cliente-modal {
@@ -2311,7 +2366,9 @@ footer a:hover {
   border-bottom: 1px dashed var(--color-borde);
 }
 
-.hist-mov:last-child { border-bottom: none; }
+.hist-mov:last-child {
+  border-bottom: none;
+}
 
 .hist-tipo {
   font-size: 12px;
@@ -2331,8 +2388,12 @@ footer a:hover {
   white-space: nowrap;
 }
 
-.hist-monto.debe  { color: #b00020; }
-.hist-monto.pago  { color: var(--color-primario); }
+.hist-monto.debe {
+  color: #b00020;
+}
+.hist-monto.pago {
+  color: var(--color-primario);
+}
 
 /* Modal cerrar venta */
 .modal-cerrar-venta {
@@ -2608,7 +2669,10 @@ footer a:hover {
     page-break-inside: avoid;
   }
 
-  .etiqueta-print svg    { max-width: 100%; height: 18mm; }
+  .etiqueta-print svg {
+    max-width: 100%;
+    height: 18mm;
+  }
 
   .etiqueta-print-nombre {
     font-size: 7pt;
@@ -2695,15 +2759,15 @@ body.modo-promo #lista-articulos {
 
 .modo-topbar-badge {
   font-size: 11px;
-  background: rgba(255,255,255,0.2);
+  background: rgba(255, 255, 255, 0.2);
   padding: 3px 10px;
   border-radius: 12px;
   color: var(--color-blanco);
 }
 
 .modo-topbar-cerrar {
-  background: rgba(255,255,255,0.15);
-  border: 1px solid rgba(255,255,255,0.3);
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   color: var(--color-blanco);
   width: 34px;
   height: 34px;
@@ -2717,7 +2781,7 @@ body.modo-promo #lista-articulos {
 }
 
 .modo-topbar-cerrar:hover {
-  background: rgba(255,255,255,0.3);
+  background: rgba(255, 255, 255, 0.3);
 }
 
 .modo-columnas-body {
@@ -2811,4 +2875,40 @@ body.modo-promo #lista-articulos {
 body.modo-venta .ticket-cerrar,
 body.modo-promo #cerrarPromo {
   display: none !important;
+}
+/* Badge fiado */
+.badge-fiado {
+  background: #e8f0fe;
+  color: #1a56db;
+}
+
+/* Card fiado — tono más suave para distinguirla */
+.venta-card-fiado {
+  opacity: 0.75;
+}
+
+/* Total en gris para fiados (no ingresó plata) */
+.venta-total-fiado {
+  color: var(--color-texto-suave);
+}
+
+/* Ajustes en el detalle de venta */
+.venta-item-ajuste {
+  font-size: 12px;
+  color: var(--color-texto-suave);
+  border-top: 1px dashed var(--color-borde);
+  padding-top: 4px;
+  margin-top: 4px;
+}
+.venta-item-descuento {
+  color: #2a7a2a;
+}
+.venta-item-recargo {
+  color: #b00020;
+}
+.venta-item-total {
+  font-size: 13px;
+  border-top: 1px solid var(--color-borde);
+  margin-top: 4px;
+  padding-top: 4px;
 }
