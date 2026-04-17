@@ -10,6 +10,7 @@ App.ClientesModule = (function (EventBus, Storage) {
   var _filtroActivo = "todos";
   var _busqueda = "";
   var _medioPagoSeleccionado = "efectivo";
+  var _ordenAlfabetico = false;
 
   var CLAVE = "tero_clientes";
 
@@ -139,12 +140,18 @@ App.ClientesModule = (function (EventBus, Storage) {
   // ---------------------------------------------------------
   function _clientesFiltrados() {
     var busq = _busqueda.toLowerCase();
-    return _clientes.filter(function (c) {
+    var lista = _clientes.filter(function (c) {
       if (busq && !c.nombre.toLowerCase().includes(busq)) return false;
       if (_filtroActivo === "deuda") return c.saldo < 0;
       if (_filtroActivo === "aldia") return c.saldo >= 0;
       return true;
     });
+    if (_ordenAlfabetico) {
+      lista = lista.slice().sort(function (a, b) {
+        return a.nombre.localeCompare(b.nombre, "es", { sensitivity: "base" });
+      });
+    }
+    return lista;
   }
 
   function _renderStats() {
@@ -610,6 +617,101 @@ App.ClientesModule = (function (EventBus, Storage) {
   }
 
   // ---------------------------------------------------------
+  // Imprimir saldo de clientes
+  // ---------------------------------------------------------
+  function _imprimirSaldos() {
+    var lista = _clientes.filter(function (c) { return c.saldo < 0; });
+    var todos = _clientes;
+
+    var deudaTotal = todos.reduce(function (a, c) {
+      return a + (c.saldo < 0 ? Math.abs(c.saldo) : 0);
+    }, 0);
+
+    var filas = todos.map(function (c) {
+      var tieneDeuda = c.saldo < 0;
+      return '<tr>' +
+        '<td style="padding:6px 10px;border-bottom:1px solid #eee">' + c.nombre + '</td>' +
+        '<td style="padding:6px 10px;border-bottom:1px solid #eee;color:' + (tieneDeuda ? '#b00020' : '#2a7a2a') + ';font-weight:700;text-align:right">' +
+        (tieneDeuda ? '-$' + Math.abs(c.saldo).toLocaleString('es-AR') : 'Al día') +
+        '</td>' +
+        '</tr>';
+    }).join('');
+
+    var ventana = window.open('', '_blank');
+    var fecha = new Date().toLocaleDateString('es-AR');
+    ventana.document.write(
+      '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Saldo de clientes</title>' +
+      '<style>body{font-family:sans-serif;padding:20px;color:#222}' +
+      'h2{margin-bottom:4px}p{color:#666;margin:0 0 16px}' +
+      'table{border-collapse:collapse;width:100%}' +
+      'th{text-align:left;padding:8px 10px;background:#f0f0f0;border-bottom:2px solid #ccc}' +
+      '.total{font-weight:700;padding:10px;text-align:right;font-size:16px;border-top:2px solid #ccc}' +
+      '@media print{button{display:none}}' +
+      '</style></head><body>' +
+      '<button onclick="window.print()" style="margin-bottom:16px;padding:8px 16px;cursor:pointer">🖨️ Imprimir</button>' +
+      '<h2>Saldo de clientes</h2><p>Generado el ' + fecha + '</p>' +
+      '<table><thead><tr><th>Cliente</th><th style="text-align:right">Saldo</th></tr></thead>' +
+      '<tbody>' + filas + '</tbody></table>' +
+      '<div class="total">Deuda total: $' + deudaTotal.toLocaleString('es-AR') + '</div>' +
+      '</body></html>'
+    );
+    ventana.document.close();
+  }
+
+  // ---------------------------------------------------------
+  // Exportar / Importar datos completos (clientes + ventas)
+  // ---------------------------------------------------------
+  function _exportarDatosCompletos() {
+    var ventas = App.VentasModule ? App.VentasModule.getVentas() : [];
+    var datos = {
+      version: 1,
+      fecha: new Date().toISOString(),
+      clientes: _clientes,
+      ventas: ventas,
+    };
+    var json = JSON.stringify(datos, null, 2);
+    var blob = new Blob([json], { type: 'application/json' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'tero-backup-completo.json';
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function _importarDatosCompletos(archivo) {
+    if (!archivo) return;
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      try {
+        var datos = JSON.parse(e.target.result);
+        if (!datos.clientes || !Array.isArray(datos.clientes)) {
+          alert('Archivo inválido: no contiene datos de clientes');
+          return;
+        }
+        if (!confirm('Esto reemplazará todos los datos de clientes' +
+            (datos.ventas ? ' y ventas' : '') +
+            '. ¿Continuar?')) return;
+
+        _clientes = datos.clientes;
+        _guardar();
+
+        if (datos.ventas && Array.isArray(datos.ventas) && App.VentasModule) {
+          Storage.guardar('tero_ventas', datos.ventas);
+          // Recargar ventas en el módulo
+          EventBus.emit('ventas:importadas', { ventas: datos.ventas });
+        }
+
+        _renderTodo();
+        alert('Datos importados correctamente (' + _clientes.length + ' clientes)');
+      } catch (err) {
+        alert('Error al leer el archivo: ' + err.message);
+      }
+    };
+    reader.readAsText(archivo);
+  }
+
+  // ---------------------------------------------------------
   // abrir / cerrar panel
   // ---------------------------------------------------------
   function abrir() {
@@ -637,6 +739,40 @@ App.ClientesModule = (function (EventBus, Storage) {
         _busqueda = this.value;
         _renderLista();
       });
+
+    // Ordenar alfabéticamente
+    var btnOrden = document.getElementById("btnOrdenarClientes");
+    if (btnOrden) {
+      btnOrden.addEventListener("click", function () {
+        _ordenAlfabetico = !_ordenAlfabetico;
+        this.classList.toggle("activo", _ordenAlfabetico);
+        this.title = _ordenAlfabetico ? "Orden original" : "Ordenar A→Z";
+        _renderLista();
+      });
+    }
+
+    // Imprimir saldos
+    var btnImprimir = document.getElementById("btnImprimirSaldos");
+    if (btnImprimir) {
+      btnImprimir.addEventListener("click", _imprimirSaldos);
+    }
+
+    // Exportar datos completos
+    var btnExportar = document.getElementById("btnExportarClientes");
+    if (btnExportar) {
+      btnExportar.addEventListener("click", _exportarDatosCompletos);
+    }
+
+    // Importar datos completos
+    var inputImportar = document.getElementById("importarClientesInput");
+    if (inputImportar) {
+      inputImportar.addEventListener("change", function () {
+        if (this.files.length) {
+          _importarDatosCompletos(this.files[0]);
+          this.value = "";
+        }
+      });
+    }
 
     // Filtros
     document.querySelectorAll(".cliente-filtro-btn").forEach(function (btn) {

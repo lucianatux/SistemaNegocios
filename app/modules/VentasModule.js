@@ -365,6 +365,13 @@ App.VentasModule = (function (EventBus, Storage) {
       if (_panelActivo) _renderTodo();
     });
 
+    // Importar ventas desde backup completo
+    EventBus.on("ventas:importadas", function (datos) {
+      _ventas = Array.isArray(datos.ventas) ? datos.ventas : [];
+      _guardar();
+      if (_panelActivo) _renderTodo();
+    });
+
     console.info("[VentasModule] iniciado");
   }
 

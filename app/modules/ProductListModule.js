@@ -215,6 +215,46 @@ App.ProductListModule = (function (
         ProductService.exportar();
       });
 
+    // Imprimir lista de productos
+    var btnImprimirLista = document.getElementById("btnImprimirLista");
+    if (btnImprimirLista) {
+      btnImprimirLista.addEventListener("click", function () {
+        var productos = Store.getProductos();
+        var filas = productos.map(function (p) {
+          var precio = PriceService.calcularDesdeStore(p);
+          return '<tr>' +
+            '<td style="padding:5px 10px;border-bottom:1px solid #eee">' + p.nombre + '</td>' +
+            '<td style="padding:5px 10px;border-bottom:1px solid #eee;color:#555">' + p.codigo + '</td>' +
+            '<td style="padding:5px 10px;border-bottom:1px solid #eee;color:#555">' + p.categoria + '</td>' +
+            '<td style="padding:5px 10px;border-bottom:1px solid #eee;text-align:right;font-weight:700">' +
+            '$' + precio.toLocaleString('es-AR') +
+            (p.porPeso ? '<span style="font-weight:400;color:#888">/100g</span>' : '') +
+            '</td>' +
+            '</tr>';
+        }).join('');
+
+        var ventana = window.open('', '_blank');
+        var fecha = new Date().toLocaleDateString('es-AR');
+        ventana.document.write(
+          '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Lista de precios</title>' +
+          '<style>body{font-family:sans-serif;padding:20px;color:#222}' +
+          'h2{margin-bottom:4px}p{color:#666;margin:0 0 16px}' +
+          'table{border-collapse:collapse;width:100%}' +
+          'th{text-align:left;padding:8px 10px;background:#f0f0f0;border-bottom:2px solid #ccc}' +
+          'tr:nth-child(even){background:#fafafa}' +
+          '@media print{button{display:none}}' +
+          '</style></head><body>' +
+          '<button onclick="window.print()" style="margin-bottom:16px;padding:8px 16px;cursor:pointer">🖨️ Imprimir</button>' +
+          '<h2>Lista de precios</h2><p>' + productos.length + ' productos · ' + fecha + '</p>' +
+          '<table><thead><tr>' +
+          '<th>Nombre</th><th>Código</th><th>Categoría</th><th style="text-align:right">Precio</th>' +
+          '</tr></thead><tbody>' + filas + '</tbody></table>' +
+          '</body></html>'
+        );
+        ventana.document.close();
+      });
+    }
+
     _importInput.addEventListener("change", function () {
       if (_importInput.files.length) {
         EventBus.emit("producto:importar:pedir-confirmacion");

@@ -109,14 +109,17 @@ App.ModoColumnasModule = (function (EventBus, Store, PriceService, ProductServic
     _input.oninput = function () {
       _busqueda = this.value;
       _render();
+      _lista.scrollTop = 0;
     };
 
     _select.onchange = function () {
       _categoria = this.value;
       _render();
+      _lista.scrollTop = 0;
     };
 
     _render();
+    _lista.scrollTop = 0;
   }
 
   function init() {

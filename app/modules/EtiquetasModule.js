@@ -90,7 +90,7 @@ App.EtiquetasModule = (function (EventBus, Store) {
       cantWrap.classList.add("etiqueta-cantidad-wrap");
       cantWrap.innerHTML =
         "<label>Copias:</label>" +
-        '<input type="number" class="etiqueta-cantidad" min="1" max="99" value="' +
+        '<input type="number" class="etiqueta-cantidad" min="1" max="21" value="' +
         (_seleccionados[producto.codigo] || 1) +
         '" />';
 

@@ -51,6 +51,9 @@
         <div class="nav-section nav-section-sistema">
           <div class="nav-label">Sistema</div>
           <button id="btnEtiquetas" class="nav-item">🏷️ Etiquetas</button>
+          <button id="btnImprimirLista" class="nav-item">
+            🖨️ Imprimir Lista
+          </button>
           <button id="exportarBtn" class="nav-item">💾 Exportar datos</button>
           <label for="importarInput" class="nav-item">📂 Importar datos</label>
           <input
@@ -788,6 +791,7 @@
               id="clienteBuscador"
               placeholder="Buscar cliente..."
             />
+
             <button class="cliente-filtro-btn activo" data-filtro="todos">
               Todos
             </button>
@@ -797,6 +801,41 @@
             <button class="cliente-filtro-btn" data-filtro="aldia">
               Al día
             </button>
+
+            <div
+              class="clientes-acciones"
+              style="
+                display: flex;
+                gap: 6px;
+                flex-wrap: wrap;
+                margin-top: 6px;
+                border-top: 1px solid var(--color-borde);
+                padding-top: 8px;
+              "
+            >
+              <button
+                id="btnOrdenarClientes"
+                class="btn-secundario"
+                title="Ordenar A→Z"
+              >
+                🔤 A→Z
+              </button>
+              <button id="btnExportarClientes" class="btn-secundario">
+                💾 Exportar
+              </button>
+              <label
+                for="importarClientesInput"
+                class="btn-secundario"
+                style="cursor: pointer"
+                >📂 Importar</label
+              >
+              <input
+                type="file"
+                id="importarClientesInput"
+                accept=".json"
+                style="display: none"
+              />
+            </div>
           </div>
 
           <div id="clientesLista" class="ventas-lista"></div>
@@ -827,6 +866,9 @@
               </button>
               <button id="btnCargarDeuda" class="btn-primario btn-azul">
                 📋 Cargar deuda
+              </button>
+              <button id="btnImprimirFicha" class="btn-secundario">
+                🖨️ Imprimir ficha
               </button>
               <button id="btnEditarCliente" class="btn-secundario">
                 ✏️ Editar

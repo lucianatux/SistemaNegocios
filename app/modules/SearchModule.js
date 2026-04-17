@@ -96,6 +96,12 @@ App.SearchModule = (function (EventBus, ProductService) {
 
     var resultado = ProductService.filtrar(texto, categoria);
     EventBus.emit("productos:filtrados", { lista: resultado });
+
+    // Volver al inicio de la lista para ver los primeros resultados
+    var lista = document.getElementById("productList");
+    if (lista) lista.scrollTop = 0;
+    var contenedor = document.getElementById("lista-articulos") || document.querySelector(".product-list-container");
+    if (contenedor) contenedor.scrollTop = 0;
   }
 
   // ---------------------------------------------------------
