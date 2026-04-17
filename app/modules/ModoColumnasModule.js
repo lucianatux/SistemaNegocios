@@ -6,7 +6,8 @@ var App = App || {};
 
 App.ModoColumnasModule = (function (EventBus, Store, PriceService, ProductService) {
 
-  var _lista    = null;
+  var _lista       = null;
+  var _listaWrap   = null;  // div.modo-lista — el que tiene el scroll real
   var _input    = null;
   var _select   = null;
   var _busqueda = "";
@@ -96,10 +97,16 @@ App.ModoColumnasModule = (function (EventBus, Store, PriceService, ProductServic
     });
   }
 
+  function _scrollAlTope() {
+    if (_listaWrap) _listaWrap.scrollTop = 0;
+    if (_lista)     _lista.scrollTop     = 0;
+  }
+
   function iniciarBuscador() {
-    _lista  = document.getElementById("modoProductList");
-    _input  = document.getElementById("modoBuscadorInput");
-    _select = document.getElementById("modoCategoryFilter");
+    _lista     = document.getElementById("modoProductList");
+    _listaWrap = _lista ? _lista.closest(".modo-lista") : null;
+    _input     = document.getElementById("modoBuscadorInput");
+    _select    = document.getElementById("modoCategoryFilter");
 
     _busqueda  = "";
     _categoria = "";
@@ -109,17 +116,17 @@ App.ModoColumnasModule = (function (EventBus, Store, PriceService, ProductServic
     _input.oninput = function () {
       _busqueda = this.value;
       _render();
-      _lista.scrollTop = 0;
+      _scrollAlTope();
     };
 
     _select.onchange = function () {
       _categoria = this.value;
       _render();
-      _lista.scrollTop = 0;
+      _scrollAlTope();
     };
 
     _render();
-    _lista.scrollTop = 0;
+    _scrollAlTope();
   }
 
   function init() {

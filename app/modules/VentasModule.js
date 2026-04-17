@@ -224,9 +224,6 @@ App.VentasModule = (function (EventBus, Storage) {
       header.classList.add("venta-card-header");
       header.innerHTML =
         '<div class="venta-card-izq">' +
-        '<span class="venta-num">#' +
-        String(venta.numero).padStart(3, "0") +
-        "</span>" +
         '<span class="venta-meta"> · ' +
         fechaFmt +
         " " +
