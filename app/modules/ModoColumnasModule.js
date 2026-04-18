@@ -12,6 +12,7 @@ App.ModoColumnasModule = (function (EventBus, Store, PriceService, ProductServic
   var _select   = null;
   var _busqueda = "";
   var _categoria = "";
+  var _ultimoInput = 0; // timestamp del último caracter — para detectar lector
 
   function _productosFiltrados() {
     return ProductService.filtrar(_busqueda, _categoria);
@@ -110,13 +111,46 @@ App.ModoColumnasModule = (function (EventBus, Store, PriceService, ProductServic
 
     _busqueda  = "";
     _categoria = "";
+    _ultimoInput = 0;
     _input.value  = "";
     _select.value = "";
 
     _input.oninput = function () {
+      _ultimoInput = Date.now(); // registrar momento del último caracter
       _busqueda = this.value;
       _render();
       _scrollAlTope();
+    };
+
+    // Detectar Enter del lector de código de barras
+    // El lector escribe todo en <50ms y manda Enter — una persona tarda más de 100ms
+    _input.onkeydown = function (e) {
+      if (e.key !== "Enter") return;
+
+      var tiempoDesdeUltimoCaracter = Date.now() - _ultimoInput;
+      if (tiempoDesdeUltimoCaracter > 100) return; // escritura manual, ignorar
+
+      var resultados = _productosFiltrados();
+      if (resultados.length !== 1) return; // solo actuar si hay resultado único
+
+      var producto   = resultados[0];
+      var modoTicket = Store.get("modoTicket");
+      var modoPromo  = Store.get("modoPromo");
+
+      if (producto.porPeso) {
+        var destino = modoTicket ? "ticket" : "promo";
+        EventBus.emit("pesaje:abrir", { producto: producto, destino: destino });
+      } else if (modoTicket) {
+        EventBus.emit("ticket:agregar-producto", { producto: producto });
+      } else if (modoPromo) {
+        EventBus.emit("promo:agregar-producto", { producto: producto });
+      }
+
+      // Limpiar buscador listo para el próximo escaneo
+      _input.value = "";
+      _busqueda = "";
+      _ultimoInput = 0;
+      _render();
     };
 
     _select.onchange = function () {
