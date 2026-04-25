@@ -95,6 +95,18 @@ App.ProductListModule = (function (
         badge.textContent = "⚖️ por 100gr";
         nombre.appendChild(badge);
       }
+      // Badge de escalas de precio
+      if (Array.isArray(producto.escalas) && producto.escalas.length > 0) {
+        var badgeEscalas = document.createElement("span");
+        badgeEscalas.classList.add("badge-escalas");
+        badgeEscalas.textContent = "🏷️ " + producto.escalas.length + " escalas";
+        nombre.appendChild(badgeEscalas);
+      } else if (producto.ganancia !== null && producto.ganancia !== undefined && producto.ganancia !== "") {
+        var badgeEspecial = document.createElement("span");
+        badgeEspecial.classList.add("badge-escalas");
+        badgeEspecial.textContent = "🏷️ margen especial";
+        nombre.appendChild(badgeEspecial);
+      }
 
       var meta = document.createElement("div");
       meta.classList.add("product-meta");

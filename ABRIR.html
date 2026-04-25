@@ -85,6 +85,9 @@
             <option value="Electronica">Electrónica</option>
             <option value="Descartables">Descartables</option>
           </select>
+          <button id="btnFiltroEspecial" class="btn-filtro-especial" title="Mostrar solo productos con precio especial o escalas">
+            🏷️ Precio especial
+          </button>
         </section>
 
         <!-- LISTA DE ARTÍCULOS -->
@@ -281,6 +284,21 @@
                 placeholder="Vacío = usa ganancia global"
               />
             </div>
+
+            <!-- SECCIÓN ESCALAS DE PRECIO -->
+            <div class="campo campo-escalas" id="seccionEscalas">
+              <div class="escalas-header">
+                <label>Precios por cantidad</label>
+                <small class="ayuda">Opcional. Márgenes distintos según cuánto compra el cliente.</small>
+              </div>
+              <div id="escalasTabla" class="escalas-tabla">
+                <!-- Filas generadas dinámicamente por EditorModule -->
+              </div>
+              <button type="button" id="btnAgregarEscala" class="btn-agregar-escala">
+                + Agregar escala
+              </button>
+            </div>
+
             <div class="campo" id="campoStock">
               <label>Stock actual</label>
               <input

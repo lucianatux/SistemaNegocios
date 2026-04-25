@@ -50,6 +50,12 @@ App.ModoColumnasModule = (function (EventBus, Store, PriceService, ProductServic
         badge.textContent = "⚖️ por 100gr";
         nombre.appendChild(badge);
       }
+      if (Array.isArray(producto.escalas) && producto.escalas.length > 0) {
+        var badgeEscalas = document.createElement("span");
+        badgeEscalas.classList.add("badge-escalas");
+        badgeEscalas.textContent = "🏷️ " + producto.escalas.length + " escalas";
+        nombre.appendChild(badgeEscalas);
+      }
 
       var meta = document.createElement("div");
       meta.classList.add("product-meta");
@@ -61,12 +67,19 @@ App.ModoColumnasModule = (function (EventBus, Store, PriceService, ProductServic
 
       var precio = document.createElement("div");
       precio.classList.add("product-price");
-      precio.textContent = "$ " + PriceService.calcularDesdeStore(producto);
+      // Mostrar precio con escala x1 (la mínima). Si no tiene escalas, precio normal.
+      precio.textContent = "$ " + PriceService.calcularConEscalaDesdeStore(producto, 1);
       if (producto.porPeso) {
         var unit = document.createElement("span");
         unit.classList.add("price-unit");
         unit.textContent = "/100gr";
         precio.appendChild(unit);
+      }
+      if (Array.isArray(producto.escalas) && producto.escalas.length > 0) {
+        var unitEscala = document.createElement("span");
+        unitEscala.classList.add("price-unit");
+        unitEscala.textContent = " desde";
+        precio.prepend(unitEscala);
       }
 
       // Botón agregar

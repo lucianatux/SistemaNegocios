@@ -86,7 +86,7 @@ App.ProductService = (function (Store, PriceService, EventBus) {
   // _normalizar — Limpia y tipifica los datos antes de guardar
   // ---------------------------------------------------------
   function _normalizar(datos) {
-    return {
+    var producto = {
       nombre   : datos.nombre.trim(),
       codigo   : datos.codigo.trim(),
       categoria: datos.categoria || "",
@@ -96,6 +96,20 @@ App.ProductService = (function (Store, PriceService, EventBus) {
                    : parseFloat(datos.ganancia),
       porPeso  : datos.porPeso === true,
     };
+
+    // Escalas de precio por cantidad — campo opcional, retrocompatible
+    // Solo se agrega al objeto si hay escalas definidas
+    if (Array.isArray(datos.escalas) && datos.escalas.length > 0) {
+      producto.escalas = datos.escalas.map(function (e) {
+        return {
+          cantidadMinima: parseFloat(e.cantidadMinima) || 0,
+          margen        : parseFloat(e.margen) || 0,
+        };
+      });
+    }
+    // Si no hay escalas, no se agrega el campo (undefined en exportación JSON)
+
+    return producto;
   }
 
   // ---------------------------------------------------------

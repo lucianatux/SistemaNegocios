@@ -59,9 +59,10 @@ App.TicketModule = (function (EventBus, Store, PriceService) {
 
     _ticket.items.push({
       nombre: producto.nombre,
-      precio: PriceService.calcularDesdeStore(producto),
+      precio: PriceService.calcularConEscalaDesdeStore(producto, 1),
       cantidad: 1,
       costo: producto.costo || 0,
+      _producto: producto, // referencia para recalcular escalas al cambiar cantidad
     });
 
     _guardarEnStore();
@@ -124,6 +125,7 @@ App.TicketModule = (function (EventBus, Store, PriceService) {
       fila.classList.add("ticket-item");
 
       var subtotalId = "subtotal-" + index;
+      var precioUnitId = "precio-unit-" + index;
 
       fila.innerHTML =
         '<div class="ticket-item-info">' +
@@ -137,8 +139,9 @@ App.TicketModule = (function (EventBus, Store, PriceService) {
         'class="ticket-cantidad" data-index="' +
         index +
         '" />' +
-        " x $" +
+        ' x $<span id="' + precioUnitId + '">' +
         item.precio.toLocaleString("es-AR") +
+        '</span>' +
         ' = <span id="' +
         subtotalId +
         '">$' +
@@ -169,7 +172,16 @@ App.TicketModule = (function (EventBus, Store, PriceService) {
         }
         _ticket.items[idx].cantidad = cantidad;
 
-        // Actualizar subtotal de esta fila en tiempo real
+        // Recalcular precio unitario si el producto tiene escalas
+        var prod = _ticket.items[idx]._producto;
+        if (prod && Array.isArray(prod.escalas) && prod.escalas.length > 0) {
+          var nuevoPrecio = PriceService.calcularConEscalaDesdeStore(prod, cantidad);
+          _ticket.items[idx].precio = nuevoPrecio;
+          var spanUnit = document.getElementById("precio-unit-" + idx);
+          if (spanUnit) spanUnit.textContent = nuevoPrecio.toLocaleString("es-AR");
+        }
+
+        // Actualizar subtotal
         var span = document.getElementById("subtotal-" + idx);
         if (span) {
           var sub = _ticket.items[idx].precio * cantidad;
@@ -199,6 +211,17 @@ App.TicketModule = (function (EventBus, Store, PriceService) {
     var guardado = Store.get("ticketActual");
     if (guardado && guardado.items) {
       _ticket = guardado;
+
+      // Reenlazar _producto desde el catálogo actual (se pierde en serialización JSON)
+      var productos = App.Store.getProductos ? App.Store.getProductos() : [];
+      _ticket.items.forEach(function (item) {
+        if (!item._producto) {
+          item._producto = productos.find(function (p) {
+            return p.nombre === item.nombre;
+          }) || null;
+        }
+      });
+
       _render();
     }
   }

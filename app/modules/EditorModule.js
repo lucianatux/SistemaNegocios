@@ -6,6 +6,7 @@
 //   - Mostrar/ocultar overlay de confirmación
 //   - Delegar guardar/eliminar a ProductService
 //   - Actualizar precio público en tiempo real
+//   - Gestionar tabla de escalas de precio por cantidad
 // =============================================================
 
 var App = App || {};
@@ -15,6 +16,9 @@ App.EditorModule = (function (EventBus, Store, ProductService, PriceService) {
   var _modoEditor = null; // "crear" | "editar"
   var _productoEditando = null;
   var _accionPendiente = null; // { tipo, producto }
+
+  // Escalas en edición — array de { cantidadMinima, margen }
+  var _escalas = [];
 
   // Elementos DOM
   var _overlay = null;
@@ -30,6 +34,117 @@ App.EditorModule = (function (EventBus, Store, ProductService, PriceService) {
   var _textoConfirmacion = null;
   var _inputPorPeso = null;
   var _labelCosto = null;
+  var _escalasTabla = null;
+
+  // ---------------------------------------------------------
+  // _unidadEscala — devuelve "g" o "u." según el producto
+  // ---------------------------------------------------------
+  function _unidadEscala() {
+    var chk = document.getElementById("editPorPeso");
+    return chk && chk.checked ? "g" : "u.";
+  }
+
+  // ---------------------------------------------------------
+  // _precioParaEscala — calcula precio unitario para una fila
+  // ---------------------------------------------------------
+  function _precioParaEscala(margen) {
+    var costo = parseFloat(_inputCosto.value);
+    if (isNaN(costo) || isNaN(margen)) return "-";
+    return "$ " + Math.ceil(costo + (costo * margen) / 100);
+  }
+
+  // ---------------------------------------------------------
+  // _renderEscalas — redibuja la tabla de escalas
+  // ---------------------------------------------------------
+  function _renderEscalas() {
+    if (!_escalasTabla) return;
+    _escalasTabla.innerHTML = "";
+
+    var unidad = _unidadEscala();
+
+    if (_escalas.length === 0) {
+      _escalasTabla.innerHTML =
+        "<p class='escalas-vacio'>Sin escalas definidas. El producto usa el margen de arriba.</p>";
+      return;
+    }
+
+    // Cabecera
+    var cab = document.createElement("div");
+    cab.classList.add("escala-fila", "escala-cabecera");
+    cab.innerHTML =
+      "<span>Cant. mín. (" + unidad + ")</span>" +
+      "<span>Margen %</span>" +
+      "<span>Precio unitario</span>" +
+      "<span></span>";
+    _escalasTabla.appendChild(cab);
+
+    _escalas.forEach(function (escala, idx) {
+      var fila = document.createElement("div");
+      fila.classList.add("escala-fila");
+
+      // Input cantidad mínima
+      var inputCant = document.createElement("input");
+      inputCant.type = "number";
+      inputCant.min = "1";
+      inputCant.classList.add("escala-input");
+      inputCant.value = escala.cantidadMinima !== undefined ? escala.cantidadMinima : "";
+      inputCant.placeholder = "ej: 10";
+      inputCant.addEventListener("input", function () {
+        _escalas[idx].cantidadMinima = parseFloat(this.value) || 0;
+      });
+
+      // Input margen
+      var inputMargen = document.createElement("input");
+      inputMargen.type = "number";
+      inputMargen.min = "0";
+      inputMargen.classList.add("escala-input");
+      inputMargen.value = escala.margen !== undefined ? escala.margen : "";
+      inputMargen.placeholder = "ej: 50";
+
+      // Precio calculado en tiempo real
+      var spanPrecio = document.createElement("span");
+      spanPrecio.classList.add("escala-precio");
+      spanPrecio.textContent = _precioParaEscala(escala.margen);
+
+      inputMargen.addEventListener("input", function () {
+        var val = parseFloat(this.value);
+        _escalas[idx].margen = isNaN(val) ? 0 : val;
+        spanPrecio.textContent = _precioParaEscala(_escalas[idx].margen);
+      });
+
+      // Botón eliminar
+      var btnElim = document.createElement("button");
+      btnElim.type = "button";
+      btnElim.classList.add("escala-btn-eliminar");
+      btnElim.textContent = "✕";
+      btnElim.title = "Eliminar escala";
+      btnElim.addEventListener("click", function () {
+        _escalas.splice(idx, 1);
+        _renderEscalas();
+      });
+
+      fila.appendChild(inputCant);
+      fila.appendChild(inputMargen);
+      fila.appendChild(spanPrecio);
+      fila.appendChild(btnElim);
+      _escalasTabla.appendChild(fila);
+    });
+  }
+
+  // ---------------------------------------------------------
+  // _actualizarPreciosEscalas — refresca precios al cambiar costo
+  // ---------------------------------------------------------
+  function _actualizarPreciosEscalas() {
+    if (!_escalasTabla) return;
+    var spans = _escalasTabla.querySelectorAll(".escala-precio");
+    spans.forEach(function (span, idx) {
+      if (_escalas[idx] !== undefined) {
+        span.textContent = _precioParaEscala(_escalas[idx].margen);
+      }
+    });
+    // También actualizar cabecera de unidad si cambió por/peso
+    _renderEscalas();
+  }
 
   // ---------------------------------------------------------
   // _actualizarPrecioPublico — recalcula en tiempo real
@@ -41,6 +156,7 @@ App.EditorModule = (function (EventBus, Store, ProductService, PriceService) {
 
     if (isNaN(costo)) {
       _precioPublico.textContent = "-";
+      _actualizarPreciosEscalas();
       return;
     }
 
@@ -57,6 +173,7 @@ App.EditorModule = (function (EventBus, Store, ProductService, PriceService) {
     );
 
     _precioPublico.textContent = "$ " + precio;
+    _actualizarPreciosEscalas();
   }
 
   // ---------------------------------------------------------
@@ -78,6 +195,8 @@ App.EditorModule = (function (EventBus, Store, ProductService, PriceService) {
       document.getElementById("labelCosto").textContent = "Costo";
       document.getElementById("editStock").value = "";
       document.getElementById("editStockMinimo").value = "";
+      _escalas = [];
+      _renderEscalas();
     }
 
     if (modo === "editar" && producto) {
@@ -101,6 +220,14 @@ App.EditorModule = (function (EventBus, Store, ProductService, PriceService) {
         stockInfo && stockInfo.stock != null ? stockInfo.stock : "";
       document.getElementById("editStockMinimo").value =
         stockInfo && stockInfo.stockMinimo != null ? stockInfo.stockMinimo : "";
+
+      // Cargar escalas — retrocompatible: si no existe el campo, array vacío
+      _escalas = (producto.escalas && Array.isArray(producto.escalas))
+        ? producto.escalas.map(function (e) {
+            return { cantidadMinima: e.cantidadMinima, margen: e.margen };
+          })
+        : [];
+      _renderEscalas();
     }
 
     _overlay.classList.remove("oculto");
@@ -113,12 +240,20 @@ App.EditorModule = (function (EventBus, Store, ProductService, PriceService) {
     _overlay.classList.add("oculto");
     _modoEditor = null;
     _productoEditando = null;
+    _escalas = [];
   }
 
   // ---------------------------------------------------------
   // _guardar — valida y delega a ProductService
   // ---------------------------------------------------------
   function _guardar() {
+    // Normalizar escalas: filtrar filas incompletas y ordenar
+    var escalasValidas = _escalas
+      .filter(function (e) {
+        return e.cantidadMinima > 0 && e.margen >= 0;
+      })
+      .sort(function (a, b) { return a.cantidadMinima - b.cantidadMinima; });
+
     var datos = {
       nombre: _inputNombre.value,
       codigo: _inputCodigo.value,
@@ -126,6 +261,9 @@ App.EditorModule = (function (EventBus, Store, ProductService, PriceService) {
       costo: _inputCosto.value,
       ganancia: _inputGanancia.value,
       porPeso: document.getElementById("editPorPeso").checked,
+      // Solo guardar el campo si hay escalas definidas; si no, undefined
+      // (retrocompatibilidad: productos sin escalas no tienen el campo)
+      escalas: escalasValidas.length > 0 ? escalasValidas : undefined,
     };
 
     var resultado;
@@ -230,6 +368,7 @@ App.EditorModule = (function (EventBus, Store, ProductService, PriceService) {
     _tituloEditor = document.getElementById("productoEditando");
     _tituloConfirmacion = document.getElementById("confirmacionTitulo");
     _textoConfirmacion = document.getElementById("confirmacionTexto");
+    _escalasTabla = document.getElementById("escalasTabla");
 
     // Precio público en tiempo real
     _inputCosto.addEventListener("input", _actualizarPrecioPublico);
@@ -250,6 +389,17 @@ App.EditorModule = (function (EventBus, Store, ProductService, PriceService) {
       .getElementById("btnAgregarProducto")
       .addEventListener("click", function () {
         abrirEditor("crear");
+      });
+
+    // Botón agregar escala
+    document
+      .getElementById("btnAgregarEscala")
+      .addEventListener("click", function () {
+        _escalas.push({ cantidadMinima: "", margen: "" });
+        _renderEscalas();
+        // Hacer foco en el último input de cantidad
+        var inputs = _escalasTabla.querySelectorAll(".escala-input");
+        if (inputs.length) inputs[inputs.length - 2].focus();
       });
 
     // Botones de confirmación
@@ -277,6 +427,8 @@ App.EditorModule = (function (EventBus, Store, ProductService, PriceService) {
           ? "Costo por gramo"
           : "Costo";
         _actualizarPrecioPublico();
+        // Actualizar la cabecera de unidad en escalas
+        _renderEscalas();
       });
 
     console.info("[EditorModule] iniciado");

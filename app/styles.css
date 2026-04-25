@@ -2950,3 +2950,165 @@ body.modo-promo #cerrarPromo {
   cursor: pointer;
   margin-right: 6px;
 }
+/* ==========================
+   ESCALAS DE PRECIO — Editor
+   ========================== */
+
+.campo-escalas {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: var(--color-fondo);
+  border: 1px solid var(--color-borde);
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.escalas-header {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.escalas-header label {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--color-texto);
+}
+
+.escalas-tabla {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.escala-cabecera {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-texto-suave);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0 4px;
+}
+
+.escala-fila {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr auto;
+  gap: 6px;
+  align-items: center;
+}
+
+.escala-input {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid var(--color-borde);
+  border-radius: 6px;
+  font-size: 13px;
+  background: var(--color-input-bg);
+  color: var(--color-texto);
+}
+
+.escala-input:focus {
+  outline: none;
+  border-color: var(--color-primario);
+}
+
+.escala-precio {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-primario);
+  text-align: center;
+}
+
+.escala-btn-eliminar {
+  background: none;
+  border: 1px solid var(--color-borde);
+  border-radius: 6px;
+  color: var(--color-texto-suave);
+  font-size: 12px;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, color 0.15s;
+}
+
+.escala-btn-eliminar:hover {
+  background: #b00020;
+  color: #fff;
+  border-color: #b00020;
+}
+
+.escalas-vacio {
+  font-size: 12px;
+  color: var(--color-texto-suave);
+  font-style: italic;
+  margin: 4px 0;
+}
+
+.btn-agregar-escala {
+  background: none;
+  border: 1px dashed var(--color-primario);
+  border-radius: 6px;
+  color: var(--color-primario);
+  font-size: 13px;
+  padding: 7px 12px;
+  cursor: pointer;
+  transition: background 0.15s;
+  text-align: left;
+}
+
+.btn-agregar-escala:hover {
+  background: var(--color-hover-bg);
+}
+
+/* ==========================
+   FILTRO PRECIO ESPECIAL — Buscador
+   ========================== */
+
+#buscador {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.btn-filtro-especial {
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-borde);
+  border-radius: 8px;
+  color: var(--color-texto);
+  font-size: 13px;
+  padding: 7px 12px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+
+.btn-filtro-especial:hover {
+  background: var(--color-hover-bg);
+  color: var(--color-hover-text);
+  border-color: var(--color-primario);
+}
+
+.btn-filtro-especial.activo {
+  background: var(--color-primario);
+  border-color: var(--color-primario);
+  color: #fff;
+  font-weight: 600;
+}
+
+/* Badge escalas en lista de productos */
+.badge-escalas {
+  display: inline-block;
+  margin-left: 6px;
+  font-size: 10px;
+  background: var(--color-blanco);
+  color: #5a4a00;
+  border-radius: 4px;
+  padding: 1px 5px;
+  vertical-align: middle;
+  font-weight: 600;
+}

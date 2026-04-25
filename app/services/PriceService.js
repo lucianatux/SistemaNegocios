@@ -84,10 +84,53 @@ App.PriceService = (function () {
     return Number(max.toFixed(2));
   }
 
+  // ---------------------------------------------------------
+  // calcularConEscala — aplica la escala correcta según cantidad
+  // Si el producto no tiene escalas, usa calcular() normal.
+  // Retrocompatible: si escalas === undefined funciona igual que antes.
+  // ---------------------------------------------------------
+  function calcularConEscala(producto, cantidad, gananciaGlobal, gananciasPorCategoria) {
+    if (!producto || typeof producto.costo !== "number") return 0;
+
+    // Sin escalas definidas → precio base normal
+    if (!Array.isArray(producto.escalas) || producto.escalas.length === 0) {
+      return calcular(producto, gananciaGlobal, gananciasPorCategoria);
+    }
+
+    var cant = parseFloat(cantidad) || 1;
+
+    // Ordenar escalas de mayor a menor umbral y encontrar la que aplica
+    var escalaAplicable = producto.escalas
+      .slice()
+      .sort(function (a, b) { return b.cantidadMinima - a.cantidadMinima; })
+      .find(function (e) { return cant >= e.cantidadMinima; });
+
+    // Si la cantidad es menor al primer umbral, usar la escala de menor umbral
+    if (!escalaAplicable) {
+      escalaAplicable = producto.escalas
+        .slice()
+        .sort(function (a, b) { return a.cantidadMinima - b.cantidadMinima; })[0];
+    }
+
+    var margen = escalaAplicable ? escalaAplicable.margen : 0;
+    return Math.ceil(producto.costo + (producto.costo * margen) / 100);
+  }
+
+  // ---------------------------------------------------------
+  // calcularConEscalaDesdeStore — wrapper conveniente con escala
+  // ---------------------------------------------------------
+  function calcularConEscalaDesdeStore(producto, cantidad) {
+    var gananciaGlobal        = App.Store.get("gananciaGlobal");
+    var gananciasPorCategoria = App.Store.get("gananciasPorCategoria");
+    return calcularConEscala(producto, cantidad, gananciaGlobal, gananciasPorCategoria);
+  }
+
   // API pública
   return {
     calcular                  : calcular,
     calcularDesdeStore        : calcularDesdeStore,
+    calcularConEscala         : calcularConEscala,
+    calcularConEscalaDesdeStore: calcularConEscalaDesdeStore,
     calcularMargenReal        : calcularMargenReal,
     calcularDescuentoMaxSeguro: calcularDescuentoMaxSeguro,
   };

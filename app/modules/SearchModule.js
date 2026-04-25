@@ -9,6 +9,7 @@ App.SearchModule = (function (EventBus, ProductService) {
   var _searchInput    = null;
   var _categoryFilter = null;
   var _timerBanner    = null;
+  var _filtroEspecial = false; // true = mostrar solo precio especial/escalas
 
   // ---------------------------------------------------------
   // _procesarCodigoLector
@@ -81,10 +82,23 @@ App.SearchModule = (function (EventBus, ProductService) {
     clearTimeout(_timerBanner);
     _timerBanner = setTimeout(function () {
       banner.classList.add("oculto");
-      // Restaurar texto original para cuando lo use GananciaModule
       if (span) span.textContent = "Margen de ganancia aplicado";
       banner.style.background = "";
     }, 2000);
+  }
+
+  // ---------------------------------------------------------
+  // _tienePrecioEspecial — detecta si un producto tiene ganancia
+  // especial cargada O escalas de precio definidas
+  // ---------------------------------------------------------
+  function _tienePrecioEspecial(producto) {
+    var tieneGananciaEspecial =
+      producto.ganancia !== null &&
+      producto.ganancia !== undefined &&
+      producto.ganancia !== "";
+    var tieneEscalas =
+      Array.isArray(producto.escalas) && producto.escalas.length > 0;
+    return tieneGananciaEspecial || tieneEscalas;
   }
 
   // ---------------------------------------------------------
@@ -95,9 +109,14 @@ App.SearchModule = (function (EventBus, ProductService) {
     var categoria = _categoryFilter ? _categoryFilter.value : "";
 
     var resultado = ProductService.filtrar(texto, categoria);
+
+    // Aplicar filtro de precio especial si está activo
+    if (_filtroEspecial) {
+      resultado = resultado.filter(_tienePrecioEspecial);
+    }
+
     EventBus.emit("productos:filtrados", { lista: resultado });
 
-    // Volver al inicio de la lista para ver los primeros resultados
     var lista = document.getElementById("productList");
     if (lista) lista.scrollTop = 0;
     var contenedor = document.getElementById("lista-articulos") || document.querySelector(".product-list-container");
@@ -125,11 +144,9 @@ App.SearchModule = (function (EventBus, ProductService) {
       return;
     }
 
-    // Búsqueda normal mientras escribe
     _searchInput.addEventListener("input", filtrar);
     _categoryFilter.addEventListener("change", filtrar);
 
-    // Enter → procesar como escaneo (funciona tanto con lector como a mano)
     _searchInput.addEventListener("keydown", function (e) {
       if (e.key !== "Enter") return;
       e.preventDefault();
@@ -140,7 +157,16 @@ App.SearchModule = (function (EventBus, ProductService) {
       _procesarCodigoLector(codigo);
     });
 
-    // Re-filtrar cuando cambia el catálogo
+    // Botón filtro precio especial — toggle
+    var btnFiltroEspecial = document.getElementById("btnFiltroEspecial");
+    if (btnFiltroEspecial) {
+      btnFiltroEspecial.addEventListener("click", function () {
+        _filtroEspecial = !_filtroEspecial;
+        btnFiltroEspecial.classList.toggle("activo", _filtroEspecial);
+        filtrar();
+      });
+    }
+
     EventBus.on("store:productos:cambiado", filtrar);
 
     console.info("[SearchModule] iniciado");
