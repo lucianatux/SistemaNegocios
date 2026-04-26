@@ -1,58 +1,172 @@
 // =============================================================
 // PesajeModule.js — Modal de pesaje para productos a granel
 // =============================================================
+// Dos modos:
+//   - Gramos: el usuario ingresa gramos → se calcula el precio
+//   - Monto:  el usuario ingresa $ → se calculan los gramos (inversa)
+//             Con escalas: se elige la opción más favorable (más gramos)
+// =============================================================
 
 var App = App || {};
 
 App.PesajeModule = (function (EventBus, PriceService, Store) {
-  var _modal = null;
-  var _inputGr = null;
-  var _resultado = null;
+  var _modal          = null;
+  var _inputGr        = null;
+  var _inputMonto     = null;
+  var _resultado      = null;
   var _productoActual = null;
-  var _destinoActual = null;
-  var _precioUnitario = 0;
+  var _destinoActual  = null;
+  var _modoActual     = "gramos"; // "gramos" | "monto"
 
-  function _calcular() {
-    var gramos = parseFloat(_inputGr.value) || 0;
-    if (gramos <= 0) {
-      _resultado.textContent = "";
-      return;
-    }
-
-    var total = Math.round((_precioUnitario * gramos) / 100);
-    _resultado.textContent = gramos + "g → $" + total.toLocaleString("es-AR");
+  // ---------------------------------------------------------
+  // _precioBaseActual — precio por 100g según el Store
+  // ---------------------------------------------------------
+  function _precioBaseActual() {
+    return PriceService.calcularDesdeStore(_productoActual);
   }
 
+  // ---------------------------------------------------------
+  // _calcularGramosDesMonto — lógica inversa con escalas
+  // Devuelve los gramos (redondeados hacia arriba) que
+  // corresponden a un monto dado, eligiendo la opción más
+  // favorable al cliente cuando hay varias soluciones válidas.
+  // ---------------------------------------------------------
+  function _calcularGramosDesMonto(monto) {
+    if (!_productoActual || monto <= 0) return null;
+
+    var producto              = _productoActual;
+    var gananciaGlobal        = Store.get("gananciaGlobal");
+    var gananciasPorCategoria = Store.get("gananciasPorCategoria");
+
+    // Sin escalas → cálculo directo
+    if (!Array.isArray(producto.escalas) || producto.escalas.length === 0) {
+      var precio100g = PriceService.calcular(producto, gananciaGlobal, gananciasPorCategoria);
+      if (precio100g <= 0) return null;
+      return Math.ceil((monto * 100) / precio100g);
+    }
+
+    // Con escalas: probar cada escala por separado.
+    var escalasOrdenadas = producto.escalas
+      .slice()
+      .sort(function (a, b) { return a.cantidadMinima - b.cantidadMinima; });
+
+    var soluciones = [];
+
+    escalasOrdenadas.forEach(function (escala) {
+      var margen     = escala.margen !== undefined ? escala.margen : 0;
+      var precio100g = Math.ceil(producto.costo + (producto.costo * margen) / 100);
+      if (precio100g <= 0) return;
+
+      var gramos = Math.ceil((monto * 100) / precio100g);
+
+      var escalaQueAplica = escalasOrdenadas
+        .slice()
+        .reverse()
+        .find(function (e) { return gramos >= e.cantidadMinima; });
+
+      if (!escalaQueAplica) escalaQueAplica = escalasOrdenadas[0];
+
+      if (escalaQueAplica.cantidadMinima === escala.cantidadMinima) {
+        soluciones.push({ gramos: gramos, precio100g: precio100g });
+      }
+    });
+
+    if (soluciones.length === 0) {
+      var precioBase = PriceService.calcular(producto, gananciaGlobal, gananciasPorCategoria);
+      return precioBase > 0 ? Math.ceil((monto * 100) / precioBase) : null;
+    }
+
+    soluciones.sort(function (a, b) { return b.gramos - a.gramos; });
+    return soluciones[0].gramos;
+  }
+
+  // ---------------------------------------------------------
+  // _calcular — reacciona al input activo
+  // ---------------------------------------------------------
+  function _calcular() {
+    if (_modoActual === "gramos") {
+      var gramos = parseFloat(_inputGr.value) || 0;
+      if (gramos <= 0) { _resultado.textContent = ""; return; }
+      var precio100g = _precioBaseActual();
+      var total = Math.round((precio100g * gramos) / 100);
+      _resultado.textContent = gramos + "g → $" + total.toLocaleString("es-AR");
+
+    } else {
+      var monto = parseFloat(_inputMonto.value) || 0;
+      if (monto <= 0) { _resultado.textContent = ""; return; }
+      var gr = _calcularGramosDesMonto(monto);
+      if (!gr) { _resultado.textContent = ""; return; }
+      // Muestra gramos redondeados arriba, precio = monto exacto ingresado
+      _resultado.textContent = "$" + monto.toLocaleString("es-AR") + " → " + gr + "g";
+    }
+  }
+
+  // ---------------------------------------------------------
+  // _cambiarModo
+  // ---------------------------------------------------------
+  function _cambiarModo(modo) {
+    _modoActual = modo;
+    _resultado.textContent = "";
+
+    if (modo === "gramos") {
+      document.getElementById("pesajeCampoGramos").classList.remove("oculto");
+      document.getElementById("pesajeCampoMonto").classList.add("oculto");
+      _inputMonto.value = "";
+      _inputGr.value    = "";
+      _inputGr.focus();
+    } else {
+      document.getElementById("pesajeCampoGramos").classList.add("oculto");
+      document.getElementById("pesajeCampoMonto").classList.remove("oculto");
+      _inputGr.value    = "";
+      _inputMonto.value = "";
+      _inputMonto.focus();
+    }
+  }
+
+  // ---------------------------------------------------------
+  // abrir
+  // ---------------------------------------------------------
   function abrir(producto, destino) {
     _productoActual = producto;
-    _destinoActual = destino;
-    _precioUnitario = PriceService.calcularDesdeStore(producto);
+    _destinoActual  = destino;
 
-    document.getElementById("pesajeNombre").textContent =
-      "⚖️ " + producto.nombre;
-    document.getElementById("pesajePrecioRef").textContent =
-      "Precio: $" + _precioUnitario + " por 100g";
+    var precio100g = PriceService.calcularDesdeStore(producto);
+    document.getElementById("pesajeNombre").textContent    = "⚖️ " + producto.nombre;
+    document.getElementById("pesajePrecioRef").textContent = "Precio: $" + precio100g + " por 100g";
 
-    _inputGr.value = "";
-    _resultado.textContent = "";
+    var radioGramos = _modal.querySelector('input[name="pesajeModo"][value="gramos"]');
+    if (radioGramos) radioGramos.checked = true;
+    _cambiarModo("gramos");
+
     _modal.classList.remove("oculto");
-    _inputGr.focus();
   }
 
+  // ---------------------------------------------------------
+  // _confirmar
+  // ---------------------------------------------------------
   function _confirmar() {
-    var gramos = parseFloat(_inputGr.value) || 0;
-    if (gramos <= 0) {
-      alert("Ingresá un peso válido");
-      return;
+    var gramos, total;
+
+    if (_modoActual === "gramos") {
+      gramos = parseFloat(_inputGr.value) || 0;
+      if (gramos <= 0) { alert("Ingresá un peso válido"); return; }
+      var precio100g = _precioBaseActual();
+      total = Math.round((precio100g * gramos) / 100);
+
+    } else {
+      // El precio en el ticket es el monto exacto que ingresó el cliente.
+      // Los gramos se redondean arriba para no cobrar de más.
+      total  = parseFloat(_inputMonto.value) || 0;
+      if (total <= 0) { alert("Ingresá un monto válido"); return; }
+      gramos = _calcularGramosDesMonto(total);
+      if (!gramos) { alert("No se pudo calcular el peso"); return; }
     }
 
-    var total = Math.round((_precioUnitario * gramos) / 100);
-
     var productoCalculado = {
-      nombre: _productoActual.nombre + " " + gramos + "g",
-      precio: total,
+      nombre  : _productoActual.nombre + " " + gramos + "g",
+      precio  : total,
       cantidad: 1,
-      costo: ((_productoActual.costo || 0) * gramos) / 100,
+      costo   : ((_productoActual.costo || 0) * gramos) / 100,
     };
 
     if (_destinoActual === "ticket") {
@@ -64,18 +178,27 @@ App.PesajeModule = (function (EventBus, PriceService, Store) {
     _modal.classList.add("oculto");
   }
 
+  // ---------------------------------------------------------
+  // init
+  // ---------------------------------------------------------
   function init() {
-    _modal = document.getElementById("modalPesaje");
-    _inputGr = document.getElementById("pesajeGramos");
-    _resultado = document.getElementById("pesajeResultado");
+    _modal      = document.getElementById("modalPesaje");
+    _inputGr    = document.getElementById("pesajeGramos");
+    _inputMonto = document.getElementById("pesajeMonto");
+    _resultado  = document.getElementById("pesajeResultado");
 
     _inputGr.addEventListener("input", _calcular);
+    _inputMonto.addEventListener("input", _calcular);
 
-    document
-      .getElementById("confirmarPesaje")
+    _modal.querySelectorAll('input[name="pesajeModo"]').forEach(function (radio) {
+      radio.addEventListener("change", function () {
+        _cambiarModo(this.value);
+      });
+    });
+
+    document.getElementById("confirmarPesaje")
       .addEventListener("click", _confirmar);
-    document
-      .getElementById("cerrarModalPesaje")
+    document.getElementById("cerrarModalPesaje")
       .addEventListener("click", function () {
         _modal.classList.add("oculto");
       });

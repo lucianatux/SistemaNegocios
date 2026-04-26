@@ -1370,10 +1370,12 @@ footer a:hover {
     display: none !important;
   }
 
-  .ticket-item, .ticket-header, .ticket-linea.first {
+  .ticket-item,
+  .ticket-header,
+  .ticket-linea.first {
     border-bottom: 1px solid #eee;
   }
-  .ticket-footer{
+  .ticket-footer {
     border-top: 1px solid #eee;
   }
 
@@ -1799,6 +1801,53 @@ footer a:hover {
   color: var(--color-primario);
   margin-bottom: 14px;
   min-height: 22px;
+}
+
+.pesaje-modos {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.pesaje-modo-opcion {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 10px;
+  border: 2px solid var(--color-borde);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition:
+    border-color 0.15s,
+    background 0.15s;
+  background: var(--color-card-bg);
+}
+
+.pesaje-modo-opcion input[type="radio"] {
+  display: none;
+}
+
+.pesaje-modo-opcion:has(input:checked) {
+  border-color: var(--color-primario);
+  background: var(--color-primario);
+  color: #fff;
+}
+
+[data-theme="dark"] .pesaje-modo-opcion:has(input:checked) {
+  color: #fff;
+}
+
+.pesaje-resultado {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-primario);
+  text-align: center;
+  min-height: 28px;
+  margin: 10px 0 4px;
 }
 
 /* ==========================
@@ -3032,7 +3081,9 @@ body.modo-promo #cerrarPromo {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.15s, color 0.15s;
+  transition:
+    background 0.15s,
+    color 0.15s;
 }
 
 .escala-btn-eliminar:hover {
@@ -3083,7 +3134,10 @@ body.modo-promo #cerrarPromo {
   font-size: 13px;
   padding: 7px 12px;
   cursor: pointer;
-  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    color 0.15s;
   white-space: nowrap;
 }
 

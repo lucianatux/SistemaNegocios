@@ -85,7 +85,11 @@
             <option value="Electronica">Electrónica</option>
             <option value="Descartables">Descartables</option>
           </select>
-          <button id="btnFiltroEspecial" class="btn-filtro-especial" title="Mostrar solo productos con precio especial o escalas">
+          <button
+            id="btnFiltroEspecial"
+            class="btn-filtro-especial"
+            title="Mostrar solo productos con precio especial o escalas"
+          >
             🏷️ Precio especial
           </button>
         </section>
@@ -289,12 +293,19 @@
             <div class="campo campo-escalas" id="seccionEscalas">
               <div class="escalas-header">
                 <label>Precios por cantidad</label>
-                <small class="ayuda">Opcional. Márgenes distintos según cuánto compra el cliente.</small>
+                <small class="ayuda"
+                  >Opcional. Márgenes distintos según cuánto compra el
+                  cliente.</small
+                >
               </div>
               <div id="escalasTabla" class="escalas-tabla">
                 <!-- Filas generadas dinámicamente por EditorModule -->
               </div>
-              <button type="button" id="btnAgregarEscala" class="btn-agregar-escala">
+              <button
+                type="button"
+                id="btnAgregarEscala"
+                class="btn-agregar-escala"
+              >
                 + Agregar escala
               </button>
             </div>
@@ -499,7 +510,7 @@
             <button class="ventas-tab" data-periodo="">Todo</button>
           </div>
           <div id="ventasTabsMeses" class="ventas-tabs-meses">
-              <select id="ventaAnioSelect" class="ventas-anio-select"></select>
+            <select id="ventaAnioSelect" class="ventas-anio-select"></select>
           </div>
           <div class="ventas-stats">
             <div class="venta-stat">
@@ -600,14 +611,43 @@
           <div class="modal-contenido modal-pesaje">
             <h2 id="pesajeNombre">⚖️ Producto</h2>
             <p id="pesajePrecioRef" class="pesaje-ref"></p>
-            <input
-              type="number"
-              id="pesajeGramos"
-              class="pesaje-input"
-              placeholder="0"
-              min="1"
-            />
+
+            <!-- Toggle de modo -->
+            <div class="pesaje-modos">
+              <label class="pesaje-modo-opcion">
+                <input type="radio" name="pesajeModo" value="gramos" checked />
+                ⚖️ Ingresá gramos
+              </label>
+              <label class="pesaje-modo-opcion">
+                <input type="radio" name="pesajeModo" value="monto" />
+                💲 Ingresá monto
+              </label>
+            </div>
+
+            <!-- Campo gramos -->
+            <div id="pesajeCampoGramos">
+              <input
+                type="number"
+                id="pesajeGramos"
+                class="pesaje-input"
+                placeholder="0"
+                min="1"
+              />
+            </div>
+
+            <!-- Campo monto (oculto por defecto) -->
+            <div id="pesajeCampoMonto" class="oculto">
+              <input
+                type="number"
+                id="pesajeMonto"
+                class="pesaje-input"
+                placeholder="$ 0"
+                min="1"
+              />
+            </div>
+
             <p id="pesajeResultado" class="pesaje-resultado"></p>
+
             <div class="modal-botones">
               <button id="confirmarPesaje" class="btn-primario">Agregar</button>
               <button id="cerrarModalPesaje" class="btn-secundario">
@@ -1300,7 +1340,6 @@
     <script src="app/modules/LightdarkModule.js"></script>
     <script src="app/modules/SearchModule.js"></script>
     <script src="app/core/activacion.js"></script>
-
 
     <!-- PUNTO DE ENTRADA — siempre último -->
     <script src="app/main.js"></script>
