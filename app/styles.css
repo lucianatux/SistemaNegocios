@@ -1902,7 +1902,17 @@ footer a:hover {
 .venta-stat-valor.amber {
   color: #633806;
 }
+.venta-stat-sub {
+  font-size: 11px;
+  color: var(--color-texto-suave);
+  margin-top: 5px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  padding-top: 4px;
+}
 
+[data-theme="dark"] .venta-stat-sub {
+  border-top-color: rgba(255, 255, 255, 0.08);
+}
 [data-theme="dark"] .venta-stat.azul {
   background: #1a2f4a;
 }

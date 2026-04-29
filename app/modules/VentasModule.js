@@ -24,7 +24,20 @@ App.VentasModule = (function (EventBus, Storage) {
   var _barratr = null;
   var _filtroCliente = null;
   var _anioSeleccionado = new Date().getFullYear();
-  var _nombresMeses = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
+  var _nombresMeses = [
+    "Ene",
+    "Feb",
+    "Mar",
+    "Abr",
+    "May",
+    "Jun",
+    "Jul",
+    "Ago",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dic",
+  ];
 
   var CLAVE = "tero_ventas";
 
@@ -81,10 +94,10 @@ App.VentasModule = (function (EventBus, Storage) {
   }
 
   function _ventasFiltradas() {
-    var medio    = _filtroMedio    ? _filtroMedio.value    : "";
-    var clienteId = _filtroCliente ? _filtroCliente.value  : "";
+    var medio = _filtroMedio ? _filtroMedio.value : "";
+    var clienteId = _filtroCliente ? _filtroCliente.value : "";
     return _ventasDelPeriodo(_periodoActivo).filter(function (v) {
-      var okMedio   = !medio     || v.medioPago === medio;
+      var okMedio = !medio || v.medioPago === medio;
       var okCliente = !clienteId || v.clienteId === clienteId;
       return okMedio && okCliente;
     });
@@ -121,6 +134,7 @@ App.VentasModule = (function (EventBus, Storage) {
       clienteNombre: datos.clienteNombre || null,
       ajustes: datos.ajustes || null,
       soloHistorial: datos.soloHistorial || false,
+      contarVenta: datos.contarVenta || false,
     };
 
     _ventas.unshift(venta);
@@ -145,7 +159,9 @@ App.VentasModule = (function (EventBus, Storage) {
   // ---------------------------------------------------------
   function _calcularStats(lista) {
     // Bug 2: fiados totales (soloHistorial) no se contabilizan
-    var contables = lista.filter(function (v) { return !v.soloHistorial; });
+    var contables = lista.filter(function (v) {
+      return !v.soloHistorial;
+    });
     var total = contables.reduce(function (a, v) {
       return a + v.total;
     }, 0);
@@ -158,12 +174,16 @@ App.VentasModule = (function (EventBus, Storage) {
       );
     }, 0);
     var ganancia = total - Math.round(costo);
-    var margen = total > 0 ? Math.round((ganancia / total) * 100) : 0;
+    var margenVenta = total > 0 ? Math.round((ganancia / total) * 100) : 0;
+    var markupCosto = costo > 0 ? Math.round((ganancia / costo) * 100) : 0;
     return {
-      count: contables.length,
+      count: lista.filter(function (v) {
+        return v.contarVenta;
+      }).length,
       total: total,
       ganancia: ganancia,
-      margen: margen,
+      markup: markupCosto,
+      margen: margenVenta,
     };
   }
 
@@ -179,10 +199,15 @@ App.VentasModule = (function (EventBus, Storage) {
       _statTotal.textContent = "$" + stats.total.toLocaleString("es-AR");
     if (_statGanancia)
       _statGanancia.textContent = "$" + stats.ganancia.toLocaleString("es-AR");
-    if (_statMargen) _statMargen.textContent = stats.margen + "%";
+    if (_statMargen) _statMargen.textContent = stats.markup + "%";
+    var subMargen = document.getElementById("ventaStatMargenVenta");
+    if (subMargen)
+      subMargen.textContent = "Margen sobre venta: " + stats.margen + "%";
 
     // Desglose por medio — excluir fiados (soloHistorial)
-    var contables = lista.filter(function (v) { return !v.soloHistorial; });
+    var contables = lista.filter(function (v) {
+      return !v.soloHistorial;
+    });
     var ef = contables.filter(function (v) {
       return v.medioPago === "efectivo";
     });
@@ -232,13 +257,17 @@ App.VentasModule = (function (EventBus, Storage) {
 
       // Bug 2: badge según medio (incluyendo fiado)
       var badgeClass =
-        venta.medioPago === "efectivo"   ? "badge-efectivo" :
-        venta.medioPago === "fiado"      ? "badge-fiado"    :
-                                           "badge-transferencia";
+        venta.medioPago === "efectivo"
+          ? "badge-efectivo"
+          : venta.medioPago === "fiado"
+            ? "badge-fiado"
+            : "badge-transferencia";
       var badgeText =
-        venta.medioPago === "efectivo"   ? "Efectivo" :
-        venta.medioPago === "fiado"      ? "📋 Fiado" :
-                                           "Transferencia";
+        venta.medioPago === "efectivo"
+          ? "Efectivo"
+          : venta.medioPago === "fiado"
+            ? "📋 Fiado"
+            : "Transferencia";
       var fechaFmt = _formatearFecha(venta.fecha);
 
       var header = document.createElement("div");
@@ -247,17 +276,27 @@ App.VentasModule = (function (EventBus, Storage) {
       header.innerHTML =
         '<div class="venta-card-izq">' +
         '<span class="venta-meta"> · ' +
-        fechaFmt + " " + venta.hora +
+        fechaFmt +
+        " " +
+        venta.hora +
         // Bug 4: nombre del cliente en el header igual que ventas normales
         (venta.clienteNombre ? " · 👤 " + venta.clienteNombre : "") +
         "</span>" +
         "</div>" +
         '<div class="venta-card-der">' +
-        '<span class="venta-badge ' + badgeClass + '">' + badgeText + "</span>" +
-        '<span class="venta-total' + (venta.soloHistorial ? " venta-total-fiado" : "") + '">$' +
+        '<span class="venta-badge ' +
+        badgeClass +
+        '">' +
+        badgeText +
+        "</span>" +
+        '<span class="venta-total' +
+        (venta.soloHistorial ? " venta-total-fiado" : "") +
+        '">$' +
         venta.total.toLocaleString("es-AR") +
         "</span>" +
-        '<button class="venta-toggle" data-id="' + venta.id + '">▶</button>' +
+        '<button class="venta-toggle" data-id="' +
+        venta.id +
+        '">▶</button>' +
         "</div>";
 
       var detalle = document.createElement("div");
@@ -267,8 +306,14 @@ App.VentasModule = (function (EventBus, Storage) {
         .map(function (item) {
           return (
             '<div class="venta-item">' +
-            "<span>" + item.nombre + " x" + item.cantidad + "</span>" +
-            "<span>$" + item.subtotal.toLocaleString("es-AR") + "</span>" +
+            "<span>" +
+            item.nombre +
+            " x" +
+            item.cantidad +
+            "</span>" +
+            "<span>$" +
+            item.subtotal.toLocaleString("es-AR") +
+            "</span>" +
             "</div>"
           );
         })
@@ -278,30 +323,48 @@ App.VentasModule = (function (EventBus, Storage) {
       var ajustesHTML = "";
       if (venta.ajustes) {
         var aj = venta.ajustes;
-        ajustesHTML += '<div class="venta-item venta-item-ajuste">' +
-          "<span>Subtotal</span><span>$" + aj.subtotalItems.toLocaleString("es-AR") + "</span></div>";
+        ajustesHTML +=
+          '<div class="venta-item venta-item-ajuste">' +
+          "<span>Subtotal</span><span>$" +
+          aj.subtotalItems.toLocaleString("es-AR") +
+          "</span></div>";
         if (aj.descuento > 0) {
-          var montoDesc = Math.round(aj.subtotalItems * aj.descuento / 100);
-          ajustesHTML += '<div class="venta-item venta-item-ajuste venta-item-descuento">' +
-            "<span>Descuento " + aj.descuento + "%</span><span>-$" +
-            montoDesc.toLocaleString("es-AR") + "</span></div>";
+          var montoDesc = Math.round((aj.subtotalItems * aj.descuento) / 100);
+          ajustesHTML +=
+            '<div class="venta-item venta-item-ajuste venta-item-descuento">' +
+            "<span>Descuento " +
+            aj.descuento +
+            "%</span><span>-$" +
+            montoDesc.toLocaleString("es-AR") +
+            "</span></div>";
         }
         if (aj.recargo > 0) {
-          var baseRecargo = aj.subtotalItems - Math.round(aj.subtotalItems * aj.descuento / 100);
-          var montoRecargo = Math.round(baseRecargo * aj.recargo / 100);
-          ajustesHTML += '<div class="venta-item venta-item-ajuste venta-item-recargo">' +
-            "<span>Recargo " + aj.recargo + "%</span><span>+$" +
-            montoRecargo.toLocaleString("es-AR") + "</span></div>";
+          var baseRecargo =
+            aj.subtotalItems -
+            Math.round((aj.subtotalItems * aj.descuento) / 100);
+          var montoRecargo = Math.round((baseRecargo * aj.recargo) / 100);
+          ajustesHTML +=
+            '<div class="venta-item venta-item-ajuste venta-item-recargo">' +
+            "<span>Recargo " +
+            aj.recargo +
+            "%</span><span>+$" +
+            montoRecargo.toLocaleString("es-AR") +
+            "</span></div>";
         }
-        ajustesHTML += '<div class="venta-item venta-item-total">' +
+        ajustesHTML +=
+          '<div class="venta-item venta-item-total">' +
           "<span><strong>Total final</strong></span><span><strong>$" +
-          aj.totalFinal.toLocaleString("es-AR") + "</strong></span></div>";
+          aj.totalFinal.toLocaleString("es-AR") +
+          "</strong></span></div>";
       }
 
       detalle.innerHTML =
-        itemsHTML + ajustesHTML +
+        itemsHTML +
+        ajustesHTML +
         '<div class="venta-acciones">' +
-        '<button class="btn-venta-eliminar" data-id="' + venta.id + '">🗑️ Eliminar venta</button>' +
+        '<button class="btn-venta-eliminar" data-id="' +
+        venta.id +
+        '">🗑️ Eliminar venta</button>' +
         "</div>";
 
       header
@@ -370,11 +433,13 @@ App.VentasModule = (function (EventBus, Storage) {
     if (!contenedorMeses) return;
     // Preservar el select, limpiar solo los botones de mes
     var botonesViejos = contenedorMeses.querySelectorAll(".ventas-tab-mes");
-    botonesViejos.forEach(function (b) { b.remove(); });
+    botonesViejos.forEach(function (b) {
+      b.remove();
+    });
 
     var anioActual = new Date().getFullYear();
-    var mesActual  = new Date().getMonth();
-    var limite     = (_anioSeleccionado === anioActual) ? mesActual : 11;
+    var mesActual = new Date().getMonth();
+    var limite = _anioSeleccionado === anioActual ? mesActual : 11;
 
     for (var m = 0; m <= limite; m++) {
       (function (mes) {
@@ -383,9 +448,11 @@ App.VentasModule = (function (EventBus, Storage) {
         btn.textContent = _nombresMeses[mes];
         var mesStr = _anioSeleccionado + "-" + String(mes + 1).padStart(2, "0");
         btn.addEventListener("click", function () {
-          document.querySelectorAll(".ventas-tab, .ventas-tab-mes").forEach(function (t) {
-            t.classList.remove("activo");
-          });
+          document
+            .querySelectorAll(".ventas-tab, .ventas-tab-mes")
+            .forEach(function (t) {
+              t.classList.remove("activo");
+            });
           btn.classList.add("activo");
           _periodoActivo = "mes-" + mesStr;
           _renderTodo();
@@ -443,9 +510,9 @@ App.VentasModule = (function (EventBus, Storage) {
     _desgloseEfCount = document.getElementById("desgloseEfectivoCount");
     _desgloseTriMonto = document.getElementById("desgloseTransferenciaMonto");
     _desgloseTriCount = document.getElementById("desgloseTransferenciaCount");
-    _barraEf        = document.getElementById("barraEfectivo");
-    _barratr        = document.getElementById("barraTransferencia");
-    _filtroCliente  = document.getElementById("ventaFiltroCliente");
+    _barraEf = document.getElementById("barraEfectivo");
+    _barratr = document.getElementById("barraTransferencia");
+    _filtroCliente = document.getElementById("ventaFiltroCliente");
 
     document.getElementById("btnVentas").addEventListener("click", abrir);
     document.getElementById("cerrarVentas").addEventListener("click", cerrar);
@@ -453,9 +520,11 @@ App.VentasModule = (function (EventBus, Storage) {
     // Tabs de período fijas
     document.querySelectorAll(".ventas-tab").forEach(function (tab) {
       tab.addEventListener("click", function () {
-        document.querySelectorAll(".ventas-tab, .ventas-tab-mes").forEach(function (t) {
-          t.classList.remove("activo");
-        });
+        document
+          .querySelectorAll(".ventas-tab, .ventas-tab-mes")
+          .forEach(function (t) {
+            t.classList.remove("activo");
+          });
         this.classList.add("activo");
         _periodoActivo = this.dataset.periodo;
         _renderTodo();
@@ -467,12 +536,19 @@ App.VentasModule = (function (EventBus, Storage) {
     if (selectorAnio) {
       selectorAnio.addEventListener("change", function () {
         _anioSeleccionado = parseInt(this.value);
-        if (_periodoActivo.startsWith("mes-") && !_periodoActivo.startsWith("mes-" + _anioSeleccionado)) {
+        if (
+          _periodoActivo.startsWith("mes-") &&
+          !_periodoActivo.startsWith("mes-" + _anioSeleccionado)
+        ) {
           _periodoActivo = "hoy";
-          document.querySelectorAll(".ventas-tab, .ventas-tab-mes").forEach(function (t) {
-            t.classList.remove("activo");
-          });
-          var tabHoy = document.querySelector(".ventas-tab[data-periodo='hoy']");
+          document
+            .querySelectorAll(".ventas-tab, .ventas-tab-mes")
+            .forEach(function (t) {
+              t.classList.remove("activo");
+            });
+          var tabHoy = document.querySelector(
+            ".ventas-tab[data-periodo='hoy']",
+          );
           if (tabHoy) tabHoy.classList.add("activo");
         }
         _generarTabsMeses();
@@ -480,7 +556,7 @@ App.VentasModule = (function (EventBus, Storage) {
       });
     }
 
-    if (_filtroMedio)   _filtroMedio.addEventListener("change", _renderLista);
+    if (_filtroMedio) _filtroMedio.addEventListener("change", _renderLista);
     if (_filtroCliente) _filtroCliente.addEventListener("change", _renderLista);
 
     EventBus.on("ventas:registrar", function (datos) {
@@ -490,7 +566,9 @@ App.VentasModule = (function (EventBus, Storage) {
     // Eliminar venta por id (desde historial de cliente)
     EventBus.on("ventas:eliminar", function (datos) {
       if (!datos || !datos.ventaId) return;
-      _ventas = _ventas.filter(function (v) { return v.id !== datos.ventaId; });
+      _ventas = _ventas.filter(function (v) {
+        return v.id !== datos.ventaId;
+      });
       _guardar();
       if (_panelActivo) _renderTodo();
     });
@@ -510,5 +588,13 @@ App.VentasModule = (function (EventBus, Storage) {
     console.info("[VentasModule] iniciado");
   }
 
-  return { init: init, abrir: abrir, cerrar: cerrar, registrar: registrar, getVentas: function() { return _ventas; }, };
+  return {
+    init: init,
+    abrir: abrir,
+    cerrar: cerrar,
+    registrar: registrar,
+    getVentas: function () {
+      return _ventas;
+    },
+  };
 })(App.EventBus, App.Storage);

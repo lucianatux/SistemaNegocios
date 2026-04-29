@@ -528,8 +528,11 @@
               </div>
             </div>
             <div class="venta-stat amber">
-              <div class="venta-stat-label">Margen promedio</div>
+              <div class="venta-stat-label">Margen sobre costo</div>
               <div class="venta-stat-valor amber" id="ventaStatMargen">0%</div>
+              <div class="venta-stat-sub" id="ventaStatMargenVenta">
+                Margen sobre venta: 0%
+              </div>
             </div>
           </div>
 
@@ -1162,7 +1165,7 @@
           </div>
         </div>
 
-        <!-- MODAL CERRAR VENTA (reemplaza modal medio de pago) -->
+        <!-- MODAL CERRAR VENTA -->
         <div id="modalCerrarVenta" class="modal oculto">
           <div class="modal-contenido modal-cerrar-venta">
             <h2>💳 Registrar venta</h2>
@@ -1181,12 +1184,16 @@
                 <button class="cerrar-medio-btn" data-medio="transferencia">
                   📲 Transferencia
                 </button>
+                <button class="cerrar-medio-btn" data-medio="mixto">
+                  💵📲 Mixto
+                </button>
                 <button class="cerrar-medio-btn" data-medio="fiado">
                   📋 Fiado
                 </button>
               </div>
             </div>
 
+            <!-- Sección monto estándar (efectivo / transferencia / parcial) -->
             <div class="cerrar-seccion" id="cerrarMontoSeccion">
               <div class="cerrar-sec-titulo">Monto abonado</div>
               <input
@@ -1200,6 +1207,45 @@
                 <input type="checkbox" id="cerrarVentaTotalCheck" />
                 Pagó el total completo
               </label>
+            </div>
+
+            <!-- Sección exclusiva pago MIXTO -->
+            <div
+              class="cerrar-seccion"
+              id="cerrarMixtoSeccion"
+              style="display: none"
+            >
+              <div class="cerrar-sec-titulo">Desglose del pago mixto</div>
+              <div style="display: flex; flex-direction: column; gap: 8px">
+                <label style="font-size: 13px; color: var(--color-texto-suave)"
+                  >💵 Efectivo</label
+                >
+                <input
+                  type="number"
+                  id="cerrarMixtoEfectivo"
+                  class="pesaje-input"
+                  style="font-size: 18px"
+                  placeholder="0"
+                />
+                <label style="font-size: 13px; color: var(--color-texto-suave)"
+                  >📲 Transferencia</label
+                >
+                <input
+                  type="number"
+                  id="cerrarMixtoTransferencia"
+                  class="pesaje-input"
+                  style="font-size: 18px"
+                  placeholder="0"
+                />
+                <div
+                  id="cerrarMixtoAviso"
+                  style="
+                    font-size: 12px;
+                    color: var(--color-texto-suave);
+                    min-height: 18px;
+                  "
+                ></div>
+              </div>
             </div>
 
             <div
@@ -1252,6 +1298,7 @@
             </div>
           </div>
         </div>
+
         <!-- PANEL ETIQUETAS -->
         <section id="etiquetasPanel" class="ventas-panel oculto">
           <div class="ventas-header">

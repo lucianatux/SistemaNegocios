@@ -243,6 +243,11 @@ App.TicketModule = (function (EventBus, Store, PriceService) {
     });
     document.getElementById("cerrarVentaMonto").value = "";
     document.getElementById("cerrarVentaTotalCheck").checked = false;
+    document.getElementById("cerrarMixtoEfectivo").value = "";
+    document.getElementById("cerrarMixtoTransferencia").value = "";
+    document.getElementById("cerrarMixtoAviso").textContent = "";
+    document.getElementById("cerrarMixtoSeccion").style.display = "none";
+    document.getElementById("cerrarMontoSeccion").style.display = "block";
     document.getElementById("cerrarFiadoSeccion").style.display = "none";
     document.getElementById("cerrarFiadoPendiente").textContent = "";
 
@@ -258,22 +263,49 @@ App.TicketModule = (function (EventBus, Store, PriceService) {
 
   function _actualizarModalCerrarVenta() {
     var total = _calcularTotalFinal();
-    var esFiado = _medioSeleccionado === "fiado";
+    var esFiado  = _medioSeleccionado === "fiado";
+    var esMixto  = _medioSeleccionado === "mixto";
     var montoInput =
       parseFloat(document.getElementById("cerrarVentaMonto").value) || 0;
     var pagoTotal = document.getElementById("cerrarVentaTotalCheck").checked;
 
-    // Sección monto — oculta solo si es fiado total
-    document.getElementById("cerrarMontoSeccion").style.display = esFiado
-      ? "none"
-      : "block";
+    // Sección monto estándar — oculta en fiado total y en mixto
+    document.getElementById("cerrarMontoSeccion").style.display =
+      (esFiado || esMixto) ? "none" : "block";
 
-    // Sección fiado — ahora SIEMPRE visible, pero el título cambia
+    // Sección mixto — solo visible en modo mixto
+    document.getElementById("cerrarMixtoSeccion").style.display =
+      esMixto ? "block" : "none";
+
+    // Actualizar aviso de suma en modo mixto
+    var pendienteMixto = 0;
+    if (esMixto) {
+      var ef  = parseFloat(document.getElementById("cerrarMixtoEfectivo").value)      || 0;
+      var tr  = parseFloat(document.getElementById("cerrarMixtoTransferencia").value)  || 0;
+      var suma = ef + tr;
+      var aviso = document.getElementById("cerrarMixtoAviso");
+      if (suma === 0) {
+        aviso.textContent = "";
+        aviso.style.color = "var(--color-texto-suave)";
+      } else if (suma === total) {
+        aviso.textContent = "✅ Monto exacto";
+        aviso.style.color = "var(--color-primario)";
+      } else if (suma > total) {
+        aviso.textContent = "✅ El cliente entrega $" + suma.toLocaleString("es-AR");
+        aviso.style.color = "var(--color-primario)";
+      } else {
+        pendienteMixto = total - suma;
+        aviso.textContent = "⚠️ Falta $" + pendienteMixto.toLocaleString("es-AR") + " → quedará como fiado";
+        aviso.style.color = "#c0392b";
+      }
+    }
+
+    // Sección fiado — siempre visible, pero el título cambia
     document.getElementById("cerrarFiadoSeccion").style.display = "block";
 
     var hayPendiente =
-      !esFiado && !pagoTotal && montoInput > 0 && montoInput < total;
-    var pendiente = esFiado ? total : hayPendiente ? total - montoInput : 0;
+      !esFiado && !esMixto && !pagoTotal && montoInput > 0 && montoInput < total;
+    var pendiente = esFiado ? total : esMixto ? pendienteMixto : hayPendiente ? total - montoInput : 0;
 
     // Cambiar título según si hay pendiente o no
     document.querySelector(
@@ -301,12 +333,30 @@ App.TicketModule = (function (EventBus, Store, PriceService) {
     var recargo   = parseFloat(_recargoInput.value)   || 0;
 
     var esFiado   = _medioSeleccionado === "fiado";
+    var esMixto   = _medioSeleccionado === "mixto";
     var montoInput = parseFloat(document.getElementById("cerrarVentaMonto").value) || 0;
     var pagoTotal  = document.getElementById("cerrarVentaTotalCheck").checked;
     var clienteId  = document.getElementById("cerrarVentaCliente").value;
 
-    var montoPagado = esFiado ? 0 : pagoTotal ? total : montoInput;
+    // --- Modo MIXTO: calcular suma y determinar sobra/falta ---
+    var montoEfectivo      = 0;
+    var montoTransferencia = 0;
+    var sumaMixto          = 0;
+    if (esMixto) {
+      montoEfectivo      = parseFloat(document.getElementById("cerrarMixtoEfectivo").value)      || 0;
+      montoTransferencia = parseFloat(document.getElementById("cerrarMixtoTransferencia").value)  || 0;
+      sumaMixto = montoEfectivo + montoTransferencia;
+
+      if (montoEfectivo <= 0 || montoTransferencia <= 0) {
+        alert("Ingresá los montos en efectivo y en transferencia");
+        return;
+      }
+    }
+
+    // montoPagado: en mixto es la suma real entregada (puede superar o ser menor al total)
+    var montoPagado = esFiado ? 0 : esMixto ? sumaMixto : pagoTotal ? total : montoInput;
     var pendiente   = total - montoPagado;
+    // Si sobra en mixto, pendiente queda negativo → no hay fiado ni error, se acepta igual que efectivo con vuelto
 
     // Resolver nombre del cliente UNA sola vez, antes de todos los bloques
     var clienteNombre = "";
@@ -345,7 +395,7 @@ App.TicketModule = (function (EventBus, Store, PriceService) {
       };
     });
 
-    // Adjuntar ajustes solo si los hay (Bug 3)
+    // Adjuntar ajustes solo si los hay
     var ajustes = null;
     if (descuento > 0 || recargo > 0) {
       ajustes = {
@@ -358,14 +408,40 @@ App.TicketModule = (function (EventBus, Store, PriceService) {
 
     // Registrar venta si hubo pago
     if (montoPagado > 0) {
-      App.EventBus.emit("ventas:registrar", {
-        items: itemsParaVenta,
-        total: montoPagado,
-        medioPago: _medioSeleccionado,
-        clienteId: clienteId || null,
-        clienteNombre: clienteNombre || null,
-        ajustes: ajustes,
-      });
+      if (esMixto) {
+        // Dos registros separados por lo que realmente entregó en cada medio
+        App.EventBus.emit("ventas:registrar", {
+          items: itemsParaVenta,
+          total: montoEfectivo,
+          medioPago: "efectivo",
+          clienteId: clienteId || null,
+          clienteNombre: clienteNombre || null,
+          ajustes: ajustes,
+          esMixto: true,
+          totalMixto: total,
+          contarVenta: true,
+        });
+        App.EventBus.emit("ventas:registrar", {
+          items: [],          // sin items: el costo ya se contó en el registro de efectivo
+          total: montoTransferencia,
+          medioPago: "transferencia",
+          clienteId: clienteId || null,
+          clienteNombre: clienteNombre || null,
+          ajustes: null,      // ajustes ya están en el primero
+          esMixto: true,
+          totalMixto: total,
+        });
+      } else {
+        App.EventBus.emit("ventas:registrar", {
+          items: itemsParaVenta,
+          total: montoPagado,
+          medioPago: _medioSeleccionado,
+          clienteId: clienteId || null,
+          clienteNombre: clienteNombre || null,
+          ajustes: ajustes,
+          contarVenta: true,
+        });
+      }
     }
 
     // Registrar fiado si quedó pendiente
@@ -381,16 +457,17 @@ App.TicketModule = (function (EventBus, Store, PriceService) {
       });
     }
 
-    // Fiado total → registrar en ventas pero marcado como no contabilizable (Bug 2)
+    // Fiado total → registrar en ventas pero marcado como no contabilizable
     if (esFiado && clienteId) {
       App.EventBus.emit("ventas:registrar", {
         items: itemsParaVenta,
         total: total,
         medioPago: "fiado",
         clienteId: clienteId,
-        clienteNombre: clienteNombre,   // Bug 1: ahora siempre está resuelto
+        clienteNombre: clienteNombre,
         ajustes: ajustes,
-        soloHistorial: true,            // Bug 2: no se contabiliza
+        soloHistorial: true,
+        contarVenta: true,
       });
     }
 
@@ -499,6 +576,14 @@ App.TicketModule = (function (EventBus, Store, PriceService) {
         }
         _actualizarModalCerrarVenta();
       });
+
+    // Inputs modo mixto
+    document
+      .getElementById("cerrarMixtoEfectivo")
+      .addEventListener("input", _actualizarModalCerrarVenta);
+    document
+      .getElementById("cerrarMixtoTransferencia")
+      .addEventListener("input", _actualizarModalCerrarVenta);
 
     document
       .getElementById("btnNuevoClienteDesdeVenta")
