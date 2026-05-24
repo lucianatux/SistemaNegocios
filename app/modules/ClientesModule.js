@@ -798,7 +798,7 @@ App.ClientesModule = (function (EventBus, Storage) {
     var url = URL.createObjectURL(blob);
     var a = document.createElement('a');
     a.href = url;
-    a.download = 'tero-backup-completo.json';
+    a.download = 'tero-backup-clientes-y-estadisticas.json';
     a.click();
     URL.revokeObjectURL(url);
   }

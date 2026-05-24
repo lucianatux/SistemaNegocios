@@ -162,7 +162,7 @@ App.ProductService = (function (Store, PriceService, EventBus) {
 
     var a      = document.createElement("a");
     a.href     = url;
-    a.download = "tero-backup.json";
+    a.download = "tero-backup-productos.json";
     a.click();
 
     URL.revokeObjectURL(url);
