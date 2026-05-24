@@ -103,13 +103,14 @@ App.PromoModule = (function (EventBus, Store, PriceService) {
 
     _promo.items.push({
       nombre: producto.nombre,
-      precio: PriceService.calcularDesdeStore(producto),
+      precio: PriceService.calcularConEscalaDesdeStore(producto, 1),
       cantidad: 1,
       costo: producto.costo,
       ganancia:
         producto.ganancia !== null
           ? producto.ganancia
           : Store.get("gananciaGlobal"),
+      _producto: producto,
     });
 
     _guardarEnStore();
@@ -234,8 +235,15 @@ App.PromoModule = (function (EventBus, Store, PriceService) {
           cantidad.value = 1;
         }
         _promo.items[index].cantidad = val;
+        var prod = _promo.items[index]._producto;
+        if (prod && Array.isArray(prod.escalas) && prod.escalas.length > 0) {
+          var nuevoPrecio = PriceService.calcularConEscalaDesdeStore(prod, val);
+          _promo.items[index].precio = nuevoPrecio;
+          precioUnitario.textContent = "Precio unitario: $" + nuevoPrecio;
+        }
         subtotal.textContent =
-          "Subtotal: $" + (item.precio * val).toLocaleString("es-AR");
+          "Subtotal: $" +
+          (_promo.items[index].precio * val).toLocaleString("es-AR");
         _actualizarTotales();
         _guardarEnStore();
       }
@@ -279,7 +287,7 @@ App.PromoModule = (function (EventBus, Store, PriceService) {
     };
 
     if (_promo.nombre) {
-      texto += "✦ " + _promo.nombre + " ✦\n\n";
+      texto +=  _promo.nombre + " \n\n";
     }
 
     _promo.items.forEach(function (prod) {
@@ -309,7 +317,7 @@ App.PromoModule = (function (EventBus, Store, PriceService) {
   function _abrirModalWhatsapp() {
     _panel.classList.add("oculto");
     _whatsappModal.classList.remove("oculto");
-    _mensajePreview.value = _generarTexto();
+    _mensajePreview.value = _generarTexto().normalize("NFC");
   }
 
   function _cerrarModalWhatsapp() {
@@ -318,13 +326,13 @@ App.PromoModule = (function (EventBus, Store, PriceService) {
   }
 
   function _enviarWhatsapp() {
-    var texto = _mensajePreview.value.trim();
+    var texto = _generarTexto().trim();
     if (!texto) {
       alert("No hay mensaje para enviar");
       return;
     }
-    var url =
-      "https://wa.me/?text=" + encodeURIComponent(texto.normalize("NFC"));
+
+    var url = "whatsapp://send?text=" + encodeURIComponent(texto);
     window.open(url, "_blank");
     _cerrarModalWhatsapp();
   }

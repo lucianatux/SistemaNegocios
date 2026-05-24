@@ -232,7 +232,14 @@ App.ClientesModule = (function (EventBus, Storage) {
   function _calcularEstadisticasCliente(cli) {
     var ventas = App.VentasModule
       ? App.VentasModule.getVentas().filter(function (v) {
-          return v.clienteId === cli.id;
+          return (
+            v.clienteId === cli.id &&
+            !(
+              v.items &&
+              v.items.length === 1 &&
+              v.items[0].nombre === "Pago de deuda"
+            )
+          );
         })
       : [];
 
@@ -340,8 +347,12 @@ App.ClientesModule = (function (EventBus, Storage) {
         "background:none;border:none;cursor:pointer;font-size:13px;" +
         "padding:0 4px;color:var(--color-texto-suave);flex-shrink:0;" +
         "opacity:0.5;transition:opacity 0.15s";
-      btnElim.onmouseenter = function () { this.style.opacity = "1"; };
-      btnElim.onmouseleave = function () { this.style.opacity = "0.5"; };
+      btnElim.onmouseenter = function () {
+        this.style.opacity = "1";
+      };
+      btnElim.onmouseleave = function () {
+        this.style.opacity = "0.5";
+      };
       btnElim.addEventListener("click", function (e) {
         e.stopPropagation();
         _eliminarMovimiento(cli, indice);
@@ -493,7 +504,6 @@ App.ClientesModule = (function (EventBus, Storage) {
       "</div>";
   }
 
-
   // ---------------------------------------------------------
   // Eliminar movimiento del historial
   // ---------------------------------------------------------
@@ -515,7 +525,9 @@ App.ClientesModule = (function (EventBus, Storage) {
 
     // Si tiene ventaId, ofrecer eliminar también de estadísticas
     if (mov.tipo === "pago" && mov.ventaId) {
-      if (confirm("¿También eliminás la venta correspondiente en estadísticas?")) {
+      if (
+        confirm("¿También eliminás la venta correspondiente en estadísticas?")
+      ) {
         EventBus.emit("ventas:eliminar", { ventaId: mov.ventaId });
       }
     }
@@ -534,65 +546,107 @@ App.ClientesModule = (function (EventBus, Storage) {
     var tieneDeuda = cli.saldo < 0;
     var fecha = new Date().toLocaleDateString("es-AR");
 
-    var filasHistorial = (cli.historial || []).map(function (mov) {
-      var esPago = mov.tipo === "pago";
-      var esCompra = mov.tipo === "compra";
-      var tipo = esPago ? "Pago" : esCompra ? "Compra" : "Fiado";
-      var desc = mov.descripcion ? " - " + mov.descripcion : "";
-      var color = (esPago || esCompra) ? "#2a7a2a" : "#b00020";
-      var signo = (esPago || esCompra) ? "+" : "-";
+    var filasHistorial = (cli.historial || [])
+      .map(function (mov) {
+        var esPago = mov.tipo === "pago";
+        var esCompra = mov.tipo === "compra";
+        var tipo = esPago ? "Pago" : esCompra ? "Compra" : "Fiado";
+        var desc = mov.descripcion ? " - " + mov.descripcion : "";
+        var color = esPago || esCompra ? "#2a7a2a" : "#b00020";
+        var signo = esPago || esCompra ? "+" : "-";
 
-      var detalleItems = "";
-      if (mov.tipo === "fiado" && mov.items && mov.items.length > 0) {
-        detalleItems =
-          "<ul style=\"margin:4px 0 0 16px;padding:0;font-size:11px;color:#555\">" +
-          mov.items.map(function (item) {
-            return "<li>" + item.nombre + " x" + item.cantidad +
-              " - $" + item.subtotal.toLocaleString("es-AR") + "</li>";
-          }).join("") +
-          "</ul>";
-      }
+        var detalleItems = "";
+        if (mov.tipo === "fiado" && mov.items && mov.items.length > 0) {
+          detalleItems =
+            '<ul style="margin:4px 0 0 16px;padding:0;font-size:11px;color:#555">' +
+            mov.items
+              .map(function (item) {
+                return (
+                  "<li>" +
+                  item.nombre +
+                  " x" +
+                  item.cantidad +
+                  " - $" +
+                  item.subtotal.toLocaleString("es-AR") +
+                  "</li>"
+                );
+              })
+              .join("") +
+            "</ul>";
+        }
 
-      return "<tr>" +
-        "<td style=\"padding:6px 8px;border-bottom:1px solid #eee;vertical-align:top\">" +
-        "<div>" + tipo + desc + "</div>" + detalleItems + "</td>" +
-        "<td style=\"padding:6px 8px;border-bottom:1px solid #eee;color:#888;font-size:12px;white-space:nowrap;vertical-align:top\">" +
-        _formatFecha(mov.fecha) + " " + mov.hora + "</td>" +
-        "<td style=\"padding:6px 8px;border-bottom:1px solid #eee;text-align:right;font-weight:700;color:" +
-        color + ";white-space:nowrap;vertical-align:top\">" +
-        signo + "$" + mov.monto.toLocaleString("es-AR") + "</td>" +
-        "</tr>";
-    }).join("");
+        return (
+          "<tr>" +
+          '<td style="padding:6px 8px;border-bottom:1px solid #eee;vertical-align:top">' +
+          "<div>" +
+          tipo +
+          desc +
+          "</div>" +
+          detalleItems +
+          "</td>" +
+          '<td style="padding:6px 8px;border-bottom:1px solid #eee;color:#888;font-size:12px;white-space:nowrap;vertical-align:top">' +
+          _formatFecha(mov.fecha) +
+          " " +
+          mov.hora +
+          "</td>" +
+          '<td style="padding:6px 8px;border-bottom:1px solid #eee;text-align:right;font-weight:700;color:' +
+          color +
+          ';white-space:nowrap;vertical-align:top">' +
+          signo +
+          "$" +
+          mov.monto.toLocaleString("es-AR") +
+          "</td>" +
+          "</tr>"
+        );
+      })
+      .join("");
 
     var ventana = window.open("", "_blank");
     ventana.document.write(
-      "<!DOCTYPE html><html><head><meta charset=\"utf-8\"><title>Ficha de " + cli.nombre + "</title>" +
-      "<style>" +
-      "body{font-family:sans-serif;padding:24px;color:#222;max-width:600px;margin:0 auto}" +
-      "h2{margin:0 0 4px}" +
-      ".notas{color:#888;font-size:13px;margin:0 0 16px}" +
-      ".saldo-box{padding:12px 16px;border-radius:8px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center}" +
-      ".saldo-deuda{background:#fff0f0;border:1px solid #f5c0c0}" +
-      ".saldo-ok{background:#f0fff0;border:1px solid #b0ddb0}" +
-      ".saldo-monto{font-size:22px;font-weight:700}" +
-      "table{border-collapse:collapse;width:100%}" +
-      "th{text-align:left;padding:8px;background:#f5f5f5;border-bottom:2px solid #ddd;font-size:13px}" +
-      "@media print{button{display:none}}" +
-      "</style></head><body>" +
-      "<button onclick=\"window.print()\" style=\"margin-bottom:20px;padding:8px 16px;cursor:pointer\">Imprimir</button>" +
-      "<h2>" + cli.nombre + "</h2>" +
-      "<p class=\"notas\">" + (cli.notas || "") + "</p>" +
-      "<div class=\"saldo-box " + (tieneDeuda ? "saldo-deuda" : "saldo-ok") + "\">" +
-      "<span style=\"font-size:14px\">" + (tieneDeuda ? "Deuda actual" : "Estado") + "</span>" +
-      "<span class=\"saldo-monto\" style=\"color:" + (tieneDeuda ? "#b00020" : "#2a7a2a") + "\">" +
-      (tieneDeuda ? "-$" + Math.abs(cli.saldo).toLocaleString("es-AR") : "Al dia") +
-      "</span></div>" +
-      "<p style=\"font-size:12px;color:#888;margin-bottom:12px\">Generado el " + fecha + "</p>" +
-      (filasHistorial
-        ? "<table><thead><tr><th>Movimiento</th><th>Fecha</th><th style=\"text-align:right\">Monto</th></tr></thead><tbody>" +
-          filasHistorial + "</tbody></table>"
-        : "<p style=\"color:#888;font-size:13px\">Sin movimientos registrados</p>") +
-      "</body></html>"
+      '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Ficha de ' +
+        cli.nombre +
+        "</title>" +
+        "<style>" +
+        "body{font-family:sans-serif;padding:24px;color:#222;max-width:600px;margin:0 auto}" +
+        "h2{margin:0 0 4px}" +
+        ".notas{color:#888;font-size:13px;margin:0 0 16px}" +
+        ".saldo-box{padding:12px 16px;border-radius:8px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center}" +
+        ".saldo-deuda{background:#fff0f0;border:1px solid #f5c0c0}" +
+        ".saldo-ok{background:#f0fff0;border:1px solid #b0ddb0}" +
+        ".saldo-monto{font-size:22px;font-weight:700}" +
+        "table{border-collapse:collapse;width:100%}" +
+        "th{text-align:left;padding:8px;background:#f5f5f5;border-bottom:2px solid #ddd;font-size:13px}" +
+        "@media print{button{display:none}}" +
+        "</style></head><body>" +
+        '<button onclick="window.print()" style="margin-bottom:20px;padding:8px 16px;cursor:pointer">Imprimir</button>' +
+        "<h2>" +
+        cli.nombre +
+        "</h2>" +
+        '<p class="notas">' +
+        (cli.notas || "") +
+        "</p>" +
+        '<div class="saldo-box ' +
+        (tieneDeuda ? "saldo-deuda" : "saldo-ok") +
+        '">' +
+        '<span style="font-size:14px">' +
+        (tieneDeuda ? "Deuda actual" : "Estado") +
+        "</span>" +
+        '<span class="saldo-monto" style="color:' +
+        (tieneDeuda ? "#b00020" : "#2a7a2a") +
+        '">' +
+        (tieneDeuda
+          ? "-$" + Math.abs(cli.saldo).toLocaleString("es-AR")
+          : "Al dia") +
+        "</span></div>" +
+        '<p style="font-size:12px;color:#888;margin-bottom:12px">Generado el ' +
+        fecha +
+        "</p>" +
+        (filasHistorial
+          ? '<table><thead><tr><th>Movimiento</th><th>Fecha</th><th style="text-align:right">Monto</th></tr></thead><tbody>' +
+            filasHistorial +
+            "</tbody></table>"
+          : '<p style="color:#888;font-size:13px">Sin movimientos registrados</p>') +
+        "</body></html>",
     );
     ventana.document.close();
   }
@@ -668,6 +722,8 @@ App.ClientesModule = (function (EventBus, Storage) {
 
   function _confirmarPago() {
     if (!_clienteActivo) return;
+    _renderFichaSaldo(_clienteActivo);
+    _renderHistorial(_clienteActivo);
     var montoInput = document.getElementById("modalPagoMonto").value;
     var monto = montoInput !== "" ? parseFloat(montoInput) : null;
     registrarPago(_clienteActivo.id, monto, _medioPagoSeleccionado);
@@ -744,40 +800,58 @@ App.ClientesModule = (function (EventBus, Storage) {
   // Imprimir saldo de clientes
   // ---------------------------------------------------------
   function _imprimirSaldos() {
-    var lista = _clientes.filter(function (c) { return c.saldo < 0; });
+    var lista = _clientes.filter(function (c) {
+      return c.saldo < 0;
+    });
     var todos = _clientes;
 
     var deudaTotal = todos.reduce(function (a, c) {
       return a + (c.saldo < 0 ? Math.abs(c.saldo) : 0);
     }, 0);
 
-    var filas = todos.map(function (c) {
-      var tieneDeuda = c.saldo < 0;
-      return '<tr>' +
-        '<td style="padding:6px 10px;border-bottom:1px solid #eee">' + c.nombre + '</td>' +
-        '<td style="padding:6px 10px;border-bottom:1px solid #eee;color:' + (tieneDeuda ? '#b00020' : '#2a7a2a') + ';font-weight:700;text-align:right">' +
-        (tieneDeuda ? '-$' + Math.abs(c.saldo).toLocaleString('es-AR') : 'Al día') +
-        '</td>' +
-        '</tr>';
-    }).join('');
+    var filas = todos
+      .map(function (c) {
+        var tieneDeuda = c.saldo < 0;
+        return (
+          "<tr>" +
+          '<td style="padding:6px 10px;border-bottom:1px solid #eee">' +
+          c.nombre +
+          "</td>" +
+          '<td style="padding:6px 10px;border-bottom:1px solid #eee;color:' +
+          (tieneDeuda ? "#b00020" : "#2a7a2a") +
+          ';font-weight:700;text-align:right">' +
+          (tieneDeuda
+            ? "-$" + Math.abs(c.saldo).toLocaleString("es-AR")
+            : "Al día") +
+          "</td>" +
+          "</tr>"
+        );
+      })
+      .join("");
 
-    var ventana = window.open('', '_blank');
-    var fecha = new Date().toLocaleDateString('es-AR');
+    var ventana = window.open("", "_blank");
+    var fecha = new Date().toLocaleDateString("es-AR");
     ventana.document.write(
       '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Saldo de clientes</title>' +
-      '<style>body{font-family:sans-serif;padding:20px;color:#222}' +
-      'h2{margin-bottom:4px}p{color:#666;margin:0 0 16px}' +
-      'table{border-collapse:collapse;width:100%}' +
-      'th{text-align:left;padding:8px 10px;background:#f0f0f0;border-bottom:2px solid #ccc}' +
-      '.total{font-weight:700;padding:10px;text-align:right;font-size:16px;border-top:2px solid #ccc}' +
-      '@media print{button{display:none}}' +
-      '</style></head><body>' +
-      '<button onclick="window.print()" style="margin-bottom:16px;padding:8px 16px;cursor:pointer">🖨️ Imprimir</button>' +
-      '<h2>Saldo de clientes</h2><p>Generado el ' + fecha + '</p>' +
-      '<table><thead><tr><th>Cliente</th><th style="text-align:right">Saldo</th></tr></thead>' +
-      '<tbody>' + filas + '</tbody></table>' +
-      '<div class="total">Deuda total: $' + deudaTotal.toLocaleString('es-AR') + '</div>' +
-      '</body></html>'
+        "<style>body{font-family:sans-serif;padding:20px;color:#222}" +
+        "h2{margin-bottom:4px}p{color:#666;margin:0 0 16px}" +
+        "table{border-collapse:collapse;width:100%}" +
+        "th{text-align:left;padding:8px 10px;background:#f0f0f0;border-bottom:2px solid #ccc}" +
+        ".total{font-weight:700;padding:10px;text-align:right;font-size:16px;border-top:2px solid #ccc}" +
+        "@media print{button{display:none}}" +
+        "</style></head><body>" +
+        '<button onclick="window.print()" style="margin-bottom:16px;padding:8px 16px;cursor:pointer">🖨️ Imprimir</button>' +
+        "<h2>Saldo de clientes</h2><p>Generado el " +
+        fecha +
+        "</p>" +
+        '<table><thead><tr><th>Cliente</th><th style="text-align:right">Saldo</th></tr></thead>' +
+        "<tbody>" +
+        filas +
+        "</tbody></table>" +
+        '<div class="total">Deuda total: $' +
+        deudaTotal.toLocaleString("es-AR") +
+        "</div>" +
+        "</body></html>",
     );
     ventana.document.close();
   }
@@ -794,11 +868,11 @@ App.ClientesModule = (function (EventBus, Storage) {
       ventas: ventas,
     };
     var json = JSON.stringify(datos, null, 2);
-    var blob = new Blob([json], { type: 'application/json' });
+    var blob = new Blob([json], { type: "application/json" });
     var url = URL.createObjectURL(blob);
-    var a = document.createElement('a');
+    var a = document.createElement("a");
     a.href = url;
-    a.download = 'tero-backup-clientes-y-estadisticas.json';
+    a.download = "tero-backup-clientes-y-estadisticas.json";
     a.click();
     URL.revokeObjectURL(url);
   }
@@ -810,26 +884,33 @@ App.ClientesModule = (function (EventBus, Storage) {
       try {
         var datos = JSON.parse(e.target.result);
         if (!datos.clientes || !Array.isArray(datos.clientes)) {
-          alert('Archivo inválido: no contiene datos de clientes');
+          alert("Archivo inválido: no contiene datos de clientes");
           return;
         }
-        if (!confirm('Esto reemplazará todos los datos de clientes' +
-            (datos.ventas ? ' y ventas' : '') +
-            '. ¿Continuar?')) return;
+        if (
+          !confirm(
+            "Esto reemplazará todos los datos de clientes" +
+              (datos.ventas ? " y ventas" : "") +
+              ". ¿Continuar?",
+          )
+        )
+          return;
 
         _clientes = datos.clientes;
         _guardar();
 
         if (datos.ventas && Array.isArray(datos.ventas) && App.VentasModule) {
-          Storage.guardar('tero_ventas', datos.ventas);
+          Storage.guardar("tero_ventas", datos.ventas);
           // Recargar ventas en el módulo
-          EventBus.emit('ventas:importadas', { ventas: datos.ventas });
+          EventBus.emit("ventas:importadas", { ventas: datos.ventas });
         }
 
         _renderTodo();
-        alert('Datos importados correctamente (' + _clientes.length + ' clientes)');
+        alert(
+          "Datos importados correctamente (" + _clientes.length + " clientes)",
+        );
       } catch (err) {
-        alert('Error al leer el archivo: ' + err.message);
+        alert("Error al leer el archivo: " + err.message);
       }
     };
     reader.readAsText(archivo);

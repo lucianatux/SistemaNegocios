@@ -72,7 +72,9 @@ App.EditorModule = (function (EventBus, Store, ProductService, PriceService) {
     var cab = document.createElement("div");
     cab.classList.add("escala-fila", "escala-cabecera");
     cab.innerHTML =
-      "<span>Cant. mín. (" + unidad + ")</span>" +
+      "<span>Cant. mín. (" +
+      unidad +
+      ")</span>" +
       "<span>Margen %</span>" +
       "<span>Precio unitario</span>" +
       "<span></span>";
@@ -87,10 +89,12 @@ App.EditorModule = (function (EventBus, Store, ProductService, PriceService) {
       inputCant.type = "number";
       inputCant.min = "1";
       inputCant.classList.add("escala-input");
-      inputCant.value = escala.cantidadMinima !== undefined ? escala.cantidadMinima : "";
+      inputCant.value =
+        escala.cantidadMinima !== undefined ? escala.cantidadMinima : "";
       inputCant.placeholder = "ej: 10";
       inputCant.addEventListener("input", function () {
         _escalas[idx].cantidadMinima = parseFloat(this.value) || 0;
+        _actualizarPrecioPublico();
       });
 
       // Input margen
@@ -110,6 +114,7 @@ App.EditorModule = (function (EventBus, Store, ProductService, PriceService) {
         var val = parseFloat(this.value);
         _escalas[idx].margen = isNaN(val) ? 0 : val;
         spanPrecio.textContent = _precioParaEscala(_escalas[idx].margen);
+        _actualizarPrecioPublico();
       });
 
       // Botón eliminar
@@ -172,7 +177,17 @@ App.EditorModule = (function (EventBus, Store, ProductService, PriceService) {
       Store.get("gananciasPorCategoria"),
     );
 
-    _precioPublico.textContent = "$ " + precio;
+    // Si hay escalas, mostrar el precio de la escala mínima
+    if (_escalas.length > 0) {
+      var escalaMin = _escalas.reduce(function (min, e) {
+        return e.cantidadMinima < min.cantidadMinima ? e : min;
+      });
+      var precioEscala = _precioParaEscala(escalaMin.margen);
+      _precioPublico.textContent =
+        precioEscala !== "-" ? precioEscala : "$ " + precio;
+    } else {
+      _precioPublico.textContent = "$ " + precio;
+    }
     _actualizarPreciosEscalas();
   }
 
@@ -212,7 +227,6 @@ App.EditorModule = (function (EventBus, Store, ProductService, PriceService) {
       document.getElementById("labelCosto").textContent = esPorPeso
         ? "Costo por gramo"
         : "Costo";
-      _actualizarPrecioPublico();
       var stockInfo = App.StockModule
         ? App.StockModule.getStock(producto.codigo)
         : null;
@@ -222,12 +236,14 @@ App.EditorModule = (function (EventBus, Store, ProductService, PriceService) {
         stockInfo && stockInfo.stockMinimo != null ? stockInfo.stockMinimo : "";
 
       // Cargar escalas — retrocompatible: si no existe el campo, array vacío
-      _escalas = (producto.escalas && Array.isArray(producto.escalas))
-        ? producto.escalas.map(function (e) {
-            return { cantidadMinima: e.cantidadMinima, margen: e.margen };
-          })
-        : [];
+      _escalas =
+        producto.escalas && Array.isArray(producto.escalas)
+          ? producto.escalas.map(function (e) {
+              return { cantidadMinima: e.cantidadMinima, margen: e.margen };
+            })
+          : [];
       _renderEscalas();
+      _actualizarPrecioPublico();
     }
 
     _overlay.classList.remove("oculto");
@@ -252,7 +268,9 @@ App.EditorModule = (function (EventBus, Store, ProductService, PriceService) {
       .filter(function (e) {
         return e.cantidadMinima > 0 && e.margen >= 0;
       })
-      .sort(function (a, b) { return a.cantidadMinima - b.cantidadMinima; });
+      .sort(function (a, b) {
+        return a.cantidadMinima - b.cantidadMinima;
+      });
 
     var datos = {
       nombre: _inputNombre.value,
@@ -343,7 +361,7 @@ App.EditorModule = (function (EventBus, Store, ProductService, PriceService) {
 
     if (tipo === "eliminar") {
       ProductService.eliminar(producto);
-      EventBus.emit("busqueda:refiltrar");
+      EventBus.emit("busqueda:limpiar");
     }
 
     if (tipo === "importar") {

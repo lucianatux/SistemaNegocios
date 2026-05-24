@@ -9075,771 +9075,197 @@
       "categoria": "Electronica"
     },
     {
-      "nombre": "1 agitador cristal x 1000",
+      "nombre": "agitador cristal x 1000",
       "codigo": "60001",
       "costo": 2800,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "2 agitador cristal x 1000",
-      "codigo": "60002",
-      "costo": 2800,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 bandeja 102 pet bandex",
+      "nombre": "bandeja 102 pet bandex",
       "codigo": "60003",
       "costo": 65,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "10 bandeja 102 pet bandex",
-      "codigo": "60004",
-      "costo": 65,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "50 bandeja 102 pet bandex",
-      "codigo": "60005",
-      "costo": 65,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 bandeja 102 pet bandex",
-      "codigo": "60006",
-      "costo": 65,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 bandeja carton redonda nº14",
+      "nombre": "bandeja carton redonda nº14",
       "codigo": "60007",
       "costo": 55,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "5 bandeja carton redonda nº14",
-      "codigo": "60008",
-      "costo": 55,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "10 bandeja carton redonda nº14",
-      "codigo": "60009",
-      "costo": 55,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 bandeja carton redonda nº15",
+      "nombre": "bandeja carton redonda nº15",
       "codigo": "60010",
       "costo": 81,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "5 bandeja carton redonda nº15",
-      "codigo": "60011",
-      "costo": 81,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "10 bandeja carton redonda nº15",
-      "codigo": "60012",
-      "costo": 81,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 bandeja carton rectangular nº5",
+      "nombre": "bandeja carton rectangular nº5",
       "codigo": "60013",
       "costo": 40,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "10 bandeja carton rectangular nº5",
-      "codigo": "60014",
-      "costo": 40,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "30 bandeja carton rectangular nº5",
-      "codigo": "60015",
-      "costo": 40,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "50 bandeja carton rectangular nº5",
-      "codigo": "60016",
-      "costo": 40,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 bandeja carton rectangular nº4",
+      "nombre": "bandeja carton rectangular nº4",
       "codigo": "60017",
       "costo": 30,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "10 bandeja carton rectangular nº4",
-      "codigo": "60018",
-      "costo": 30,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "30 bandeja carton rectangular nº4",
-      "codigo": "60019",
-      "costo": 30,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "50 bandeja carton rectangular nº4",
-      "codigo": "60020",
-      "costo": 30,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 bandeja carton rectangular nº3",
+      "nombre": "bandeja carton rectangular nº3",
       "codigo": "60021",
       "costo": 25,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "10 bandeja carton rectangular nº3",
-      "codigo": "60022",
-      "costo": 25,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "30 bandeja carton rectangular nº3",
-      "codigo": "60023",
-      "costo": 25,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "50 bandeja carton rectangular nº3",
-      "codigo": "60024",
-      "costo": 25,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 bandejadesayuno c/visor 30x30x12",
+      "nombre": "bandeja desayuno c/visor 30x30x12",
       "codigo": "60025",
       "costo": 1130,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "3 bandejadesayuno c/visor 30x30x12",
-      "codigo": "60026",
-      "costo": 1130,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "5 bandejadesayuno c/visor 30x30x12",
-      "codigo": "60027",
-      "costo": 1130,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "10 bandejadesayuno c/visor 30x30x12",
-      "codigo": "60028",
-      "costo": 1130,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 bandejadesayuno c/visor 25x25x12",
+      "nombre": "bandeja desayuno c/visor 25x25x12",
       "codigo": "60029",
       "costo": 1095,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "3 bandejadesayuno c/visor 25x25x12",
-      "codigo": "60030",
-      "costo": 1095,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "5 bandejadesayuno c/visor 25x25x12",
-      "codigo": "60031",
-      "costo": 1095,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "10 bandejadesayuno c/visor 25x25x12",
-      "codigo": "60032",
-      "costo": 1095,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 bandeja pet 101 transp.",
+      "nombre": "bandeja pet 101 transp.",
       "codigo": "60033",
       "costo": 24,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "10 bandeja pet 101 transp.",
-      "codigo": "60034",
-      "costo": 24,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "50 bandeja pet 101 transp.",
-      "codigo": "60035",
-      "costo": 24,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 bandeja pet 101 transp.",
-      "codigo": "60036",
-      "costo": 24,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 bandeja bisagra(tapa) 103",
+      "nombre": "bandeja bisagra(tapa) 103",
       "codigo": "60037",
       "costo": 265,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "10 bandeja bisagra(tapa) 103",
-      "codigo": "60038",
-      "costo": 265,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "50 bandeja bisagra(tapa) 103",
-      "codigo": "60039",
-      "costo": 265,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 bandeja bisagra(tapa) 103",
-      "codigo": "60040",
-      "costo": 265,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 bandeja bisagra(tapa) 105",
+      "nombre": "bandeja bisagra(tapa) 105",
       "codigo": "60041",
       "costo": 440,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "10 bandeja bisagra(tapa) 105",
-      "codigo": "60042",
-      "costo": 440,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "50 bandeja bisagra(tapa) 105",
-      "codigo": "60043",
-      "costo": 440,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 bandeja bisagra(tapa) 105",
-      "codigo": "60044",
-      "costo": 440,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 bandeja SD micro 105 (CRISTAL)",
+      "nombre": "bandeja SD micro 105 (CRISTAL)",
       "codigo": "60045",
       "costo": 56,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "10 bandeja SD micro 105 (CRISTAL)",
-      "codigo": "60046",
-      "costo": 56,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "50 bandeja SD micro 105 (CRISTAL)",
-      "codigo": "60047",
-      "costo": 56,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 bandeja SD micro 105 (CRISTAL)",
-      "codigo": "60048",
-      "costo": 56,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 bandeja micro 103 (CRISTAL)",
+      "nombre": "bandeja micro 103 (CRISTAL)",
       "codigo": "60049",
       "costo": 42,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "10 bandeja micro 103 (CRISTAL)",
-      "codigo": "60050",
-      "costo": 42,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "50 bandeja micro 103 (CRISTAL)",
-      "codigo": "60051",
-      "costo": 42,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 bandeja micro 103 (CRISTAL)",
-      "codigo": "60052",
-      "costo": 42,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 bandeja plastica redonda nº27",
+      "nombre": "bandeja plastica redonda nº27",
       "codigo": "60053",
       "costo": 540,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "2 bandeja plastica redonda nº27",
-      "codigo": "60054",
-      "costo": 540,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "3 bandeja plastica redonda nº27",
-      "codigo": "60055",
-      "costo": 540,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 bandeja plastica redonda nº33",
+      "nombre": "bandeja plastica redonda nº33",
       "codigo": "60056",
       "costo": 940,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "2 bandeja plastica redonda nº33",
-      "codigo": "60057",
-      "costo": 940,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "3 bandeja plastica redonda nº33",
-      "codigo": "60058",
-      "costo": 940,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 blonda papel bca redonda 35 cm",
+      "nombre": "blonda papel bca redonda 35 cm",
       "codigo": "60059",
       "costo": 65,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "5 blonda papel bca redonda 35 cm",
-      "codigo": "60060",
-      "costo": 65,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "10 blonda papel bca redonda 35 cm",
-      "codigo": "60061",
-      "costo": 65,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 bolsa de papel kraft nº4",
+      "nombre": "bolsa de papel kraft nº4",
       "codigo": "60062",
       "costo": 16,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "10 bolsa de papel kraft nº4",
-      "codigo": "60063",
-      "costo": 16,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "20 bolsa de papel kraft nº4",
-      "codigo": "60064",
-      "costo": 16,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "50 bolsa de papel kraft nº4",
-      "codigo": "60065",
-      "costo": 16,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 bolsa de papel kraft nº4",
-      "codigo": "60066",
-      "costo": 16,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 bolsa de papel kraft nº6",
+      "nombre": "bolsa de papel kraft nº6",
       "codigo": "60067",
       "costo": 23,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "10 bolsa de papel kraft nº6",
-      "codigo": "60068",
-      "costo": 23,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "20 bolsa de papel kraft nº6",
-      "codigo": "60069",
-      "costo": 23,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "50 bolsa de papel kraft nº6",
-      "codigo": "60070",
-      "costo": 23,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 bolsa de papel kraft nº6",
-      "codigo": "60071",
-      "costo": 23,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 bolsa papel con manija 22x30",
+      "nombre": "bolsa papel con manija 22x30",
       "codigo": "60072",
       "costo": 265,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "3 bolsa papel con manija 22x30",
-      "codigo": "60073",
-      "costo": 265,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "5 bolsa papel con manija 22x30",
-      "codigo": "60074",
-      "costo": 265,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 bolsa G2 KRAFT con manija 16x25x18",
+      "nombre": "bolsa G2 KRAFT con manija 16x25x18",
       "codigo": "60075",
       "costo": 250,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "3 bolsa G2 KRAFT con manija 16x25x18",
-      "codigo": "60076",
-      "costo": 250,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "5 bolsa G2 KRAFT con manija 16x25x18",
-      "codigo": "60077",
-      "costo": 250,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 caja hamburguesa 13x14x8",
+      "nombre": "caja hamburguesa 13x14x8",
       "codigo": "60078",
       "costo": 105,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "10 caja hamburguesa 13x14x8",
-      "codigo": "60079",
-      "costo": 105,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "30 caja hamburguesa 13x14x8",
-      "codigo": "60080",
-      "costo": 105,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "50 caja hamburguesa 13x14x8",
-      "codigo": "60081",
-      "costo": 105,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 caja hamburguesa 13x14x8",
-      "codigo": "60082",
-      "costo": 105,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 caja 1/2 pizza gris",
+      "nombre": "caja 1/2 pizza gris",
       "codigo": "60083",
       "costo": 80,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "10 caja 1/2 pizza gris",
-      "codigo": "60084",
-      "costo": 80,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "30 caja 1/2 pizza gris",
-      "codigo": "60085",
-      "costo": 80,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "50 caja 1/2 pizza gris",
-      "codigo": "60086",
-      "costo": 80,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 caja 1/2 pizza gris",
-      "codigo": "60087",
-      "costo": 80,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 caja pizza REFORZADA",
+      "nombre": "caja pizza REFORZADA",
       "codigo": "60088",
       "costo": 132,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "10 caja pizza REFORZADA",
-      "codigo": "60089",
-      "costo": 132,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "30 caja pizza REFORZADA",
-      "codigo": "60090",
-      "costo": 132,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "50 caja pizza REFORZADA",
-      "codigo": "60091",
-      "costo": 132,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 caja pizza REFORZADA",
-      "codigo": "60092",
-      "costo": 132,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 caja Empanadas REFORZADA",
+      "nombre": "caja Empanadas REFORZADA",
       "codigo": "60093",
       "costo": 95,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "10 caja Empanadas REFORZADA",
-      "codigo": "60094",
-      "costo": 95,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "30 caja Empanadas REFORZADA",
-      "codigo": "60095",
-      "costo": 95,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "50 caja Empanadas REFORZADA",
-      "codigo": "60096",
-      "costo": 95,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 caja Empanadas REFORZADA",
-      "codigo": "60097",
-      "costo": 95,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 caja LOMO REFORZADA",
+      "nombre": "caja LOMO REFORZADA",
       "codigo": "60098",
       "costo": 70,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "10 caja LOMO REFORZADA",
-      "codigo": "60099",
-      "costo": 70,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "30 caja LOMO REFORZADA",
-      "codigo": "60100",
-      "costo": 70,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "50 caja LOMO REFORZADA",
-      "codigo": "60101",
-      "costo": 70,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 caja LOMO REFORZADA",
-      "codigo": "60102",
-      "costo": 70,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 caja para lomo CHICA REFORZADA",
+      "nombre": "caja para lomo CHICA REFORZADA",
       "codigo": "60103",
       "costo": 70,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "10 caja para lomo CHICA REFORZADA",
-      "codigo": "60104",
-      "costo": 70,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "30 caja para lomo CHICA REFORZADA",
-      "codigo": "60105",
-      "costo": 70,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "50 caja para lomo CHICA REFORZADA",
-      "codigo": "60106",
-      "costo": 70,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 caja para lomo CHICA REFORZADA",
-      "codigo": "60107",
-      "costo": 70,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 camiseta 45x60 blanca",
+      "nombre": "camiseta 45x60 blanca",
       "codigo": "60108",
-      "costo": 2150,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "2 camiseta 45x60 blanca",
-      "codigo": "60109",
-      "costo": 2150,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "5 camiseta 45x60 blanca",
-      "codigo": "60110",
       "costo": 2150,
       "ganancia": null,
       "categoria": "Descartables"
@@ -9852,1815 +9278,450 @@
       "categoria": "Sin categoria"
     },
     {
-      "nombre": "2 camiseta blanca 30x40 \"MP\"",
-      "codigo": "60112",
-      "costo": 865,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "5 camiseta blanca 30x40 \"MP\"",
-      "codigo": "60113",
-      "costo": 865,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 camiseta 30x40 ECO x 60 unid.",
+      "nombre": "camiseta 30x40 ECO x 60 unid.",
       "codigo": "60114",
       "costo": 820,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "2 camiseta 30x40 ECO x 60 unid.",
-      "codigo": "60115",
-      "costo": 820,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "5 camiseta 30x40 ECO x 60 unid.",
-      "codigo": "60116",
-      "costo": 820,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 camiseta color 40x50 \"AZUL \"",
+      "nombre": "camiseta color 40x50 \"AZUL \"",
       "codigo": "60117",
       "costo": 1050,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "2 camiseta color 40x50 \"AZUL \"",
-      "codigo": "60118",
-      "costo": 1050,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "5 camiseta color 40x50 \"AZUL \"",
-      "codigo": "60119",
-      "costo": 1050,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 camiseta 40x50 ECO x 60 unid.",
+      "nombre": "camiseta 40x50 ECO x 60 unid.",
       "codigo": "60120",
       "costo": 995,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "2 camiseta 40x50 ECO x 60 unid.",
-      "codigo": "60121",
-      "costo": 995,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "5 camiseta 40x50 ECO x 60 unid.",
-      "codigo": "60122",
-      "costo": 995,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 camiseta 20x30 blanca POLIMUNDI",
+      "nombre": "camiseta 20x30 blanca POLIMUNDI",
       "codigo": "60123",
       "costo": 560,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "2 camiseta 20x30 blanca POLIMUNDI",
-      "codigo": "60124",
-      "costo": 560,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "5 camiseta 20x30 blanca POLIMUNDI",
-      "codigo": "60125",
-      "costo": 560,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 cono papas fritas grande",
+      "nombre": "cono papas fritas grande",
       "codigo": "60126",
       "costo": 15,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "10 cono papas fritas grande",
-      "codigo": "60127",
-      "costo": 15,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "30 cono papas fritas grande",
-      "codigo": "60128",
-      "costo": 15,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "50 cono papas fritas grande",
-      "codigo": "60129",
-      "costo": 15,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 cono papas fritas grande",
-      "codigo": "60130",
-      "costo": 15,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 cuchara sopera/postre colono bca",
+      "nombre": "cuchara sopera/postre colono bca",
       "codigo": "60131",
       "costo": 31,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "10 cuchara sopera/postre colono bca",
-      "codigo": "60132",
-      "costo": 31,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "50 cuchara sopera/postre colono bca",
-      "codigo": "60133",
-      "costo": 31,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 cuchara sopera/postre colono bca",
-      "codigo": "60134",
-      "costo": 31,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 cuchara sundae koval eco bca",
+      "nombre": "cuchara sundae koval eco bca",
       "codigo": "60135",
       "costo": 13,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "10 cuchara sundae koval eco bca",
-      "codigo": "60136",
-      "costo": 13,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "50 cuchara sundae koval eco bca",
-      "codigo": "60137",
-      "costo": 13,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 cuchara sundae koval eco bca",
-      "codigo": "60138",
-      "costo": 13,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "500 espadita sable x 500 unid aprox.",
-      "codigo": "60139",
-      "costo": 2216,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1000 espadita sable x 500 unid aprox.",
-      "codigo": "60140",
-      "costo": 2216,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 cuchillo colono plastic BADEN",
+      "nombre": "cuchillo colono plastic BADEN",
       "codigo": "60141",
       "costo": 13,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "10 cuchillo colono plastic BADEN",
-      "codigo": "60142",
-      "costo": 13,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "50 cuchillo colono plastic BADEN",
-      "codigo": "60143",
-      "costo": 13,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 cuchillo colono plastic BADEN",
-      "codigo": "60144",
-      "costo": 13,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 film INCA 38 CM",
+      "nombre": "film INCA 38 CM",
       "codigo": "60145",
       "costo": 3400,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "2 film INCA 38 CM",
-      "codigo": "60146",
-      "costo": 3400,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 film super eco NEW PACK 38cm x 200 mts",
+      "nombre": "film super eco NEW PACK 38cm x 200 mts",
       "codigo": "60147",
       "costo": 3400,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "2 film super eco NEW PACK 38cm x 200 mts",
-      "codigo": "60148",
-      "costo": 3400,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 guante polietileno x 100 u",
+      "nombre": "guante polietileno x 100 u",
       "codigo": "60149",
       "costo": 560,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "2 guante polietileno x 100 u",
-      "codigo": "60150",
-      "costo": 560,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 hilo algodon x 50 gr",
+      "nombre": "hilo algodon x 50 gr",
       "codigo": "60151",
       "costo": 510,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "3 hilo algodon x 50 gr",
-      "codigo": "60152",
-      "costo": 510,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 hilo algodon GRANDE x 300 gr",
+      "nombre": "hilo algodon GRANDE x 300 gr",
       "codigo": "60153",
       "costo": 2300,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "2 hilo algodon GRANDE x 300 gr",
-      "codigo": "60154",
-      "costo": 2300,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 Hilo Chorizero ovillo x 50 gr",
+      "nombre": "Hilo Chorizero ovillo x 50 gr",
       "codigo": "60155",
       "costo": 650,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "3 Hilo Chorizero ovillo x 50 gr",
-      "codigo": "60156",
-      "costo": 650,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 laminas 20x25 polimundi(folex)",
+      "nombre": "laminas 20x25 polimundi(folex)",
       "codigo": "60157",
       "costo": 4080,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "2 laminas 20x25 polimundi(folex)",
-      "codigo": "60158",
-      "costo": 4080,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 laminas 25x37 polimundi(folex)",
+      "nombre": "laminas 25x37 polimundi(folex)",
       "codigo": "60159",
       "costo": 4080,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "2 laminas 25x37 polimundi(folex)",
-      "codigo": "60160",
-      "costo": 4080,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 laminas para hamburguesas 14x14 (folex)",
+      "nombre": "laminas para hamburguesas 14x14 (folex)",
       "codigo": "60161",
       "costo": 4950,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "2 laminas para hamburguesas 14x14 (folex)",
-      "codigo": "60162",
-      "costo": 4950,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 mangas desc nº1",
+      "nombre": "mangas desc nº1",
       "codigo": "60163",
       "costo": 100,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "3 mangas desc nº1",
-      "codigo": "60164",
-      "costo": 100,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "5 mangas desc nº1",
-      "codigo": "60165",
-      "costo": 100,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 mangas desc nº2",
+      "nombre": "mangas desc nº2",
       "codigo": "60166",
       "costo": 140,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "3 mangas desc nº2",
-      "codigo": "60167",
-      "costo": 140,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "5 mangas desc nº2",
-      "codigo": "60168",
-      "costo": 140,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 mangas desc nº3",
+      "nombre": "mangas desc nº3",
       "codigo": "60169",
       "costo": 210,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "3 mangas desc nº3",
-      "codigo": "60170",
-      "costo": 210,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "5 mangas desc nº3",
-      "codigo": "60171",
-      "costo": 210,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 mangas desc nº4",
+      "nombre": "mangas desc nº4",
       "codigo": "60172",
       "costo": 240,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "3 mangas desc nº4",
-      "codigo": "60173",
-      "costo": 240,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "5 mangas desc nº4",
-      "codigo": "60174",
-      "costo": 240,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 molde p/budin 180 gr",
+      "nombre": "molde p/budin 180 gr",
       "codigo": "60175",
       "costo": 120,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "3 molde p/budin 180 gr",
-      "codigo": "60176",
-      "costo": 120,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "5 molde p/budin 180 gr",
-      "codigo": "60177",
-      "costo": 120,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 molde p/budin 250 gr",
+      "nombre": "molde p/budin 250 gr",
       "codigo": "60178",
       "costo": 131,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "3 molde p/budin 250 gr",
-      "codigo": "60179",
-      "costo": 131,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "5 molde p/budin 250 gr",
-      "codigo": "60180",
-      "costo": 131,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 molde p/budin 500 gr",
+      "nombre": "molde p/budin 500 gr",
       "codigo": "60181",
       "costo": 167,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "3 molde p/budin 500 gr",
-      "codigo": "60182",
-      "costo": 167,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "5 molde p/budin 500 gr",
-      "codigo": "60183",
-      "costo": 167,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 molde p/pan dulce 1 kg",
+      "nombre": "molde p/pan dulce 1 kg",
       "codigo": "60184",
       "costo": 120,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "3 molde p/pan dulce 1 kg",
-      "codigo": "60185",
-      "costo": 120,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "5 molde p/pan dulce 1 kg",
-      "codigo": "60186",
-      "costo": 120,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 molde p/pan dulce 500 gr",
+      "nombre": "molde p/pan dulce 500 gr",
       "codigo": "60187",
       "costo": 102,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "3 molde p/pan dulce 500 gr",
-      "codigo": "60188",
-      "costo": 102,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "5 molde p/pan dulce 500 gr",
-      "codigo": "60189",
-      "costo": 102,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 ñoquera o papas fritas Nº1",
+      "nombre": "ñoquera o papas fritas Nº1",
       "codigo": "60190",
       "costo": 25,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "10 ñoquera o papas fritas Nº1",
-      "codigo": "60191",
-      "costo": 25,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "30 ñoquera o papas fritas Nº1",
-      "codigo": "60192",
-      "costo": 25,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "50 ñoquera o papas fritas Nº1",
-      "codigo": "60193",
-      "costo": 25,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 ñoquera o papas fritas Nº1",
-      "codigo": "60194",
-      "costo": 25,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 ñoquera o papas fritas Nº2",
+      "nombre": "ñoquera o papas fritas Nº2",
       "codigo": "60195",
       "costo": 34,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "10 ñoquera o papas fritas Nº2",
-      "codigo": "60196",
-      "costo": 34,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "30 ñoquera o papas fritas Nº2",
-      "codigo": "60197",
-      "costo": 34,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "50 ñoquera o papas fritas Nº2",
-      "codigo": "60198",
-      "costo": 34,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 ñoquera o papas fritas Nº2",
-      "codigo": "60199",
-      "costo": 34,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 papel aluminio x 5 mts",
+      "nombre": "papel aluminio x 5 mts",
       "codigo": "60200",
       "costo": 940,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "2 papel aluminio x 5 mts",
-      "codigo": "60201",
-      "costo": 940,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "3 papel aluminio x 5 mts",
-      "codigo": "60202",
-      "costo": 940,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 gr papel parafinado x 100 gr",
-      "codigo": "60203",
-      "costo": 1350,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1000 gr papel parafinado x kg",
-      "codigo": "60204",
-      "costo": 1350,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 papel manteca x 5 mts",
+      "nombre": "papel manteca x 5 mts",
       "codigo": "60205",
       "costo": 1050,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "2 papel manteca x 5 mts",
-      "codigo": "60206",
-      "costo": 1050,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "3 papel manteca x 5 mts",
-      "codigo": "60207",
-      "costo": 1050,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 p.p.p JUGUITOS x 100",
-      "codigo": "60208",
-      "costo": 1450,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "200 p.p.p 4x30",
-      "codigo": "60209",
-      "costo": 1500,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 p.p.p 5x30",
-      "codigo": "60210",
-      "costo": 800,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 p.p.p 6x20",
-      "codigo": "60211",
-      "costo": 700,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 p.p.p 8x20",
-      "codigo": "60212",
-      "costo": 700,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 p.p.p 8x30",
-      "codigo": "60213",
-      "costo": 1200,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "200 p.p.p 10x15",
-      "codigo": "60214",
-      "costo": 1400,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 p.p.p 12x15",
-      "codigo": "60215",
-      "costo": 800,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 p.p.p 10x20",
-      "codigo": "60216",
-      "costo": 900,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 p.p.p 13x20",
-      "codigo": "60217",
-      "costo": 1200,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 p.p.p 12x25",
-      "codigo": "60218",
-      "costo": 1100,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 p.p.p 12x30",
-      "codigo": "60219",
-      "costo": 1500,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 p.p.p 12x35",
-      "codigo": "60220",
-      "costo": 1600,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 p.p.p 15x30",
-      "codigo": "60221",
-      "costo": 1700,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 p.p.p 15x35",
-      "codigo": "60222",
-      "costo": 1900,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 p.p.p 15x40",
-      "codigo": "60223",
-      "costo": 2000,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 .p.p 17x35",
-      "codigo": "60224",
-      "costo": 2150,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "50 p.p.p 20x30",
-      "codigo": "60225",
-      "costo": 2100,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 p.p.p 20x30",
-      "codigo": "60226",
-      "costo": 2100,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 p.p.p 25x40",
-      "codigo": "60227",
-      "costo": 3300,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 p.p.p 35x45",
-      "codigo": "60228",
-      "costo": 4700,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 p.p.p 40x60",
-      "codigo": "60229",
-      "costo": 9200,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 palillero ibera safari",
+      "nombre": "palillero ibera safari",
       "codigo": "60230",
       "costo": 470,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "3 palillero ibera safari",
-      "codigo": "60231",
-      "costo": 470,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "5 palillero ibera safari",
-      "codigo": "60232",
-      "costo": 470,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 palillero encendedor",
+      "nombre": "palillero encendedor",
       "codigo": "60233",
       "costo": 470,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "3 palillero encendedor",
-      "codigo": "60234",
-      "costo": 470,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "5 palillero encendedor",
-      "codigo": "60235",
-      "costo": 470,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1000 gr papel sulfito 40x50 (corto)",
-      "codigo": "60236",
-      "costo": 1400,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "2000 gr papel sulfito 40x50 (corto)",
-      "codigo": "60237",
-      "costo": 1400,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1000 gr papel sulfito 52x70 (largo)",
-      "codigo": "60238",
-      "costo": 1400,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "2000 gr papel sulfito 52x70 (largo)",
-      "codigo": "60239",
-      "costo": 1400,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 pirotines nº 10 comun x 18 u",
+      "nombre": "pirotines nº 10 comun x 18 u",
       "codigo": "60240",
       "costo": 310,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "2 pirotines nº 10 comun x 18 u",
-      "codigo": "60241",
-      "costo": 310,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "5 pirotines nº 10 comun x 18 u",
-      "codigo": "60242",
-      "costo": 310,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "10 pirotines nº 10 comun x 18 u",
-      "codigo": "60243",
-      "costo": 310,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 pirotines nº 9 comun x 18 u",
+      "nombre": "pirotines nº 9 comun x 18 u",
       "codigo": "60244",
       "costo": 250,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "2 pirotines nº 9 comun x 18 u",
-      "codigo": "60245",
-      "costo": 250,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "5 pirotines nº 9 comun x 18 u",
-      "codigo": "60246",
-      "costo": 250,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "10 pirotines nº 9 comun x 18 u",
-      "codigo": "60247",
-      "costo": 250,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 plato de aluminio flexal p 26",
+      "nombre": "plato de aluminio flexal p 26",
       "codigo": "60248",
       "costo": 250,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "2 plato de aluminio flexal p 26",
-      "codigo": "60249",
-      "costo": 250,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "5 plato de aluminio flexal p 26",
-      "codigo": "60250",
-      "costo": 250,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 plato de aluminio flexal p 29",
+      "nombre": "plato de aluminio flexal p 29",
       "codigo": "60251",
       "costo": 360,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "2 plato de aluminio flexal p 29",
-      "codigo": "60252",
-      "costo": 360,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "5 plato de aluminio flexal p 29",
-      "codigo": "60253",
-      "costo": 360,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 plato dorado alberdi 26 cm",
+      "nombre": "plato dorado alberdi 26 cm",
       "codigo": "60254",
       "costo": 280,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "3 plato dorado alberdi 26 cm",
-      "codigo": "60255",
-      "costo": 280,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "5 plato dorado alberdi 26 cm",
-      "codigo": "60256",
-      "costo": 280,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 plato dorado alberdi 28 cm",
+      "nombre": "plato dorado alberdi 28 cm",
       "codigo": "60257",
       "costo": 350,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "3 plato dorado alberdi 28 cm",
-      "codigo": "60258",
-      "costo": 350,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "5 plato dorado alberdi 28 cm",
-      "codigo": "60259",
-      "costo": 350,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 plato dorado alberdi 33 cm",
+      "nombre": "plato dorado alberdi 33 cm",
       "codigo": "60260",
       "costo": 440,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "3 plato dorado alberdi 33 cm",
-      "codigo": "60261",
-      "costo": 440,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "5 plato dorado alberdi 33 cm",
-      "codigo": "60262",
-      "costo": 440,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 plato dorado rect 1,5kg alberdi",
+      "nombre": "plato dorado rect 1,5kg alberdi",
       "codigo": "60263",
       "costo": 450,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "3 plato dorado rect 1,5kg alberdi",
-      "codigo": "60264",
-      "costo": 450,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "5 plato dorado rect 1,5kg alberdi",
-      "codigo": "60265",
-      "costo": 450,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 plato dorado rect 2kg alberdi",
+      "nombre": "plato dorado rect 2kg alberdi",
       "codigo": "60266",
       "costo": 690,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "2 plato dorado rect 2kg alberdi",
-      "codigo": "60267",
-      "costo": 690,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "5 plato dorado rect 2kg alberdi",
-      "codigo": "60268",
-      "costo": 690,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 plato dorado rect 3kg alberdi",
+      "nombre": "plato dorado rect 3kg alberdi",
       "codigo": "60269",
       "costo": 1100,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "2 plato dorado rect 3kg alberdi",
-      "codigo": "60270",
-      "costo": 1100,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "5 plato dorado rect 3kg alberdi",
-      "codigo": "60271",
-      "costo": 1100,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 plato plastico bco 17 cm",
+      "nombre": "plato plastico bco 17 cm",
       "codigo": "60272",
       "costo": 40,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "10 plato plastico bco 17 cm",
-      "codigo": "60273",
-      "costo": 40,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "50 plato plastico bco 17 cm",
-      "codigo": "60274",
-      "costo": 40,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 plato plastico bco 17 cm",
-      "codigo": "60275",
-      "costo": 40,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 plato plastico bco 22 cm",
+      "nombre": "plato plastico bco 22 cm",
       "codigo": "60276",
       "costo": 63,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "10 plato plastico bco 22 cm",
-      "codigo": "60277",
-      "costo": 63,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "50 plato plastico bco 22 cm",
-      "codigo": "60278",
-      "costo": 63,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 plato plastico bco 22 cm",
-      "codigo": "60279",
-      "costo": 63,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 pote con bisagra 350 cc",
+      "nombre": "pote con bisagra 350 cc",
       "codigo": "60280",
       "costo": 163,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "10 pote con bisagra 350 cc",
-      "codigo": "60281",
-      "costo": 163,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "50 pote con bisagra 350 cc",
-      "codigo": "60282",
-      "costo": 163,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 pote con bisagra 350 cc",
-      "codigo": "60283",
-      "costo": 163,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "500 precintos plasticos 6 cm",
-      "codigo": "60284",
-      "costo": 1.8,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1000 precintos plasticos 6 cm",
-      "codigo": "60285",
-      "costo": 1.8,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "500 precintos plasticos 9 cm",
-      "codigo": "60286",
-      "costo": 2.3,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1000 precintos plasticos 9 cm",
-      "codigo": "60287",
-      "costo": 2.3,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 pvc FILM 30 mts",
+      "nombre": "pvc FILM 30 mts",
       "codigo": "60288",
       "costo": 425,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "2 pvc FILM 30 mts",
-      "codigo": "60289",
-      "costo": 425,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "3 pvc FILM 30 mts",
-      "codigo": "60290",
-      "costo": 425,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 rollo cono plastico15x20 (290gr)",
+      "nombre": "rollo cono plastico15x20 (290gr)",
       "codigo": "60291",
       "costo": 2000,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "2 rollo cono plastico15x20 (290gr)",
-      "codigo": "60292",
-      "costo": 2000,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 rollo mini polyfilm 15x25 (250gr)",
+      "nombre": "rollo mini polyfilm 15x25 (250gr)",
       "codigo": "60293",
       "costo": 2000,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "2 rollo mini polyfilm 15x25 (250gr)",
-      "codigo": "60294",
-      "costo": 2000,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 rollo mundi 25x35, 20x30, 35x45 -700 gr-",
+      "nombre": "rollo mundi 25x35, 20x30, 35x45 -700 gr-",
       "codigo": "60295",
       "costo": 2900,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "2 rollo mundi 25x35, 20x30, 35x45 -700 gr-",
-      "codigo": "60296",
-      "costo": 2900,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 rollo mundi 30x40, 45x50, 50x60 -700 gr-",
+      "nombre": "rollo mundi 30x40, 45x50, 50x60 -700 gr-",
       "codigo": "60297",
       "costo": 2900,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "2 rollo mundi 30x40, 45x50, 50x60 -700 gr-",
-      "codigo": "60298",
-      "costo": 2900,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "50 servilletas OLIMPO 30x30 x 50unid",
-      "codigo": "60299",
-      "costo": 7,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "150 servilletas OLIMPO 30x30 x 50unid",
-      "codigo": "60300",
-      "costo": 7,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "250 servilletas OLIMPO 30x30 x 50unid",
-      "codigo": "60301",
-      "costo": 7,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "10 sorbetes comun con funda",
-      "codigo": "60302",
-      "costo": 8,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "50 sorbetes comun con funda",
-      "codigo": "60303",
-      "costo": 8,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 sorbetes comun con funda",
-      "codigo": "60304",
-      "costo": 8,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 sorbete polipapel x 1",
+      "nombre": "sorbete polipapel x 1",
       "codigo": "60305",
       "costo": 33,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "10 sorbete polipapel x 1",
-      "codigo": "60306",
-      "costo": 33,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "30 sorbete polipapel x 1",
-      "codigo": "60307",
-      "costo": 33,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "50 sorbete polipapel x 1",
-      "codigo": "60308",
-      "costo": 33,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 tenedor blanco koval",
+      "nombre": "tenedor blanco koval",
       "codigo": "60309",
       "costo": 24,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "10 tenedor blanco koval",
-      "codigo": "60310",
-      "costo": 24,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "50 tenedor blanco koval",
-      "codigo": "60311",
-      "costo": 24,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 tenedor blanco koval",
-      "codigo": "60312",
-      "costo": 24,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1000 gr tripode",
-      "codigo": "60313",
-      "costo": 23,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "2000 gr tripode",
-      "codigo": "60314",
-      "costo": 23,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "3000 gr tripode",
-      "codigo": "60315",
-      "costo": 23,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 vaso bco reforzado 330 cc",
+      "nombre": "vaso bco reforzado 330 cc",
       "codigo": "60316",
       "costo": 45,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "10 vaso bco reforzado 330 cc",
-      "codigo": "60317",
-      "costo": 45,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "50 vaso bco reforzado 330 cc",
-      "codigo": "60318",
-      "costo": 45,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 vaso bco reforzado 330 cc",
-      "codigo": "60319",
-      "costo": 45,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 vaso trago largo 280 cc",
+      "nombre": "vaso trago largo 280 cc",
       "codigo": "60320",
       "costo": 107,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "10 vaso trago largo 280 cc",
-      "codigo": "60321",
-      "costo": 107,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "50 vaso trago largo 280 cc",
-      "codigo": "60322",
-      "costo": 107,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 vaso trago largo 280 cc",
-      "codigo": "60323",
-      "costo": 107,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 vasos americanos azul 400 cc",
+      "nombre": "vasos americanos azul 400 cc",
       "codigo": "60324",
       "costo": 158,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "10 vasos americanos azul 400 cc",
-      "codigo": "60325",
-      "costo": 158,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "25 vasos americanos azul 400 cc",
-      "codigo": "60326",
-      "costo": 158,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "50 vasos americanos azul 400 cc",
-      "codigo": "60327",
-      "costo": 158,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 vaso fiestita lila/rosa/azul 200 cc",
+      "nombre": "vaso fiestita lila/rosa/azul 200 cc",
       "codigo": "60328",
       "costo": 29,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "10 vasos fiestita lila/rosa/azul 200 cc",
-      "codigo": "60329",
-      "costo": 29,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "50 vasos fiestita lila/rosa/azul 200 cc",
-      "codigo": "60330",
-      "costo": 29,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 vasos fiestita lila/rosa/azul 200 cc",
-      "codigo": "60331",
-      "costo": 29,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 vaso c/tapa ens. fruta 500 cc",
+      "nombre": "vaso c/tapa ens. fruta 500 cc",
       "codigo": "60332",
       "costo": 160,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "10 vaso c/tapa ens. fruta 500 cc",
-      "codigo": "60333",
-      "costo": 160,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "50 vaso c/tapa ens. fruta 500 cc",
-      "codigo": "60334",
-      "costo": 160,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 vaso c/tapa ens. fruta 500 cc",
-      "codigo": "60335",
-      "costo": 160,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 vaso c/tapa gelatina 250 cc",
+      "nombre": "vaso c/tapa gelatina 250 cc",
       "codigo": "60336",
       "costo": 100,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "10 vaso c/tapa gelatina 250 cc",
-      "codigo": "60337",
-      "costo": 100,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "50 vaso c/tapa gelatina 250 cc",
-      "codigo": "60338",
-      "costo": 100,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 vaso c/tapa gelatina 250 cc",
-      "codigo": "60339",
-      "costo": 100,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 vaso c/tapa 180 cc",
+      "nombre": "vaso c/tapa 180 cc",
       "codigo": "60340",
       "costo": 91,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "10 vaso c/tapa 180 cc",
-      "codigo": "60341",
-      "costo": 91,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "50 vaso c/tapa 180 cc",
-      "codigo": "60342",
-      "costo": 91,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 vaso c/tapa 180 cc",
-      "codigo": "60343",
-      "costo": 91,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 vaso c/tapa 80 cc",
+      "nombre": "vaso c/tapa 80 cc",
       "codigo": "60344",
       "costo": 75,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "10 vaso c/tapa 80 cc",
-      "codigo": "60345",
-      "costo": 75,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "50 vaso c/tapa 80 cc",
-      "codigo": "60346",
-      "costo": 75,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 vaso c/tapa 80 cc",
-      "codigo": "60347",
-      "costo": 75,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 vasos 1000 cc natural",
+      "nombre": "vasos 1000 cc natural",
       "codigo": "60348",
       "costo": 145,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "10 vasos 1000 cc natural",
-      "codigo": "60349",
-      "costo": 145,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "50 vasos 1000 cc natural",
-      "codigo": "60350",
-      "costo": 145,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 vasos 1000 cc natural",
-      "codigo": "60351",
-      "costo": 145,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 vaso termico empolex 300cc",
+      "nombre": "vaso termico empolex 300cc",
       "codigo": "60352",
       "costo": 65,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "10 vaso termico empolex 300cc",
-      "codigo": "60353",
-      "costo": 65,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "50 vaso termico empolex 300cc",
-      "codigo": "60354",
-      "costo": 65,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 vaso termico empolex 300cc",
-      "codigo": "60355",
-      "costo": 65,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1000 BOLSAS EMBLOCADAS 15 X 20 X 1000 UNID",
-      "codigo": "60356",
-      "costo": 5300,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1000 BOLSAS EMBLOCADAS 25 X 35 X 1000 UNID",
-      "codigo": "60357",
-      "costo": 7560,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1000 BOLSAS EMBLOCADAS 35 X 45 X 1000 UNID",
-      "codigo": "60358",
-      "costo": 14460,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 GUANTE NITRILO",
+      "nombre": "GUANTE NITRILO",
       "codigo": "60359",
       "costo": 73,
       "ganancia": null,
       "categoria": "Descartables"
     },
     {
-      "nombre": "10 GUANTE NITRILO",
-      "codigo": "60360",
-      "costo": 73,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "50 GUANTE NITRILO",
-      "codigo": "60361",
-      "costo": 73,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 GUANTE NITRILO",
-      "codigo": "60362",
-      "costo": 73,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 vaso CRISTAL 110 cc para postre SHOT",
+      "nombre": "vaso CRISTAL 110 cc para postre SHOT",
       "codigo": "60363",
       "costo": 43,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "10 vaso CRISTAL 110 cc para postre SHOT",
-      "codigo": "60364",
-      "costo": 43,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "30 vaso CRISTAL 110 cc para postre SHOT",
-      "codigo": "60365",
-      "costo": 43,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "50 vaso CRISTAL 110 cc para postre SHOT",
-      "codigo": "60366",
-      "costo": 43,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 vaso CRISTAL 110 cc para postre SHOT",
-      "codigo": "60367",
-      "costo": 43,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "1 sorbete XXL negro",
-      "codigo": "60368",
-      "costo": 10,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "10 sorbete XXL negro",
-      "codigo": "60369",
-      "costo": 10,
-      "ganancia": null,
-      "categoria": "Descartables"
-    },
-    {
-      "nombre": "100 sorbete XXL negro",
-      "codigo": "60370",
-      "costo": 10,
       "ganancia": null,
       "categoria": "Descartables"
     }

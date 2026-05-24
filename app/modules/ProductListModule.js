@@ -118,7 +118,7 @@ App.ProductListModule = (function (
 
       var precio = document.createElement("div");
       precio.classList.add("product-price");
-      precio.textContent = "$ " + PriceService.calcularDesdeStore(producto);
+      precio.textContent = (Array.isArray(producto.escalas) && producto.escalas.length > 0 ? "desde" : "") + "$ " + PriceService.calcularConEscalaDesdeStore(producto, 1);
       if (producto.porPeso) {
         var unit = document.createElement("span");
         unit.classList.add("price-unit");
