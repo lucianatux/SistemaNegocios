@@ -148,12 +148,36 @@ App.ProductService = (function (Store, PriceService, EventBus) {
 
   // ---------------------------------------------------------
   // exportar — Descarga el catálogo como archivo JSON
+  // Cada producto incluye stock y stockMinimo si están definidos.
+  // Si un producto no tiene stock cargado, esos campos se omiten
+  // (retrocompatible: equivale a "stock sin definir").
   // ---------------------------------------------------------
   function exportar() {
+    var productos = Store.getProductos().map(function (p) {
+      var copia = {};
+      // Copiar todos los campos del producto tal cual
+      Object.keys(p).forEach(function (k) {
+        copia[k] = p[k];
+      });
+
+      // Inyectar stock si existe
+      var s = Store.getStock ? Store.getStock(p.codigo) : null;
+      if (s) {
+        if (s.stock !== null && s.stock !== undefined) {
+          copia.stock = s.stock;
+        }
+        if (s.stockMinimo !== null && s.stockMinimo !== undefined) {
+          copia.stockMinimo = s.stockMinimo;
+        }
+      }
+
+      return copia;
+    });
+
     var datos = {
       version  : 1,
       fecha    : new Date().toISOString(),
-      productos: Store.getProductos(),
+      productos: productos,
     };
 
     var json = JSON.stringify(datos, null, 2);
@@ -189,8 +213,46 @@ App.ProductService = (function (Store, PriceService, EventBus) {
           return;
         }
 
-        Store.setProductos(datos.productos);
-        callback({ ok: true, cantidad: datos.productos.length });
+        // Separar el stock del resto de los datos del producto.
+        // Productos viejos sin stock/stockMinimo simplemente no se incluyen
+        // en stockData (= "sin definir"), totalmente retrocompatible.
+        var productosLimpios = [];
+        var stockExtraido = {};
+
+        datos.productos.forEach(function (p) {
+          var producto = {};
+          Object.keys(p).forEach(function (k) {
+            if (k !== "stock" && k !== "stockMinimo") {
+              producto[k] = p[k];
+            }
+          });
+          productosLimpios.push(producto);
+
+          var tieneStock = p.stock !== null && p.stock !== undefined;
+          var tieneMinimo = p.stockMinimo !== null && p.stockMinimo !== undefined;
+
+          if (tieneStock || tieneMinimo) {
+            stockExtraido[p.codigo] = {
+              stock      : tieneStock ? p.stock : null,
+              stockMinimo: tieneMinimo ? p.stockMinimo : null,
+            };
+          }
+        });
+
+        Store.setProductos(productosLimpios);
+
+        // Reemplazar stockData con lo extraído del archivo
+        if (Store.setStock) {
+          var stockActual = Store.getStockData ? Store.getStockData() : {};
+          Object.keys(stockActual).forEach(function (cod) {
+            delete stockActual[cod];
+          });
+          Object.keys(stockExtraido).forEach(function (codigo) {
+            Store.setStock(codigo, stockExtraido[codigo]);
+          });
+        }
+
+        callback({ ok: true, cantidad: productosLimpios.length });
 
       } catch (error) {
         callback({ ok: false, error: "Error al leer el archivo: " + error.message });

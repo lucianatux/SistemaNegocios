@@ -62,6 +62,20 @@ App.EditorModule = (function (EventBus, Store, ProductService, PriceService) {
 
     var unidad = _unidadEscala();
 
+    // Ocultar el campo "Ganancia especial" cuando hay escalas:
+    // el margen relevante pasa a ser el del primer escalón.
+    var campoGanancia = _inputGanancia
+      ? _inputGanancia.closest(".campo")
+      : null;
+    if (campoGanancia) {
+      if (_escalas.length > 0) {
+        campoGanancia.style.display = "none";
+        _inputGanancia.value = ""; // evita que quede un valor "fantasma" al guardar
+      } else {
+        campoGanancia.style.display = "";
+      }
+    }
+
     if (_escalas.length === 0) {
       _escalasTabla.innerHTML =
         "<p class='escalas-vacio'>Sin escalas definidas. El producto usa el margen de arriba.</p>";
@@ -147,8 +161,6 @@ App.EditorModule = (function (EventBus, Store, ProductService, PriceService) {
         span.textContent = _precioParaEscala(_escalas[idx].margen);
       }
     });
-    // También actualizar cabecera de unidad si cambió por/peso
-    _renderEscalas();
   }
 
   // ---------------------------------------------------------
@@ -361,7 +373,7 @@ App.EditorModule = (function (EventBus, Store, ProductService, PriceService) {
 
     if (tipo === "eliminar") {
       ProductService.eliminar(producto);
-        EventBus.emit("busqueda:refiltrar");
+      EventBus.emit("busqueda:refiltrar");
     }
 
     if (tipo === "importar") {
