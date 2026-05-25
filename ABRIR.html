@@ -54,8 +54,12 @@
           <button id="btnImprimirLista" class="nav-item">
             🖨️ Imprimir Lista
           </button>
-          <button id="exportarBtn" class="nav-item">💾 Exportar productos</button>
-          <label for="importarInput" class="nav-item">📂 Importar productos</label>
+          <button id="exportarBtn" class="nav-item">
+            💾 Exportar productos
+          </button>
+          <label for="importarInput" class="nav-item"
+            >📂 Importar productos</label
+          >
           <input
             type="file"
             id="importarInput"
@@ -110,7 +114,13 @@
                 >🛒 Venta</span
               >
             </div>
-            <button class="modo-topbar-cerrar" id="modoTopbarCerrar" title="volver atrás">↩️</button>
+            <button
+              class="modo-topbar-cerrar"
+              id="modoTopbarCerrar"
+              title="volver atrás"
+            >
+              ↩️
+            </button>
           </div>
 
           <!-- Columnas -->
@@ -501,7 +511,13 @@
         <section id="ventasPanel" class="ventas-panel oculto">
           <div class="ventas-header">
             <h2>📊 Estadísticas</h2>
-            <button id="cerrarVentas" class="ventas-cerrar" title="Volver atrás">↩️</button>
+            <button
+              id="cerrarVentas"
+              class="ventas-cerrar"
+              title="Volver atrás"
+            >
+              ↩️
+            </button>
           </div>
           <div class="ventas-tabs">
             <button class="ventas-tab activo" data-periodo="hoy">Hoy</button>
@@ -663,7 +679,9 @@
         <section id="stockPanel" class="ventas-panel oculto">
           <div class="ventas-header">
             <h2>📦 Stock e inventario</h2>
-            <button id="cerrarStock" class="ventas-cerrar" title="volver atrás">↩️</button>
+            <button id="cerrarStock" class="ventas-cerrar" title="volver atrás">
+              ↩️
+            </button>
           </div>
 
           <div class="ventas-stats">
@@ -692,8 +710,16 @@
               </div>
             </div>
           </div>
-
           <div class="stock-filtros">
+            <select id="stockCategoryFilter">
+              <option value="">Todas las categorías</option>
+              <option value="Libreria">Librería</option>
+              <option value="Reposteria">Repostería</option>
+              <option value="Cotillon">Cotillón</option>
+              <option value="Regaleria">Regalería</option>
+              <option value="Electronica">Electrónica</option>
+              <option value="Descartables">Descartables</option>
+            </select>
             <input
               type="text"
               id="stockBuscador"
@@ -702,6 +728,7 @@
             <button class="stock-filtro-btn activo" data-filtro="todos">
               Todos
             </button>
+
             <button class="stock-filtro-btn" data-filtro="bajo">⚠️ Bajo</button>
             <button class="stock-filtro-btn" data-filtro="sin">
               Sin definir
@@ -830,7 +857,13 @@
               >
                 + Nuevo
               </button>
-              <button id="cerrarClientes" class="ventas-cerrar" title="volver atrás">↩️</button>
+              <button
+                id="cerrarClientes"
+                class="ventas-cerrar"
+                title="volver atrás"
+              >
+                ↩️
+              </button>
             </div>
           </div>
 
@@ -886,13 +919,18 @@
               >
                 🔤 A→Z
               </button>
-              <button id="btnExportarClientes" class="btn-secundario" title="Exportar clientes y estadísticas">
+              <button
+                id="btnExportarClientes"
+                class="btn-secundario"
+                title="Exportar clientes y estadísticas"
+              >
                 💾 Exportar
               </button>
               <label
                 for="importarClientesInput"
                 class="btn-secundario"
-                style="cursor: pointer" title="Importar clientes y estadísticas"
+                style="cursor: pointer"
+                title="Importar clientes y estadísticas"
                 >📂 Importar</label
               >
               <input
@@ -1303,7 +1341,13 @@
         <section id="etiquetasPanel" class="ventas-panel oculto">
           <div class="ventas-header">
             <h2>🏷️ Imprimir etiquetas</h2>
-            <button id="cerrarEtiquetas" class="ventas-cerrar" title="volver atrás">↩️</button>
+            <button
+              id="cerrarEtiquetas"
+              class="ventas-cerrar"
+              title="volver atrás"
+            >
+              ↩️
+            </button>
           </div>
 
           <div class="etiquetas-controles">

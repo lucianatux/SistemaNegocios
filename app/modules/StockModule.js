@@ -5,14 +5,14 @@
 var App = App || {};
 
 App.StockModule = (function (EventBus, Store) {
-
-  var _panelActivo    = false;
-  var _filtroActivo   = "todos";
-  var _busqueda       = "";
+  var _panelActivo = false;
+  var _filtroActivo = "todos";
+  var _busqueda = "";
+  var _categoria = "";
   var _codigoEditando = null;
 
-  var _panel    = null;
-  var _listaEl  = null;
+  var _panel = null;
+  var _listaEl = null;
 
   // ---------------------------------------------------------
   // Helpers
@@ -27,7 +27,8 @@ App.StockModule = (function (EventBus, Store) {
 
   function _esBajo(stockInfo) {
     if (!stockInfo || stockInfo.stock === null) return false;
-    if (stockInfo.stockMinimo === null || stockInfo.stockMinimo === undefined) return false;
+    if (stockInfo.stockMinimo === null || stockInfo.stockMinimo === undefined)
+      return false;
     return stockInfo.stock <= stockInfo.stockMinimo;
   }
 
@@ -35,9 +36,14 @@ App.StockModule = (function (EventBus, Store) {
   // _renderStats
   // ---------------------------------------------------------
   function _renderStats() {
-    var productos  = Store.getProductos();
-    var definidos  = 0;
-    var bajos      = 0;
+    var productos = Store.getProductos();
+    if (_categoria) {
+      productos = productos.filter(function (p) {
+        return p.categoria === _categoria;
+      });
+    }
+    var definidos = 0;
+    var bajos = 0;
     var sinDefinir = 0;
 
     productos.forEach(function (p) {
@@ -50,8 +56,8 @@ App.StockModule = (function (EventBus, Store) {
       }
     });
 
-    document.getElementById("stockStatDefinido").textContent  = definidos;
-    document.getElementById("stockStatBajo").textContent      = bajos;
+    document.getElementById("stockStatDefinido").textContent = definidos;
+    document.getElementById("stockStatBajo").textContent = bajos;
     document.getElementById("stockStatSinDefinir").textContent = sinDefinir;
   }
 
@@ -60,21 +66,26 @@ App.StockModule = (function (EventBus, Store) {
   // ---------------------------------------------------------
   function _productosFiltrados() {
     var productos = Store.getProductos();
-    var busq      = _busqueda.toLowerCase();
+    var busq = _busqueda.toLowerCase();
 
     return productos.filter(function (p) {
       var s = _getStock(p.codigo);
-      var tieneStock = s && (s.stock !== null && s.stock !== undefined);
+      var tieneStock = s && s.stock !== null && s.stock !== undefined;
 
-      if (busq && !p.nombre.toLowerCase().includes(busq) &&
-          !p.codigo.toLowerCase().includes(busq)) return false;
+      if (_categoria && p.categoria !== _categoria) return false; // ← línea nueva
 
-      if (_filtroActivo === "bajo")  return tieneStock && _esBajo(s);
-      if (_filtroActivo === "sin")   return !tieneStock;
+      if (
+        busq &&
+        !p.nombre.toLowerCase().includes(busq) &&
+        !p.codigo.toLowerCase().includes(busq)
+      )
+        return false;
+
+      if (_filtroActivo === "bajo") return tieneStock && _esBajo(s);
+      if (_filtroActivo === "sin") return !tieneStock;
       return true;
     });
   }
-
   // ---------------------------------------------------------
   // _renderLista
   // ---------------------------------------------------------
@@ -85,13 +96,16 @@ App.StockModule = (function (EventBus, Store) {
     var lista = _productosFiltrados();
 
     if (lista.length === 0) {
-      _listaEl.innerHTML = "<p class='ventas-vacio'>No hay productos en esta vista</p>";
+      _listaEl.innerHTML =
+        "<p class='ventas-vacio'>No hay productos en esta vista</p>";
       return;
     }
 
     // Agrupar por estado
-    var bajos      = lista.filter(function (p) { return _esBajo(_getStock(p.codigo)); });
-    var ok         = lista.filter(function (p) {
+    var bajos = lista.filter(function (p) {
+      return _esBajo(_getStock(p.codigo));
+    });
+    var ok = lista.filter(function (p) {
       var s = _getStock(p.codigo);
       return s && s.stock !== null && !_esBajo(s);
     });
@@ -115,9 +129,9 @@ App.StockModule = (function (EventBus, Store) {
   }
 
   function _renderItem(producto) {
-    var s        = _getStock(producto.codigo);
+    var s = _getStock(producto.codigo);
     var tieneStock = s && s.stock !== null && s.stock !== undefined;
-    var unidad   = _unidad(producto);
+    var unidad = _unidad(producto);
 
     var fila = document.createElement("div");
     fila.classList.add("stock-item");
@@ -126,11 +140,15 @@ App.StockModule = (function (EventBus, Store) {
     var info = document.createElement("div");
     info.classList.add("stock-item-info");
     info.innerHTML =
-      '<div class="stock-item-nombre">' + producto.nombre + '</div>' +
-      '<div class="stock-item-meta">Cód: ' + producto.codigo +
-        ' · ' + producto.categoria +
-        (producto.porPeso ? ' · ⚖️ granel' : '') +
-      '</div>';
+      '<div class="stock-item-nombre">' +
+      producto.nombre +
+      "</div>" +
+      '<div class="stock-item-meta">Cód: ' +
+      producto.codigo +
+      " · " +
+      producto.categoria +
+      (producto.porPeso ? " · ⚖️ granel" : "") +
+      "</div>";
 
     // Badge stock
     var badge = document.createElement("span");
@@ -149,9 +167,10 @@ App.StockModule = (function (EventBus, Store) {
     // Mínimo
     var minimo = document.createElement("span");
     minimo.classList.add("stock-minimo");
-    minimo.textContent = (tieneStock && s.stockMinimo != null)
-      ? "mín: " + s.stockMinimo + " " + unidad
-      : "";
+    minimo.textContent =
+      tieneStock && s.stockMinimo != null
+        ? "mín: " + s.stockMinimo + " " + unidad
+        : "";
 
     // Acciones
     var acciones = document.createElement("div");
@@ -202,12 +221,16 @@ App.StockModule = (function (EventBus, Store) {
   }
 
   function _confirmarReposicion() {
-    var cantidad = parseFloat(document.getElementById("reposicionCantidad").value) || 0;
-    if (cantidad <= 0) { alert("Ingresá una cantidad válida"); return; }
+    var cantidad =
+      parseFloat(document.getElementById("reposicionCantidad").value) || 0;
+    if (cantidad <= 0) {
+      alert("Ingresá una cantidad válida");
+      return;
+    }
 
     var s = _getStock(_codigoEditando) || { stock: 0, stockMinimo: null };
     Store.setStock(_codigoEditando, {
-      stock      : (s.stock || 0) + cantidad,
+      stock: (s.stock || 0) + cantidad,
       stockMinimo: s.stockMinimo,
     });
 
@@ -219,22 +242,21 @@ App.StockModule = (function (EventBus, Store) {
     _codigoEditando = producto.codigo;
     var s = _getStock(producto.codigo);
 
-    document.getElementById("editarStockNombre").textContent =
-      producto.nombre;
+    document.getElementById("editarStockNombre").textContent = producto.nombre;
     document.getElementById("editarStockActual").value =
-      (s && s.stock != null) ? s.stock : "";
+      s && s.stock != null ? s.stock : "";
     document.getElementById("editarStockMinimo").value =
-      (s && s.stockMinimo != null) ? s.stockMinimo : "";
+      s && s.stockMinimo != null ? s.stockMinimo : "";
     document.getElementById("modalEditarStock").classList.remove("oculto");
     document.getElementById("editarStockActual").focus();
   }
 
   function _confirmarEditarStock() {
-    var stockVal  = document.getElementById("editarStockActual").value;
+    var stockVal = document.getElementById("editarStockActual").value;
     var minimoVal = document.getElementById("editarStockMinimo").value;
 
     Store.setStock(_codigoEditando, {
-      stock      : stockVal  !== "" ? parseFloat(stockVal)  : null,
+      stock: stockVal !== "" ? parseFloat(stockVal) : null,
       stockMinimo: minimoVal !== "" ? parseFloat(minimoVal) : null,
     });
 
@@ -248,8 +270,10 @@ App.StockModule = (function (EventBus, Store) {
   function _descontarStockDeVenta(items) {
     items.forEach(function (item) {
       var producto = Store.getProductos().find(function (p) {
-        return p.nombre === item.nombre ||
-               p.nombre + " " === item.nombre.substring(0, p.nombre.length + 1);
+        return (
+          p.nombre === item.nombre ||
+          p.nombre + " " === item.nombre.substring(0, p.nombre.length + 1)
+        );
       });
 
       if (!producto) {
@@ -266,12 +290,17 @@ App.StockModule = (function (EventBus, Store) {
       var s = _getStock(producto.codigo);
       if (!s || s.stock === null || s.stock === undefined) return;
 
-      var cantidad = item.cantidad;
+      var cantidad = producto.porPeso
+        ? (function () {
+            var m = item.nombre.match(/(\d+(?:\.\d+)?)g$/);
+            return m ? parseFloat(m[1]) : item.cantidad;
+          })()
+        : item.cantidad;
 
       // Para productos por peso, la cantidad ya viene en gramos
       var nuevoStock = Math.max(0, (s.stock || 0) - cantidad);
       Store.setStock(producto.codigo, {
-        stock      : nuevoStock,
+        stock: nuevoStock,
         stockMinimo: s.stockMinimo,
       });
     });
@@ -301,25 +330,36 @@ App.StockModule = (function (EventBus, Store) {
   // init
   // ---------------------------------------------------------
   function init() {
-    _panel   = document.getElementById("stockPanel");
+    _panel = document.getElementById("stockPanel");
     _listaEl = document.getElementById("stockLista");
 
-    document.getElementById("btnStock")
-      .addEventListener("click", abrir);
-    document.getElementById("cerrarStock")
-      .addEventListener("click", cerrar);
+    document.getElementById("btnStock").addEventListener("click", abrir);
+    document.getElementById("cerrarStock").addEventListener("click", cerrar);
 
     // Buscador
-    document.getElementById("stockBuscador").addEventListener("input", function () {
-      _busqueda = this.value;
-      _renderLista();
-    });
+    document
+      .getElementById("stockBuscador")
+      .addEventListener("input", function () {
+        _busqueda = this.value;
+        _renderLista();
+      });
+
+    // Filtro por categoría
+    document
+      .getElementById("stockCategoryFilter")
+      .addEventListener("change", function () {
+        _categoria = this.value;
+        _renderStats(); // ← actualiza tarjetas según categoría
+        _renderLista();
+        _listaEl.classList.toggle("filtrando-categoria", _categoria !== "");
+      });
 
     // Filtros
     document.querySelectorAll(".stock-filtro-btn").forEach(function (btn) {
       btn.addEventListener("click", function () {
-        document.querySelectorAll(".stock-filtro-btn")
-          .forEach(function (b) { b.classList.remove("activo"); });
+        document.querySelectorAll(".stock-filtro-btn").forEach(function (b) {
+          b.classList.remove("activo");
+        });
         this.classList.add("activo");
         _filtroActivo = this.dataset.filtro;
         _renderLista();
@@ -327,17 +367,21 @@ App.StockModule = (function (EventBus, Store) {
     });
 
     // Modal reposición
-    document.getElementById("confirmarReposicion")
+    document
+      .getElementById("confirmarReposicion")
       .addEventListener("click", _confirmarReposicion);
-    document.getElementById("cerrarModalReposicion")
+    document
+      .getElementById("cerrarModalReposicion")
       .addEventListener("click", function () {
         document.getElementById("modalReposicion").classList.add("oculto");
       });
 
     // Modal editar stock
-    document.getElementById("confirmarEditarStock")
+    document
+      .getElementById("confirmarEditarStock")
       .addEventListener("click", _confirmarEditarStock);
-    document.getElementById("cerrarModalEditarStock")
+    document
+      .getElementById("cerrarModalEditarStock")
       .addEventListener("click", function () {
         document.getElementById("modalEditarStock").classList.add("oculto");
       });
@@ -357,11 +401,10 @@ App.StockModule = (function (EventBus, Store) {
   }
 
   return {
-    init          : init,
-    abrir         : abrir,
-    cerrar        : cerrar,
-    getStock      : _getStock,
-    esBajo        : _esBajo,
+    init: init,
+    abrir: abrir,
+    cerrar: cerrar,
+    getStock: _getStock,
+    esBajo: _esBajo,
   };
-
 })(App.EventBus, App.Store);

@@ -116,6 +116,16 @@ main {
 .oculto {
   display: none !important;
 }
+select{
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+select:focus{
+  outline: none;
+}
 
 /* ==========================
    HEADER
@@ -357,6 +367,11 @@ header {
 
 /* Pista visual: lista teñida cuando hay categoría filtrada */
 #productList.filtrando-categoria {
+  background-color: var(--color-fondo);
+  transition: background-color 0.25s ease;
+}
+
+#stockLista.filtrando-categoria .stock-item {
   background-color: var(--color-fondo);
   transition: background-color 0.25s ease;
 }
