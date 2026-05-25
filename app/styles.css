@@ -355,6 +355,12 @@ header {
   margin: 0;
 }
 
+/* Pista visual: lista teñida cuando hay categoría filtrada */
+#productList.filtrando-categoria {
+  background-color: var(--color-fondo);
+  transition: background-color 0.25s ease;
+}
+
 .product-item {
   display: flex;
   justify-content: space-between;

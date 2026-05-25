@@ -361,7 +361,7 @@ App.EditorModule = (function (EventBus, Store, ProductService, PriceService) {
 
     if (tipo === "eliminar") {
       ProductService.eliminar(producto);
-      EventBus.emit("busqueda:limpiar");
+        EventBus.emit("busqueda:refiltrar");
     }
 
     if (tipo === "importar") {

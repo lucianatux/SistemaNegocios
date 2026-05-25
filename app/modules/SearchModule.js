@@ -5,10 +5,9 @@
 var App = App || {};
 
 App.SearchModule = (function (EventBus, ProductService) {
-
-  var _searchInput    = null;
+  var _searchInput = null;
   var _categoryFilter = null;
-  var _timerBanner    = null;
+  var _timerBanner = null;
   var _filtroEspecial = false; // true = mostrar solo precio especial/escalas
 
   // ---------------------------------------------------------
@@ -17,9 +16,9 @@ App.SearchModule = (function (EventBus, ProductService) {
   function _procesarCodigoLector(codigo) {
     if (!codigo || codigo.trim() === "") return;
 
-    var productos  = ProductService.filtrar(codigo.trim(), "");
+    var productos = ProductService.filtrar(codigo.trim(), "");
     var modoTicket = App.Store ? App.Store.get("modoTicket") : false;
-    var modoPromo  = App.Store ? App.Store.get("modoPromo")  : false;
+    var modoPromo = App.Store ? App.Store.get("modoPromo") : false;
 
     if (productos.length === 0) {
       _mostrarBannerTemporal("⚠️ No encontrado: " + codigo, true);
@@ -31,10 +30,16 @@ App.SearchModule = (function (EventBus, ProductService) {
 
       if (modoTicket) {
         if (producto.porPeso) {
-          EventBus.emit("pesaje:abrir", { producto: producto, destino: "ticket" });
+          EventBus.emit("pesaje:abrir", {
+            producto: producto,
+            destino: "ticket",
+          });
         } else {
           EventBus.emit("ticket:agregar-producto", { producto: producto });
-          _mostrarBannerTemporal("✅ Agregado al ticket: " + producto.nombre, false);
+          _mostrarBannerTemporal(
+            "✅ Agregado al ticket: " + producto.nombre,
+            false,
+          );
         }
         _searchInput.value = "";
         filtrar();
@@ -43,10 +48,16 @@ App.SearchModule = (function (EventBus, ProductService) {
 
       if (modoPromo) {
         if (producto.porPeso) {
-          EventBus.emit("pesaje:abrir", { producto: producto, destino: "promo" });
+          EventBus.emit("pesaje:abrir", {
+            producto: producto,
+            destino: "promo",
+          });
         } else {
           EventBus.emit("promo:agregar-producto", { producto: producto });
-          _mostrarBannerTemporal("✅ Agregado a la promo: " + producto.nombre, false);
+          _mostrarBannerTemporal(
+            "✅ Agregado a la promo: " + producto.nombre,
+            false,
+          );
         }
         _searchInput.value = "";
         filtrar();
@@ -74,9 +85,7 @@ App.SearchModule = (function (EventBus, ProductService) {
     var span = banner.querySelector("span");
     if (span) span.textContent = texto;
 
-    banner.style.background = esError
-      ? "#b00020"
-      : "var(--color-primario)";
+    banner.style.background = esError ? "#b00020" : "var(--color-primario)";
     banner.classList.remove("oculto");
 
     clearTimeout(_timerBanner);
@@ -105,7 +114,7 @@ App.SearchModule = (function (EventBus, ProductService) {
   // filtrar
   // ---------------------------------------------------------
   function filtrar() {
-    var texto     = _searchInput    ? _searchInput.value    : "";
+    var texto = _searchInput ? _searchInput.value : "";
     var categoria = _categoryFilter ? _categoryFilter.value : "";
 
     var resultado = ProductService.filtrar(texto, categoria);
@@ -119,15 +128,22 @@ App.SearchModule = (function (EventBus, ProductService) {
 
     var lista = document.getElementById("productList");
     if (lista) lista.scrollTop = 0;
-    var contenedor = document.getElementById("lista-articulos") || document.querySelector(".product-list-container");
+    var contenedor =
+      document.getElementById("lista-articulos") ||
+      document.querySelector(".product-list-container");
     if (contenedor) contenedor.scrollTop = 0;
+
+    // Pista visual: marcar la lista cuando hay categoría filtrada
+    if (lista) {
+      lista.classList.toggle("filtrando-categoria", categoria !== "");
+    }
   }
 
   // ---------------------------------------------------------
   // limpiar
   // ---------------------------------------------------------
   function limpiar() {
-    if (_searchInput)    _searchInput.value    = "";
+    if (_searchInput) _searchInput.value = "";
     if (_categoryFilter) _categoryFilter.value = "";
     filtrar();
   }
@@ -136,11 +152,13 @@ App.SearchModule = (function (EventBus, ProductService) {
   // init
   // ---------------------------------------------------------
   function init() {
-    _searchInput    = document.getElementById("searchInput");
+    _searchInput = document.getElementById("searchInput");
     _categoryFilter = document.getElementById("categoryFilter");
 
     if (!_searchInput || !_categoryFilter) {
-      console.warn("[SearchModule] No se encontraron los elementos del buscador");
+      console.warn(
+        "[SearchModule] No se encontraron los elementos del buscador",
+      );
       return;
     }
 
@@ -173,9 +191,8 @@ App.SearchModule = (function (EventBus, ProductService) {
   }
 
   return {
-    init   : init,
+    init: init,
     filtrar: filtrar,
     limpiar: limpiar,
   };
-
 })(App.EventBus, App.ProductService);
