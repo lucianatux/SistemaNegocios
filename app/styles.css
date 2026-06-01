@@ -7,27 +7,27 @@
   --color-secundario: #07489d;
   --color-terciario: #ebcd73;
   --color-cuaternario: #e8e1dc;
-  --color-fondo: #e3e3e3;
-  --color-blanco: #eee;
-  --color-texto: #222222;
-  --color-texto-suave: #6f7178;
-  --color-borde: #cccccc;
+  --color-fondo: #efefec;
+  --color-blanco: #f9f9f7;
+  --color-texto: #1e1c1a;
+  --color-texto-suave: #6b6560;
+  --color-borde: #d8d5d0;
 
   /* Colores específicos para elementos */
   --color-header-bg: #079d8b;
-  --color-sidebar-bg: #ffffff;
-  --color-card-bg: #ffffff;
+  --color-sidebar-bg: #f4f4f1;
+  --color-card-bg: #f9f9f7;
   --color-input-bg: #ffffff;
   --color-hover-bg: #e1f5ee;
   --color-hover-text: #085041;
   --color-seleccionado-bg: #e6f7f5;
-  --color-ticket-bg: #ffffff;
-  --color-ticket-footer-bg: #fafafa;
-  --color-modal-bg: #ffffff;
+  --color-ticket-bg: #f9f9f7;
+  --color-ticket-footer-bg: #f0f0ec;
+  --color-modal-bg: #f9f9f7;
   --color-promo-bg: #e8e1dc;
   --color-venta-stat-bg: #f0faf7;
-  --color-shadow: rgba(0, 0, 0, 0.2);
-  --color-overlay: rgba(0, 0, 0, 0.55);
+  --color-shadow: rgba(60, 45, 30, 0.12);
+  --color-overlay: rgba(20, 15, 10, 0.55);
 }
 
 /* ==========================
@@ -62,14 +62,6 @@
   --color-overlay: rgba(0, 0, 0, 0.75);
 }
 
-/* ==========================
-   RESET BÁSICO
-   ========================== */
-
-* {
-  box-sizing: border-box;
-  font-family: Arial, Helvetica, sans-serif;
-}
 
 /* ==========================
    FUENTES
@@ -79,6 +71,20 @@
   font-family: "Buda";
   src: url("fonts/Buda-Light.ttf") format("truetype");
 }
+@font-face {
+  font-family: "Inter";
+  src: url("fonts/Inter-VariableFont_opsz,wght.ttf") format("truetype");
+}
+
+/* ==========================
+   RESET BÁSICO
+   ========================== */
+
+* {
+  box-sizing: border-box;
+  font-family: 'Inter', Arial, sans-serif;
+}
+
 
 /* ==========================
    LAYOUT PRINCIPAL
