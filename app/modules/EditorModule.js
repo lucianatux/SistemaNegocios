@@ -78,7 +78,7 @@ App.EditorModule = (function (EventBus, Store, ProductService, PriceService) {
 
     if (_escalas.length === 0) {
       _escalasTabla.innerHTML =
-        "<p class='escalas-vacio'>Sin escalas definidas. El producto usa el margen de arriba.</p>";
+        "<p class='escalas-vacio'>Sin escalas definidas. El producto usa el margen predeterminado.</p>";
       return;
     }
 
@@ -237,7 +237,7 @@ App.EditorModule = (function (EventBus, Store, ProductService, PriceService) {
       var esPorPeso = producto.porPeso === true;
       document.getElementById("editPorPeso").checked = esPorPeso;
       document.getElementById("labelCosto").textContent = esPorPeso
-        ? "Costo por gramo"
+        ? "Costo por 100 gramos"
         : "Costo";
       var stockInfo = App.StockModule
         ? App.StockModule.getStock(producto.codigo)
@@ -454,7 +454,7 @@ App.EditorModule = (function (EventBus, Store, ProductService, PriceService) {
       .getElementById("editPorPeso")
       .addEventListener("change", function () {
         document.getElementById("labelCosto").textContent = this.checked
-          ? "Costo por gramo"
+          ? "Costo por 100 gramos"
           : "Costo";
         _actualizarPrecioPublico();
         // Actualizar la cabecera de unidad en escalas

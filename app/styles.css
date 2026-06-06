@@ -2738,8 +2738,8 @@ footer a:hover {
    MODO IMPRESIÓN — ETIQUETAS
    ========================== */
 @media print {
-  #etiquetasImprimir {
-    display: block !important;
+  #etiquetasImprimir:empty {
+    display: none !important;
   }
 
   .hoja-etiquetas {

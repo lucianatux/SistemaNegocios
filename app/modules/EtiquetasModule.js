@@ -241,6 +241,7 @@ App.EtiquetasModule = (function (EventBus, Store) {
         el.style.display = displays[i];
       });
       contenedor.style.display = "none";
+      contenedor.innerHTML = "";
       contenedor.style.position = "";
       contenedor.style.top = "";
       contenedor.style.left = "";
