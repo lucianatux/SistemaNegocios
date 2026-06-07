@@ -3,7 +3,7 @@
    ========================== */
 
 :root {
-  --color-primario: #079d8b;
+  --color-primario: #07889c;
   --color-secundario: #07489d;
   --color-terciario: #ebcd73;
   --color-cuaternario: #e8e1dc;
@@ -14,20 +14,20 @@
   --color-borde: #d8d5d0;
 
   /* Colores específicos para elementos */
-  --color-header-bg: #079d8b;
+  --color-header-bg: #07889c;
   --color-sidebar-bg: #f4f4f1;
   --color-card-bg: #f9f9f7;
   --color-input-bg: #ffffff;
   --color-hover-bg: #e1f5ee;
-  --color-hover-text: #085041;
+  --color-hover-text: #08454f;
   --color-seleccionado-bg: #e6f7f5;
   --color-ticket-bg: #f9f9f7;
   --color-ticket-footer-bg: #f0f0ec;
   --color-modal-bg: #f9f9f7;
   --color-promo-bg: #e8e1dc;
   --color-venta-stat-bg: #f0faf7;
-  --color-shadow: rgba(60, 45, 30, 0.12);
-  --color-overlay: rgba(20, 15, 10, 0.55);
+  --color-shadow: #3c2d1e1f;
+  --color-overlay: #140f0a8c;
 }
 
 /* ==========================
@@ -35,7 +35,7 @@
    ========================== */
 
 [data-theme="dark"] {
-  --color-primario: #0ac5ad;
+  --color-primario: #0aaec7;
   --color-secundario: #4a8fff;
   --color-terciario: #f5dc7a;
   --color-cuaternario: #3a3530;
@@ -46,20 +46,20 @@
   --color-borde: #404040;
 
   /* Colores específicos para elementos */
-  --color-header-bg: #0a7d70;
+  --color-header-bg: #0a6c7b;
   --color-sidebar-bg: #252525;
   --color-card-bg: #2a2a2a;
   --color-input-bg: #1f1f1f;
-  --color-hover-bg: #1a4540;
-  --color-hover-text: #0ac5ad;
-  --color-seleccionado-bg: #1a3f3a;
+  --color-hover-bg: #1b4046;
+  --color-hover-text: #0aaec7;
+  --color-seleccionado-bg: #19393e;
   --color-ticket-bg: #2a2a2a;
   --color-ticket-footer-bg: #222222;
   --color-modal-bg: #2a2a2a;
   --color-promo-bg: #3a3530;
-  --color-venta-stat-bg: #1a3f3a;
-  --color-shadow: rgba(0, 0, 0, 0.5);
-  --color-overlay: rgba(0, 0, 0, 0.75);
+  --color-venta-stat-bg: #19393e;
+  --color-shadow: #00000080;
+  --color-overlay: #000000bf;
 }
 
 
