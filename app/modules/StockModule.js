@@ -68,11 +68,11 @@ App.StockModule = (function (EventBus, Store) {
     var productos = Store.getProductos();
     var busq = _busqueda.toLowerCase();
 
-    return productos.filter(function (p) {
+    var lista = productos.filter(function (p) {
       var s = _getStock(p.codigo);
       var tieneStock = s && s.stock !== null && s.stock !== undefined;
 
-      if (_categoria && p.categoria !== _categoria) return false; // ← línea nueva
+      if (_categoria && p.categoria !== _categoria) return false;
 
       if (
         busq &&
@@ -85,6 +85,22 @@ App.StockModule = (function (EventBus, Store) {
       if (_filtroActivo === "sin") return !tieneStock;
       return true;
     });
+
+    // Orden por código (toggle global compartido con SearchModule)
+    var porCodigo =
+      App.SearchModule && App.SearchModule.getOrdenPorCodigo
+        ? App.SearchModule.getOrdenPorCodigo()
+        : false;
+    if (porCodigo) {
+      lista = lista.slice().sort(function (a, b) {
+        return (a.codigo || "").localeCompare(b.codigo || "", "es", {
+          numeric: true,
+          sensitivity: "base",
+        });
+      });
+    }
+
+    return lista;
   }
   // ---------------------------------------------------------
   // _renderLista
@@ -343,6 +359,23 @@ App.StockModule = (function (EventBus, Store) {
         _busqueda = this.value;
         _renderLista();
       });
+
+    // Botón orden por código / nombre — delega al toggle global de SearchModule
+    var btnOrdenStock = document.getElementById("btnOrdenCodigoStock");
+    if (btnOrdenStock) {
+      btnOrdenStock.addEventListener("click", function () {
+        if (App.SearchModule && App.SearchModule.toggleOrden) {
+          App.SearchModule.toggleOrden();
+        }
+      });
+    }
+
+    // Re-renderizar si cambia el criterio de orden global
+    EventBus.on("orden:cambiado", function () {
+      if (_panel && !_panel.classList.contains("oculto")) {
+        _renderLista();
+      }
+    });
 
     // Filtro por categoría
     document

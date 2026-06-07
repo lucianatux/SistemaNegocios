@@ -158,16 +158,22 @@ App.ModoColumnasModule = (function (
       _scrollAlTope();
     };
 
-    // Detectar Enter del lector de código de barras
-    // El lector escribe todo en <50ms y manda Enter — una persona tarda más de 100ms
+    // Enter en el buscador del modo columnas:
+    // Busca por código EXACTO. Si encuentra exactamente un producto,
+    // lo agrega al ticket/promo. Si no, no hace nada (la lista ya muestra
+    // el filtro parcial gracias al oninput).
     _input.onkeydown = function (e) {
       if (e.key !== "Enter") return;
+      e.preventDefault();
 
-      var tiempoDesdeUltimoCaracter = Date.now() - _ultimoInput;
-      if (tiempoDesdeUltimoCaracter > 100) return; // escritura manual, ignorar
+      var codigoBuscado = (_input.value || "").trim().toLowerCase();
+      if (!codigoBuscado) return;
 
-      var resultados = _productosFiltrados();
-      if (resultados.length !== 1) return; // solo actuar si hay resultado único
+      var resultados = App.Store.getProductos().filter(function (p) {
+        return p.codigo && String(p.codigo).toLowerCase() === codigoBuscado;
+      });
+
+      if (resultados.length !== 1) return; // 0 o varios → no agregar nada
 
       var producto = resultados[0];
       var modoTicket = Store.get("modoTicket");
@@ -182,7 +188,7 @@ App.ModoColumnasModule = (function (
         EventBus.emit("promo:agregar-producto", { producto: producto });
       }
 
-      // Limpiar buscador listo para el próximo escaneo
+      // Limpiar buscador listo para el próximo escaneo / tipeo
       _input.value = "";
       _busqueda = "";
       _ultimoInput = 0;

@@ -210,8 +210,10 @@ App.SearchModule = (function (EventBus, ProductService) {
     var label = _ordenPorCodigo ? "🔤 Nombre" : "🔢 Código";
     var b1 = document.getElementById("btnOrdenCodigo");
     var b2 = document.getElementById("btnOrdenCodigoModo");
+    var b3 = document.getElementById("btnOrdenCodigoStock");
     if (b1) b1.textContent = label;
     if (b2) b2.textContent = label;
+    if (b3) b3.textContent = label;
   }
 
   function toggleOrden() {
