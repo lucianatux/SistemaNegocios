@@ -143,7 +143,7 @@ App.StockModule = (function (EventBus, Store) {
       '<div class="stock-item-nombre">' +
       producto.nombre +
       "</div>" +
-      '<div class="stock-item-meta">Cód: ' +
+      '<div class="stock-item-meta">Código: ' +
       producto.codigo +
       " · " +
       producto.categoria +

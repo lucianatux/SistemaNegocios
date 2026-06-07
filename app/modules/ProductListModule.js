@@ -110,7 +110,7 @@ App.ProductListModule = (function (
 
       var meta = document.createElement("div");
       meta.classList.add("product-meta");
-      meta.textContent = "Cód: " + producto.codigo + " · " + producto.categoria;
+      meta.textContent = "Código: " + producto.codigo + " · " + producto.categoria;
 
       info.appendChild(nombre);
       info.appendChild(meta);

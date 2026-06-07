@@ -4,30 +4,48 @@
 
 var App = App || {};
 
-App.ModoColumnasModule = (function (EventBus, Store, PriceService, ProductService) {
-
-  var _lista       = null;
-  var _listaWrap   = null;  // div.modo-lista — el que tiene el scroll real
-  var _input    = null;
-  var _select   = null;
+App.ModoColumnasModule = (function (
+  EventBus,
+  Store,
+  PriceService,
+  ProductService,
+) {
+  var _lista = null;
+  var _listaWrap = null; // div.modo-lista — el que tiene el scroll real
+  var _input = null;
+  var _select = null;
   var _busqueda = "";
   var _categoria = "";
   var _ultimoInput = 0; // timestamp del último caracter — para detectar lector
 
   function _productosFiltrados() {
-    return ProductService.filtrar(_busqueda, _categoria);
+    var lista = ProductService.filtrar(_busqueda, _categoria);
+    var porCodigo =
+      App.SearchModule && App.SearchModule.getOrdenPorCodigo
+        ? App.SearchModule.getOrdenPorCodigo()
+        : false;
+    if (porCodigo) {
+      lista = lista.slice().sort(function (a, b) {
+        return (a.codigo || "").localeCompare(b.codigo || "", "es", {
+          numeric: true,
+          sensitivity: "base",
+        });
+      });
+    }
+    return lista;
   }
 
   function _render() {
     if (!_lista) return;
     _lista.innerHTML = "";
 
-    var productos  = _productosFiltrados();
+    var productos = _productosFiltrados();
     var modoTicket = Store.get("modoTicket");
-    var modoPromo  = Store.get("modoPromo");
+    var modoPromo = Store.get("modoPromo");
 
     if (productos.length === 0) {
-      _lista.innerHTML = "<li style='padding:16px;color:var(--color-texto-suave);font-size:14px'>No se encontraron productos</li>";
+      _lista.innerHTML =
+        "<li style='padding:16px;color:var(--color-texto-suave);font-size:14px'>No se encontraron productos</li>";
       return;
     }
 
@@ -59,7 +77,8 @@ App.ModoColumnasModule = (function (EventBus, Store, PriceService, ProductServic
 
       var meta = document.createElement("div");
       meta.classList.add("product-meta");
-      meta.textContent = "Cód: " + producto.codigo + " · " + producto.categoria;
+      meta.textContent =
+        "Código: " + producto.codigo + " · " + producto.categoria;
 
       info.appendChild(nombre);
       info.appendChild(meta);
@@ -68,7 +87,8 @@ App.ModoColumnasModule = (function (EventBus, Store, PriceService, ProductServic
       var precio = document.createElement("div");
       precio.classList.add("product-price");
       // Mostrar precio con escala x1 (la mínima). Si no tiene escalas, precio normal.
-      precio.textContent = "$ " + PriceService.calcularConEscalaDesdeStore(producto, 1);
+      precio.textContent =
+        "$ " + PriceService.calcularConEscalaDesdeStore(producto, 1);
       if (producto.porPeso) {
         var unit = document.createElement("span");
         unit.classList.add("price-unit");
@@ -90,7 +110,10 @@ App.ModoColumnasModule = (function (EventBus, Store, PriceService, ProductServic
         btnAgregar.textContent = "⚖️ Pesar";
         btnAgregar.addEventListener("click", function () {
           var destino = modoTicket ? "ticket" : "promo";
-          EventBus.emit("pesaje:abrir", { producto: producto, destino: destino });
+          EventBus.emit("pesaje:abrir", {
+            producto: producto,
+            destino: destino,
+          });
         });
       } else if (modoTicket) {
         btnAgregar.textContent = "+";
@@ -113,19 +136,19 @@ App.ModoColumnasModule = (function (EventBus, Store, PriceService, ProductServic
 
   function _scrollAlTope() {
     if (_listaWrap) _listaWrap.scrollTop = 0;
-    if (_lista)     _lista.scrollTop     = 0;
+    if (_lista) _lista.scrollTop = 0;
   }
 
   function iniciarBuscador() {
-    _lista     = document.getElementById("modoProductList");
+    _lista = document.getElementById("modoProductList");
     _listaWrap = _lista ? _lista.closest(".modo-lista") : null;
-    _input     = document.getElementById("modoBuscadorInput");
-    _select    = document.getElementById("modoCategoryFilter");
+    _input = document.getElementById("modoBuscadorInput");
+    _select = document.getElementById("modoCategoryFilter");
 
-    _busqueda  = "";
+    _busqueda = "";
     _categoria = "";
     _ultimoInput = 0;
-    _input.value  = "";
+    _input.value = "";
     _select.value = "";
 
     _input.oninput = function () {
@@ -146,9 +169,9 @@ App.ModoColumnasModule = (function (EventBus, Store, PriceService, ProductServic
       var resultados = _productosFiltrados();
       if (resultados.length !== 1) return; // solo actuar si hay resultado único
 
-      var producto   = resultados[0];
+      var producto = resultados[0];
       var modoTicket = Store.get("modoTicket");
-      var modoPromo  = Store.get("modoPromo");
+      var modoPromo = Store.get("modoPromo");
 
       if (producto.porPeso) {
         var destino = modoTicket ? "ticket" : "promo";
@@ -172,19 +195,31 @@ App.ModoColumnasModule = (function (EventBus, Store, PriceService, ProductServic
       _scrollAlTope();
     };
 
+    // Botón orden por código / nombre — delega al toggle global de SearchModule
+    var btnOrdenModo = document.getElementById("btnOrdenCodigoModo");
+    if (btnOrdenModo) {
+      btnOrdenModo.onclick = function () {
+        if (App.SearchModule && App.SearchModule.toggleOrden) {
+          App.SearchModule.toggleOrden();
+        }
+      };
+    }
+
     _render();
     _scrollAlTope();
   }
 
   function init() {
     // Botón X del topbar — cierra ticket o promo según el modo activo
-    document.getElementById("modoTopbarCerrar").addEventListener("click", function () {
-      if (Store.get("modoTicket")) {
-        App.TicketModule.cerrar();
-      } else if (Store.get("modoPromo")) {
-        App.PromoModule.cerrar();
-      }
-    });
+    document
+      .getElementById("modoTopbarCerrar")
+      .addEventListener("click", function () {
+        if (Store.get("modoTicket")) {
+          App.TicketModule.cerrar();
+        } else if (Store.get("modoPromo")) {
+          App.PromoModule.cerrar();
+        }
+      });
 
     // Re-renderizar si cambia el catálogo o el stock
     EventBus.on("store:productos:cambiado", function () {
@@ -193,10 +228,12 @@ App.ModoColumnasModule = (function (EventBus, Store, PriceService, ProductServic
     EventBus.on("stock:actualizado", function () {
       if (Store.get("modoTicket") || Store.get("modoPromo")) _render();
     });
-
+    // Re-renderizar si cambia el criterio de orden global
+    EventBus.on("orden:cambiado", function () {
+      if (Store.get("modoTicket") || Store.get("modoPromo")) _render();
+    });
     console.info("[ModoColumnasModule] iniciado");
   }
 
   return { init: init, iniciarBuscador: iniciarBuscador };
-
 })(App.EventBus, App.Store, App.PriceService, App.ProductService);

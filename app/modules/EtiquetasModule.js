@@ -80,7 +80,7 @@ App.EtiquetasModule = (function (EventBus, Store) {
         '<div class="etiqueta-item-nombre">' +
         producto.nombre +
         "</div>" +
-        '<div class="etiqueta-item-meta">Cód: ' +
+        '<div class="etiqueta-item-meta">Código: ' +
         producto.codigo +
         " · " +
         producto.categoria +

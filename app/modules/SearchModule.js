@@ -9,6 +9,7 @@ App.SearchModule = (function (EventBus, ProductService) {
   var _categoryFilter = null;
   var _timerBanner = null;
   var _filtroEspecial = false; // true = mostrar solo precio especial/escalas
+  var _ordenPorCodigo = true; // true = orden por código (default); false = alfabético
 
   // ---------------------------------------------------------
   // _procesarCodigoLector
@@ -123,7 +124,15 @@ App.SearchModule = (function (EventBus, ProductService) {
     if (_filtroEspecial) {
       resultado = resultado.filter(_tienePrecioEspecial);
     }
-
+    // Orden por código (sobrescribe el alfabético del ProductService)
+    if (_ordenPorCodigo) {
+      resultado = resultado.slice().sort(function (a, b) {
+        return (a.codigo || "").localeCompare(b.codigo || "", "es", {
+          numeric: true,
+          sensitivity: "base",
+        });
+      });
+    }
     EventBus.emit("productos:filtrados", { lista: resultado });
 
     var lista = document.getElementById("productList");
@@ -184,15 +193,43 @@ App.SearchModule = (function (EventBus, ProductService) {
         filtrar();
       });
     }
-
+    // Botón orden por código / nombre — toggle global (afecta lista general y modo columnas)
+    var btnOrdenCodigo = document.getElementById("btnOrdenCodigo");
+    if (btnOrdenCodigo) {
+      btnOrdenCodigo.addEventListener("click", toggleOrden);
+    }
+    _actualizarBtnOrden();
     EventBus.on("store:productos:cambiado", filtrar);
 
     console.info("[SearchModule] iniciado");
+  }
+  // ---------------------------------------------------------
+  // Orden por código / nombre — estado global compartido
+  // ---------------------------------------------------------
+  function _actualizarBtnOrden() {
+    var label = _ordenPorCodigo ? "🔤 Nombre" : "🔢 Código";
+    var b1 = document.getElementById("btnOrdenCodigo");
+    var b2 = document.getElementById("btnOrdenCodigoModo");
+    if (b1) b1.textContent = label;
+    if (b2) b2.textContent = label;
+  }
+
+  function toggleOrden() {
+    _ordenPorCodigo = !_ordenPorCodigo;
+    _actualizarBtnOrden();
+    EventBus.emit("orden:cambiado", { porCodigo: _ordenPorCodigo });
+    filtrar();
+  }
+
+  function getOrdenPorCodigo() {
+    return _ordenPorCodigo;
   }
 
   return {
     init: init,
     filtrar: filtrar,
     limpiar: limpiar,
+    toggleOrden: toggleOrden,
+    getOrdenPorCodigo: getOrdenPorCodigo,
   };
 })(App.EventBus, App.ProductService);
