@@ -17,6 +17,7 @@
 //   App.ProductService.eliminar(producto)        → { ok }
 //   App.ProductService.exportar()                → descarga JSON
 //   App.ProductService.importar(archivo, cb)     → cb({ ok, cantidad, error })
+//   App.ProductService.codigoDuplicado(codigo, excluir) → boolean
 // =============================================================
 
 var App = App || {};
@@ -83,6 +84,20 @@ App.ProductService = (function (Store, PriceService, EventBus) {
   }
 
   // ---------------------------------------------------------
+  // _codigoDuplicado — true si el código ya existe en otro producto
+  // Si se pasa `excluir`, ignora ese producto (caso edición:
+  // el mismo producto puede tener el mismo código sin ser duplicado)
+  // ---------------------------------------------------------
+  function _codigoDuplicado(codigo, excluir) {
+    var c = String(codigo || "").trim().toLowerCase();
+    if (!c) return false;
+    return Store.getProductos().some(function (p) {
+      if (excluir && p === excluir) return false;
+      return p.codigo && String(p.codigo).toLowerCase() === c;
+    });
+  }
+
+  // ---------------------------------------------------------
   // _normalizar — Limpia y tipifica los datos antes de guardar
   // ---------------------------------------------------------
   function _normalizar(datos) {
@@ -113,11 +128,18 @@ App.ProductService = (function (Store, PriceService, EventBus) {
   }
 
   // ---------------------------------------------------------
-  // agregar — Alta de producto
+  // Alta de producto
   // ---------------------------------------------------------
   function agregar(datos) {
     var validacion = _validar(datos);
     if (!validacion.ok) return validacion;
+
+    if (_codigoDuplicado(datos.codigo)) {
+      return {
+        ok: false,
+        error: "Ya existe un producto con el código '" + datos.codigo.trim() + "'",
+      };
+    }
 
     var producto = _normalizar(datos);
     Store.agregarProducto(producto);
@@ -131,6 +153,13 @@ App.ProductService = (function (Store, PriceService, EventBus) {
   function actualizar(productoOriginal, datos) {
     var validacion = _validar(datos);
     if (!validacion.ok) return validacion;
+
+    if (_codigoDuplicado(datos.codigo, productoOriginal)) {
+      return {
+        ok: false,
+        error: "Ya existe otro producto con el código '" + datos.codigo.trim() + "'",
+      };
+    }
 
     var cambios = _normalizar(datos);
     Store.actualizarProducto(productoOriginal, cambios);
@@ -268,12 +297,13 @@ App.ProductService = (function (Store, PriceService, EventBus) {
 
   // API pública
   return {
-    filtrar   : filtrar,
-    agregar   : agregar,
-    actualizar: actualizar,
-    eliminar  : eliminar,
-    exportar  : exportar,
-    importar  : importar,
+    filtrar         : filtrar,
+    agregar         : agregar,
+    actualizar      : actualizar,
+    eliminar        : eliminar,
+    exportar        : exportar,
+    importar        : importar,
+    codigoDuplicado : _codigoDuplicado,
   };
 
 })(App.Store, App.PriceService, App.EventBus);

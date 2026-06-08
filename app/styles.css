@@ -980,6 +980,18 @@ header {
   color: #ff6b7a;
 }
 
+.aviso-codigo-duplicado {
+  display: block;
+  font-size: 0.82em;
+  color: #b00020;
+  margin-top: 4px;
+  line-height: 1.2;
+}
+
+[data-theme="dark"] .aviso-codigo-duplicado {
+  color: #ff6b7a;
+}
+
 #enviarWhatsapp {
   width: 100%;
   margin-top: 8px;

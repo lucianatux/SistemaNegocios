@@ -7,6 +7,7 @@
 //   - Delegar guardar/eliminar a ProductService
 //   - Actualizar precio público en tiempo real
 //   - Gestionar tabla de escalas de precio por cantidad
+//   - Avisar en vivo si el código tipeado ya existe en otro producto
 // =============================================================
 
 var App = App || {};
@@ -204,6 +205,23 @@ App.EditorModule = (function (EventBus, Store, ProductService, PriceService) {
   }
 
   // ---------------------------------------------------------
+  // _verificarCodigoDuplicado — muestra/oculta el aviso debajo
+  // del campo código según si ya existe otro producto con ese código
+  // ---------------------------------------------------------
+  function _verificarCodigoDuplicado() {
+    var aviso = document.getElementById("editCodigoAviso");
+    if (!aviso) return;
+    var codigo = (_inputCodigo.value || "").trim();
+    if (!codigo) {
+      aviso.classList.add("oculto");
+      return;
+    }
+    var excluir = _modoEditor === "editar" ? _productoEditando : null;
+    var hayDup = ProductService.codigoDuplicado(codigo, excluir);
+    aviso.classList.toggle("oculto", !hayDup);
+  }
+
+  // ---------------------------------------------------------
   // abrirEditor
   // ---------------------------------------------------------
   function abrirEditor(modo, producto) {
@@ -258,6 +276,7 @@ App.EditorModule = (function (EventBus, Store, ProductService, PriceService) {
       _actualizarPrecioPublico();
     }
 
+    _verificarCodigoDuplicado();
     _overlay.classList.remove("oculto");
   }
 
@@ -404,6 +423,9 @@ App.EditorModule = (function (EventBus, Store, ProductService, PriceService) {
     _inputCosto.addEventListener("input", _actualizarPrecioPublico);
     _inputGanancia.addEventListener("input", _actualizarPrecioPublico);
     _inputCategoria.addEventListener("change", _actualizarPrecioPublico);
+
+    // Aviso en vivo de código duplicado
+    _inputCodigo.addEventListener("input", _verificarCodigoDuplicado);
 
     // Botones del editor
     document
