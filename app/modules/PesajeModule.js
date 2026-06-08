@@ -4,7 +4,10 @@
 // Dos modos:
 //   - Gramos: el usuario ingresa gramos → se calcula el precio
 //   - Monto:  el usuario ingresa $ → se calculan los gramos (inversa)
-//             Con escalas: se elige la opción más favorable (más gramos)
+//             Los gramos se redondean al entero más cercano (±0,5g),
+//             priorizando minimizar la diferencia entre lo cobrado y
+//             lo entregado. Con escalas, se elige la opción más
+//             favorable al cliente (más gramos).
 // =============================================================
 
 var App = App || {};
@@ -27,8 +30,8 @@ App.PesajeModule = (function (EventBus, PriceService, Store) {
 
   // ---------------------------------------------------------
   // _calcularGramosDesMonto — lógica inversa con escalas
-  // Devuelve los gramos (redondeados hacia arriba) que
-  // corresponden a un monto dado, eligiendo la opción más
+  // Devuelve los gramos (redondeados al entero más cercano)
+  // que corresponden a un monto dado, eligiendo la opción más
   // favorable al cliente cuando hay varias soluciones válidas.
   // ---------------------------------------------------------
   function _calcularGramosDesMonto(monto) {
@@ -42,7 +45,7 @@ App.PesajeModule = (function (EventBus, PriceService, Store) {
     if (!Array.isArray(producto.escalas) || producto.escalas.length === 0) {
       var precio100g = PriceService.calcular(producto, gananciaGlobal, gananciasPorCategoria);
       if (precio100g <= 0) return null;
-      return Math.ceil((monto * 100) / precio100g);
+      return Math.round((monto * 100) / precio100g);
     }
 
     // Con escalas: probar cada escala por separado.
@@ -57,7 +60,7 @@ App.PesajeModule = (function (EventBus, PriceService, Store) {
       var precio100g = Math.ceil(producto.costo + (producto.costo * margen) / 100);
       if (precio100g <= 0) return;
 
-      var gramos = Math.ceil((monto * 100) / precio100g);
+      var gramos = Math.round((monto * 100) / precio100g);
 
       var escalaQueAplica = escalasOrdenadas
         .slice()
@@ -73,7 +76,7 @@ App.PesajeModule = (function (EventBus, PriceService, Store) {
 
     if (soluciones.length === 0) {
       var precioBase = PriceService.calcular(producto, gananciaGlobal, gananciasPorCategoria);
-      return precioBase > 0 ? Math.ceil((monto * 100) / precioBase) : null;
+      return precioBase > 0 ? Math.round((monto * 100) / precioBase) : null;
     }
 
     soluciones.sort(function (a, b) { return b.gramos - a.gramos; });
@@ -96,8 +99,12 @@ App.PesajeModule = (function (EventBus, PriceService, Store) {
       if (monto <= 0) { _resultado.textContent = ""; return; }
       var gr = _calcularGramosDesMonto(monto);
       if (!gr) { _resultado.textContent = ""; return; }
-      // Muestra gramos redondeados arriba, precio = monto exacto ingresado
-      _resultado.textContent = "$" + monto.toLocaleString("es-AR") + " → " + gr + "g";
+      // En modo monto, el precio del ticket es el monto exacto ingresado.
+      // Los gramos se redondean al entero más cercano (±0,5g), por eso se
+      // aclara al usuario que el peso es aproximado.
+      _resultado.innerHTML =
+        "$" + monto.toLocaleString("es-AR") + " → " + gr + "g" +
+        "<br><small>El peso es aproximado (±1g)</small>";
     }
   }
 
@@ -155,7 +162,7 @@ App.PesajeModule = (function (EventBus, PriceService, Store) {
 
     } else {
       // El precio en el ticket es el monto exacto que ingresó el cliente.
-      // Los gramos se redondean arriba para no cobrar de más.
+      // Los gramos se redondean al entero más cercano (±0,5g de tolerancia).
       total  = parseFloat(_inputMonto.value) || 0;
       if (total <= 0) { alert("Ingresá un monto válido"); return; }
       gramos = _calcularGramosDesMonto(total);

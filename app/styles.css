@@ -163,20 +163,14 @@ header {
   padding: 0;
 }
 
-.firstletter {
-  font-size: 1.7rem;
-  font-family: "Buda", "Times New Roman", Times, serif;
-  margin-right: -4px;
-}
-
 .title {
-  font-size: 1.3rem;
-  font-family: "Buda", "Times New Roman", Times, serif;
+  font-size: 1rem;
+  font-family: "Inter", Times, serif;
 }
 
 .subtitle {
-  font-size: 1.3rem;
-  font-family: "Buda", "Times New Roman", Times, serif;
+  font-size: 1rem;
+  font-family: "Inter", Times, serif;
 }
 
 .shopname {
