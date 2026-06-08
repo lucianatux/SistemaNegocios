@@ -306,6 +306,8 @@ App.StockModule = (function (EventBus, Store) {
       var s = _getStock(producto.codigo);
       if (!s || s.stock === null || s.stock === undefined) return;
 
+      var eraBajo = _esBajo(s); // ← estado previo
+
       var cantidad = producto.porPeso
         ? (function () {
             var m = item.nombre.match(/(\d+(?:\.\d+)?)g$/);
@@ -319,7 +321,53 @@ App.StockModule = (function (EventBus, Store) {
         stock: nuevoStock,
         stockMinimo: s.stockMinimo,
       });
+
+      // Alerta: el producto recién entró al rango de stock mínimo
+      if (
+        !eraBajo &&
+        _esBajo({ stock: nuevoStock, stockMinimo: s.stockMinimo })
+      ) {
+        _mostrarToastStockBajo(producto, nuevoStock);
+      }
     });
+  }
+
+  // ---------------------------------------------------------
+  // Toast de alerta — stock bajo (3s, encima de todo)
+  // ---------------------------------------------------------
+  function _mostrarToastStockBajo(producto, stockActual) {
+    var contenedor = document.getElementById("stockToastContainer");
+    if (!contenedor) {
+      contenedor = document.createElement("div");
+      contenedor.id = "stockToastContainer";
+      contenedor.className = "stock-toast-container";
+      document.body.appendChild(contenedor);
+    }
+
+    var s = _getStock(producto.codigo);
+    var unidad = _unidad(producto);
+    var minimo = s && s.stockMinimo != null ? s.stockMinimo : "";
+
+    var toast = document.createElement("div");
+    toast.className = "stock-toast";
+    toast.setAttribute("role", "alert");
+    toast.innerHTML =
+      '<div class="stock-toast-icon">⚠️</div>' +
+      '<div class="stock-toast-body">' +
+        '<div class="stock-toast-titulo">Stock mínimo alcanzado</div>' +
+        '<div class="stock-toast-nombre"></div>' +
+        '<div class="stock-toast-detalle"></div>' +
+      "</div>";
+    // Asignar texto sin innerHTML para evitar inyección desde el nombre del producto
+    toast.querySelector(".stock-toast-nombre").textContent = producto.nombre;
+    toast.querySelector(".stock-toast-detalle").textContent =
+      "Quedan " + stockActual + " " + unidad +
+      (minimo !== "" ? " · mínimo: " + minimo + " " + unidad : "");
+
+    contenedor.appendChild(toast);
+    setTimeout(function () {
+      if (toast.parentNode) toast.parentNode.removeChild(toast);
+    }, 9000);
   }
 
   // ---------------------------------------------------------
