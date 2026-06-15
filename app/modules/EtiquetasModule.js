@@ -226,9 +226,7 @@ App.EtiquetasModule = (function (EventBus, Store) {
 
     // Mostrar contenedor
     contenedor.style.display = "block";
-    contenedor.style.position = "fixed";
-    contenedor.style.top = "0";
-    contenedor.style.left = "0";
+    contenedor.style.position = "static";
     contenedor.style.width = "100%";
     contenedor.style.background = "white";
     contenedor.style.zIndex = "99999";

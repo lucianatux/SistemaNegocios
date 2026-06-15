@@ -25,6 +25,23 @@ var App = App || {};
 App.PriceService = (function () {
 
   // ---------------------------------------------------------
+  // redondearPrecio — redondea al múltiplo de 10 MÁS CERCANO
+  // (el medio, 5, va hacia arriba), con un piso mínimo de 10.
+  //   2698 -> 2700   4401 -> 4400   3195 -> 3200
+  //   2304 -> 2300     45 -> 50       3 -> 10 (piso)
+  // ---------------------------------------------------------
+  var PASO_REDONDEO = 10;
+  var PRECIO_MINIMO = 10;
+
+  function redondearPrecio(valor) {
+    if (typeof valor !== "number" || !isFinite(valor)) return 0;
+    // El +0.0001 evita que un 2649,99999998 (error de coma flotante)
+    // caiga del lado equivocado al redondear los "medios".
+    var redondeado = Math.round(valor / PASO_REDONDEO + 0.0001) * PASO_REDONDEO;
+    return Math.max(PRECIO_MINIMO, redondeado);
+  }
+
+  // ---------------------------------------------------------
   // calcular — función pura, sin efectos secundarios
   // Siempre devuelve el mismo resultado para los mismos parámetros.
   // ---------------------------------------------------------
@@ -50,8 +67,8 @@ App.PriceService = (function () {
 
     var precioBase = producto.costo + (producto.costo * gananciaUsada) / 100;
 
-    // Redondeo hacia arriba al entero más cercano
-    return Math.ceil(precioBase);
+    // Redondeo al múltiplo de 100 más cercano (regla del Excel del cliente)
+    return redondearPrecio(precioBase);
   }
 
   // ---------------------------------------------------------
@@ -113,7 +130,7 @@ App.PriceService = (function () {
     }
 
     var margen = escalaAplicable ? escalaAplicable.margen : 0;
-    return Math.ceil(producto.costo + (producto.costo * margen) / 100);
+    return redondearPrecio(producto.costo + (producto.costo * margen) / 100);
   }
 
   // ---------------------------------------------------------
@@ -127,6 +144,7 @@ App.PriceService = (function () {
 
   // API pública
   return {
+    redondearPrecio           : redondearPrecio,
     calcular                  : calcular,
     calcularDesdeStore        : calcularDesdeStore,
     calcularConEscala         : calcularConEscala,

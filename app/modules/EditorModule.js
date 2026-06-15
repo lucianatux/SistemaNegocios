@@ -51,7 +51,7 @@ App.EditorModule = (function (EventBus, Store, ProductService, PriceService) {
   function _precioParaEscala(margen) {
     var costo = parseFloat(_inputCosto.value);
     if (isNaN(costo) || isNaN(margen)) return "-";
-    return "$ " + Math.ceil(costo + (costo * margen) / 100);
+    return "$ " + PriceService.redondearPrecio(costo + (costo * margen) / 100);
   }
 
   // ---------------------------------------------------------
