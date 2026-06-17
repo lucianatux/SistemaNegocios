@@ -25,13 +25,13 @@ var App = App || {};
 App.PriceService = (function () {
 
   // ---------------------------------------------------------
-  // redondearPrecio — redondea al múltiplo de 10 MÁS CERCANO
-  // (el medio, 5, va hacia arriba), con un piso mínimo de 10.
+  // redondearPrecio — redondea al múltiplo de 50 MÁS CERCANO
+  // (el medio, 25, va hacia arriba), con un piso mínimo de 50.
   //   2698 -> 2700   4401 -> 4400   3195 -> 3200
-  //   2304 -> 2300     45 -> 50       3 -> 10 (piso)
+  //   2304 -> 2300     45 -> 50       3 -> 50 (piso)
   // ---------------------------------------------------------
-  var PASO_REDONDEO = 10;
-  var PRECIO_MINIMO = 10;
+  var PASO_REDONDEO = 50;
+  var PRECIO_MINIMO = 50;
 
   function redondearPrecio(valor) {
     if (typeof valor !== "number" || !isFinite(valor)) return 0;
@@ -67,7 +67,7 @@ App.PriceService = (function () {
 
     var precioBase = producto.costo + (producto.costo * gananciaUsada) / 100;
 
-    // Redondeo al múltiplo de 100 más cercano (regla del Excel del cliente)
+    // Redondeo al múltiplo de 50 más cercano (regla del Excel del cliente)
     return redondearPrecio(precioBase);
   }
 
@@ -105,6 +105,10 @@ App.PriceService = (function () {
   // calcularConEscala — aplica la escala correcta según cantidad
   // Si el producto no tiene escalas, usa calcular() normal.
   // Retrocompatible: si escalas === undefined funciona igual que antes.
+  //
+  // Nota sobre unidades: para productos por peso, `cantidad` y
+  // `cantidadMinima` se expresan en GRAMOS (ej: "desde 500 g").
+  // Para productos por unidad, en unidades.
   // ---------------------------------------------------------
   function calcularConEscala(producto, cantidad, gananciaGlobal, gananciasPorCategoria) {
     if (!producto || typeof producto.costo !== "number") return 0;
