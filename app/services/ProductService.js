@@ -25,13 +25,29 @@ var App = App || {};
 App.ProductService = (function (Store, PriceService, EventBus) {
 
   // ---------------------------------------------------------
+  // _norm — Normaliza un texto para comparar:
+  //   - minúsculas
+  //   - sin tildes/diacríticos ("Cotillón" === "Cotillon")
+  //   - sin espacios sobrantes al inicio/fin
+  // Esto evita que un producto guardado como "Cotillón" no
+  // coincida con la opción de filtro "Cotillon" (y viceversa).
+  // ---------------------------------------------------------
+  function _norm(s) {
+    return (s || "")
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "") // quita diacríticos (tildes)
+      .trim();
+  }
+
+  // ---------------------------------------------------------
   // filtrar — Búsqueda + filtro por categoría
   // Devuelve una nueva lista, no modifica el Store.
   // ---------------------------------------------------------
   function filtrar(texto, categoria) {
     var productos = Store.getProductos();
     var textoBajo = (texto || "").toLowerCase().trim();
-    var categoriaBaja = (categoria || "").toLowerCase().trim();
+    var categoriaBaja = _norm(categoria);
 
     var resultado = productos.filter(function (p) {
       var coincideTexto =
@@ -41,7 +57,7 @@ App.ProductService = (function (Store, PriceService, EventBus) {
 
       var coincideCategoria =
         !categoriaBaja ||
-        p.categoria.toLowerCase().trim() === categoriaBaja;
+        _norm(p.categoria) === categoriaBaja;
 
       return coincideTexto && coincideCategoria;
     });

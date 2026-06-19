@@ -25,6 +25,43 @@ var App = App || {};
 App.PriceService = (function () {
 
   // ---------------------------------------------------------
+  // _norm — Normaliza un texto para comparar categorías:
+  //   - minúsculas
+  //   - sin tildes/diacríticos ("Cotillón" === "Cotillon")
+  //   - sin espacios sobrantes
+  // Evita que un producto guardado como "Cotillon" no encuentre
+  // su margen si la clave de categoría se guardó como "Cotillón".
+  // ---------------------------------------------------------
+  function _norm(s) {
+    return (s || "")
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "") // quita diacríticos (tildes)
+      .trim();
+  }
+
+  // ---------------------------------------------------------
+  // _buscarMargenCategoria — devuelve el margen de la categoría
+  // del producto, tolerando diferencias de tilde/mayúsculas.
+  // Devuelve undefined si la categoría no tiene margen definido.
+  // ---------------------------------------------------------
+  function _buscarMargenCategoria(categoria, mapa) {
+    if (!mapa) return undefined;
+
+    // 1) Coincidencia exacta (camino rápido, 100% retrocompatible)
+    if (mapa[categoria] !== undefined) return mapa[categoria];
+
+    // 2) Coincidencia normalizada (tolera tildes / mayúsculas)
+    var objetivo = _norm(categoria);
+    var claves = Object.keys(mapa);
+    for (var i = 0; i < claves.length; i++) {
+      if (_norm(claves[i]) === objetivo) return mapa[claves[i]];
+    }
+
+    return undefined;
+  }
+
+  // ---------------------------------------------------------
   // redondearPrecio — redondea al múltiplo de 50 MÁS CERCANO
   // (el medio, 25, va hacia arriba), con un piso mínimo de 50.
   //   2698 -> 2700   4401 -> 4400   3195 -> 3200
@@ -57,12 +94,15 @@ App.PriceService = (function () {
     if (producto.ganancia !== null && producto.ganancia !== undefined) {
       gananciaUsada = producto.ganancia;
     }
-    // Prioridad 2: margen de categoría
-    else if (
-      gananciasPorCategoria &&
-      gananciasPorCategoria[producto.categoria] !== undefined
-    ) {
-      gananciaUsada = gananciasPorCategoria[producto.categoria];
+    // Prioridad 2: margen de categoría (tolerante a tildes/mayúsculas)
+    else {
+      var margenCategoria = _buscarMargenCategoria(
+        producto.categoria,
+        gananciasPorCategoria
+      );
+      if (margenCategoria !== undefined) {
+        gananciaUsada = margenCategoria;
+      }
     }
 
     var precioBase = producto.costo + (producto.costo * gananciaUsada) / 100;
