@@ -576,8 +576,17 @@
             </div>
           </div>
 
-          <div class="ventas-desglose">
-            <div class="desglose-titulo">Desglose por medio de pago</div>
+          <div class="ventas-desglose" id="desgloseMedios">
+            <button
+              class="desglose-titulo desglose-toggle"
+              type="button"
+              data-desglose="medios"
+            >
+              <span>Desglose por medio de pago</span>
+              <span class="desglose-resumen" id="desgloseMediosResumen"></span>
+              <span class="desglose-chevron" aria-hidden="true">▾</span>
+            </button>
+            <div class="desglose-cuerpo">
             <div class="desglose-items">
               <div class="desglose-item">
                 <div class="desglose-medio">💵 Efectivo</div>
@@ -616,17 +625,31 @@
                 </div>
               </div>
             </div>
+            </div>
           </div>
 
-          <div class="ventas-desglose">
-            <div class="desglose-titulo">Desglose por categoría</div>
-            <div
-              class="desglose-cobertura oculto"
-              id="desgloseCategoriasCobertura"
-            ></div>
-            <div class="desglose-items" id="desgloseCategoriasItems"></div>
-            <div class="desglose-vacio oculto" id="desgloseCategoriasVacio">
-              Todavía no hay ventas con categoría en este período.
+          <div class="ventas-desglose" id="desgloseCategorias">
+            <button
+              class="desglose-titulo desglose-toggle"
+              type="button"
+              data-desglose="categorias"
+            >
+              <span>Desglose por categoría</span>
+              <span
+                class="desglose-resumen"
+                id="desgloseCategoriasResumen"
+              ></span>
+              <span class="desglose-chevron" aria-hidden="true">▾</span>
+            </button>
+            <div class="desglose-cuerpo">
+              <div
+                class="desglose-cobertura oculto"
+                id="desgloseCategoriasCobertura"
+              ></div>
+              <div class="desglose-items" id="desgloseCategoriasItems"></div>
+              <div class="desglose-vacio oculto" id="desgloseCategoriasVacio">
+                Todavía no hay ventas con categoría en este período.
+              </div>
             </div>
           </div>
 

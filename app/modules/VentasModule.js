@@ -25,6 +25,13 @@ App.VentasModule = (function (EventBus, Storage) {
   var _catItems = null;
   var _catCobertura = null;
   var _catVacio = null;
+  var _catResumen = null;
+  var _mediosResumen = null;
+
+  // Qué desgloses están cerrados. Se recuerda entre sesiones para que
+  // no haya que volver a cerrarlos cada vez que se abre el panel.
+  var CLAVE_UI = "tero_ventas_ui";
+  var _colapsados = { medios: true, categorias: false };
   var _filtroCliente = null;
   var _anioSeleccionado = new Date().getFullYear();
   var _nombresMeses = [
@@ -50,6 +57,35 @@ App.VentasModule = (function (EventBus, Storage) {
   function _cargar() {
     var datos = Storage.cargar(CLAVE);
     _ventas = Array.isArray(datos) ? datos : [];
+  }
+
+  // ---------------------------------------------------------
+  // Desgloses colapsables
+  // ---------------------------------------------------------
+  function _cargarEstadoUI() {
+    var guardado = Storage.cargar(CLAVE_UI);
+    if (guardado && typeof guardado.colapsados === "object") {
+      if (typeof guardado.colapsados.medios === "boolean") {
+        _colapsados.medios = guardado.colapsados.medios;
+      }
+      if (typeof guardado.colapsados.categorias === "boolean") {
+        _colapsados.categorias = guardado.colapsados.categorias;
+      }
+    }
+  }
+
+  function _aplicarEstadoDesgloses() {
+    var mapa = { medios: "desgloseMedios", categorias: "desgloseCategorias" };
+    Object.keys(mapa).forEach(function (clave) {
+      var el = document.getElementById(mapa[clave]);
+      if (el) el.classList.toggle("colapsado", _colapsados[clave]);
+    });
+  }
+
+  function _alternarDesglose(clave) {
+    _colapsados[clave] = !_colapsados[clave];
+    Storage.guardar(CLAVE_UI, { colapsados: _colapsados });
+    _aplicarEstadoDesgloses();
   }
 
   // --- FIX zona horaria: fecha local, no UTC ---
@@ -251,6 +287,14 @@ App.VentasModule = (function (EventBus, Storage) {
     if (_barraEf) _barraEf.style.width = Math.round((mEf / tot) * 100) + "%";
     if (_barratr) _barratr.style.width = Math.round((mTr / tot) * 100) + "%";
 
+    if (_mediosResumen) {
+      _mediosResumen.textContent =
+        "Efectivo $" +
+        mEf.toLocaleString("es-AR") +
+        " · Transferencia $" +
+        mTr.toLocaleString("es-AR");
+    }
+
     _renderDesgloseCategorias(lista);
   }
 
@@ -265,6 +309,16 @@ App.VentasModule = (function (EventBus, Storage) {
 
     if (_catVacio) _catVacio.classList.toggle("oculto", hay);
     _catItems.innerHTML = "";
+
+    if (_catResumen) {
+      _catResumen.textContent = hay
+        ? datos.categorias
+            .map(function (cat) {
+              return cat.etiqueta + " $" + cat.monto.toLocaleString("es-AR");
+            })
+            .join(" · ")
+        : "Sin ventas con categoría";
+    }
 
     // La cobertura solo se aclara cuando falta algo. Con el tiempo, a
     // medida que las ventas viejas salen del período elegido, la línea
@@ -610,7 +664,17 @@ App.VentasModule = (function (EventBus, Storage) {
     _catItems = document.getElementById("desgloseCategoriasItems");
     _catCobertura = document.getElementById("desgloseCategoriasCobertura");
     _catVacio = document.getElementById("desgloseCategoriasVacio");
+    _catResumen = document.getElementById("desgloseCategoriasResumen");
+    _mediosResumen = document.getElementById("desgloseMediosResumen");
     _filtroCliente = document.getElementById("ventaFiltroCliente");
+
+    _cargarEstadoUI();
+    _aplicarEstadoDesgloses();
+    document.querySelectorAll(".desglose-toggle").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        _alternarDesglose(btn.getAttribute("data-desglose"));
+      });
+    });
 
     document.getElementById("btnVentas").addEventListener("click", abrir);
     document.getElementById("cerrarVentas").addEventListener("click", cerrar);

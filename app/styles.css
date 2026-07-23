@@ -2081,6 +2081,112 @@ footer a:hover {
   background: #b8563a;
 }
 
+/* --- Compactación del encabezado del panel de ventas ---
+   El encabezado se comía la pantalla y dejaba sin aire a la lista.
+   Todo lo de acá está scopeado a #ventasPanel para no tocar el panel
+   de stock, que reusa .ventas-stats. */
+
+#ventasPanel .ventas-stats {
+  grid-template-columns: repeat(4, 1fr);
+  padding: 8px 14px;
+  gap: 6px;
+}
+
+#ventasPanel .venta-stat {
+  padding: 6px 9px;
+}
+
+#ventasPanel .venta-stat-label {
+  margin-bottom: 1px;
+}
+
+#ventasPanel .venta-stat-valor {
+  font-size: 16px;
+}
+
+#ventasPanel .venta-stat-sub {
+  margin-top: 3px;
+  padding-top: 3px;
+}
+
+#ventasPanel .ventas-tab {
+  padding: 6px;
+}
+
+#ventasPanel .ventas-desglose {
+  padding: 6px 14px;
+}
+
+/* En pantallas angostas los cuatro stats no entran en una fila. */
+@media (max-width: 860px) {
+  #ventasPanel .ventas-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* --- Desgloses colapsables --- */
+
+.desglose-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  margin-bottom: 0;
+  padding: 3px 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  /* hereda tamaño, color y mayúsculas de .desglose-titulo */
+  font: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-texto-suave);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.desglose-toggle:hover {
+  color: var(--color-primario);
+}
+
+.desglose-chevron {
+  margin-left: auto;
+  font-size: 13px;
+  line-height: 1;
+  transition: transform 0.15s ease;
+}
+
+/* El resumen de una línea solo aparece cerrado, así colapsar no
+   significa perder el dato de vista. */
+.desglose-resumen {
+  display: none;
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--color-texto-suave);
+}
+
+.ventas-desglose.colapsado .desglose-cuerpo {
+  display: none;
+}
+
+.ventas-desglose.colapsado .desglose-resumen {
+  display: block;
+}
+
+.ventas-desglose.colapsado .desglose-chevron {
+  transform: rotate(-90deg);
+}
+
+.ventas-desglose:not(.colapsado) .desglose-toggle {
+  margin-bottom: 6px;
+}
+
 /* ==========================
    FILTRO MEDIO (solo lista)
    ========================== */
