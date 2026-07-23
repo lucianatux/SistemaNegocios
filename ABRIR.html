@@ -618,6 +618,18 @@
             </div>
           </div>
 
+          <div class="ventas-desglose">
+            <div class="desglose-titulo">Desglose por categoría</div>
+            <div
+              class="desglose-cobertura oculto"
+              id="desgloseCategoriasCobertura"
+            ></div>
+            <div class="desglose-items" id="desgloseCategoriasItems"></div>
+            <div class="desglose-vacio oculto" id="desgloseCategoriasVacio">
+              Todavía no hay ventas con categoría en este período.
+            </div>
+          </div>
+
           <div class="ventas-filtros-medio">
             <select id="ventaFiltroMedio">
               <option value="">Todos los medios</option>
@@ -1442,6 +1454,7 @@
     <!-- SERVICES -->
     <script src="app/services/PriceService.js"></script>
     <script src="app/services/ProductService.js"></script>
+    <script src="app/services/StatsService.js"></script>
 
     <!-- DATOS -->
     <script src="app/data.js"></script>

@@ -2038,6 +2038,49 @@ footer a:hover {
   background: var(--color-secundario);
 }
 
+/* --- Desglose por categoría ---
+   Reusa .ventas-desglose, .desglose-item, .desglose-row, .barra-wrap
+   y .barra. Solo se agrega lo que no existía. */
+
+.desglose-cobertura {
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--color-texto-suave);
+  margin-bottom: 8px;
+}
+
+.desglose-vacio {
+  font-size: 12px;
+  color: var(--color-texto-suave);
+  padding: 2px 0 4px;
+}
+
+.desglose-cat-pie {
+  display: block;
+  margin-top: 4px;
+}
+
+/* Tonos medios elegidos para que contrasten igual en claro y oscuro,
+   así no hace falta duplicarlos en [data-theme="dark"]. */
+.barra-cat-libreria {
+  background: #07889c;
+}
+.barra-cat-cotillon {
+  background: #07489d;
+}
+.barra-cat-reposteria {
+  background: #b8873a;
+}
+.barra-cat-regaleria {
+  background: #8a5fb0;
+}
+.barra-cat-descartables {
+  background: #4f8a4a;
+}
+.barra-cat-electronica {
+  background: #b8563a;
+}
+
 /* ==========================
    FILTRO MEDIO (solo lista)
    ========================== */

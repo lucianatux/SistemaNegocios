@@ -62,6 +62,10 @@ App.TicketModule = (function (EventBus, Store, PriceService) {
       precio: PriceService.calcularConEscalaDesdeStore(producto, 1),
       cantidad: 1,
       costo: producto.costo || 0,
+      // Se congelan al momento de la venta: si mañana el producto cambia
+      // de categoría o se borra, la venta vieja mantiene su clasificación.
+      categoria: producto.categoria || null,
+      codigo: producto.codigo || null,
       _producto: producto, // referencia para recalcular escalas al cambiar cantidad
     });
 
@@ -392,6 +396,8 @@ App.TicketModule = (function (EventBus, Store, PriceService) {
         precioUnitario: item.precio,
         subtotal: item.precio * item.cantidad,
         costo: item.costo || 0,
+        categoria: item.categoria || null,
+        codigo: item.codigo || null,
       };
     });
 

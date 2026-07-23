@@ -22,6 +22,9 @@ App.VentasModule = (function (EventBus, Storage) {
   var _desgloseTriCount = null;
   var _barraEf = null;
   var _barratr = null;
+  var _catItems = null;
+  var _catCobertura = null;
+  var _catVacio = null;
   var _filtroCliente = null;
   var _anioSeleccionado = new Date().getFullYear();
   var _nombresMeses = [
@@ -147,6 +150,7 @@ App.VentasModule = (function (EventBus, Storage) {
       ajustes: datos.ajustes || null,
       soloHistorial: datos.soloHistorial || false,
       contarVenta: datos.contarVenta || false,
+      esPagoDeuda: datos.esPagoDeuda || false,
     };
 
     _ventas.unshift(venta);
@@ -246,6 +250,85 @@ App.VentasModule = (function (EventBus, Storage) {
         tr.length + (tr.length === 1 ? " venta" : " ventas");
     if (_barraEf) _barraEf.style.width = Math.round((mEf / tot) * 100) + "%";
     if (_barratr) _barratr.style.width = Math.round((mTr / tot) * 100) + "%";
+
+    _renderDesgloseCategorias(lista);
+  }
+
+  // ---------------------------------------------------------
+  // _renderDesgloseCategorias
+  // ---------------------------------------------------------
+  function _renderDesgloseCategorias(lista) {
+    if (!_catItems || !App.StatsService) return;
+
+    var datos = App.StatsService.porCategoria(lista);
+    var hay = datos.categorias.length > 0;
+
+    if (_catVacio) _catVacio.classList.toggle("oculto", hay);
+    _catItems.innerHTML = "";
+
+    // La cobertura solo se aclara cuando falta algo. Con el tiempo, a
+    // medida que las ventas viejas salen del período elegido, la línea
+    // desaparece sola sin que haya que configurar ninguna fecha.
+    if (_catCobertura) {
+      var parcial = hay && datos.cobertura.porcentaje < 100;
+      _catCobertura.classList.toggle("oculto", !parcial);
+      if (parcial) {
+        _catCobertura.textContent =
+          "Cubre $" +
+          datos.cobertura.conCategoria.toLocaleString("es-AR") +
+          " de $" +
+          datos.cobertura.total.toLocaleString("es-AR") +
+          " del período. El resto son ventas sin categoría.";
+      }
+    }
+
+    if (!hay) return;
+
+    datos.categorias.forEach(function (cat) {
+      var item = document.createElement("div");
+      item.className = "desglose-item";
+
+      var titulo = document.createElement("div");
+      titulo.className = "desglose-medio";
+      titulo.textContent = cat.etiqueta;
+
+      var row = document.createElement("div");
+      row.className = "desglose-row";
+
+      var monto = document.createElement("span");
+      monto.className = "desglose-monto";
+      monto.textContent = "$" + cat.monto.toLocaleString("es-AR");
+
+      var pct = document.createElement("span");
+      pct.className = "desglose-sub";
+      pct.textContent = cat.porcentaje + "%";
+
+      row.appendChild(monto);
+      row.appendChild(pct);
+
+      var wrap = document.createElement("div");
+      wrap.className = "barra-wrap";
+
+      var barra = document.createElement("div");
+      barra.className = "barra barra-cat-" + cat.clave.toLowerCase();
+      barra.style.width = cat.porcentaje + "%";
+      wrap.appendChild(barra);
+
+      var pie = document.createElement("div");
+      pie.className = "desglose-sub desglose-cat-pie";
+      pie.textContent =
+        "Ganancia $" +
+        cat.ganancia.toLocaleString("es-AR") +
+        " · margen " +
+        cat.margen +
+        "%";
+
+      item.appendChild(titulo);
+      item.appendChild(row);
+      item.appendChild(wrap);
+      item.appendChild(pie);
+      _catItems.appendChild(item);
+    });
   }
 
   // ---------------------------------------------------------
@@ -524,6 +607,9 @@ App.VentasModule = (function (EventBus, Storage) {
     _desgloseTriCount = document.getElementById("desgloseTransferenciaCount");
     _barraEf = document.getElementById("barraEfectivo");
     _barratr = document.getElementById("barraTransferencia");
+    _catItems = document.getElementById("desgloseCategoriasItems");
+    _catCobertura = document.getElementById("desgloseCategoriasCobertura");
+    _catVacio = document.getElementById("desgloseCategoriasVacio");
     _filtroCliente = document.getElementById("ventaFiltroCliente");
 
     document.getElementById("btnVentas").addEventListener("click", abrir);

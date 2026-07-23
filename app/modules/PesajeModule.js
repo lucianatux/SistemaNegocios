@@ -196,6 +196,10 @@ App.PesajeModule = (function (EventBus, PriceService, Store) {
       precio  : total,
       cantidad: 1,
       costo   : ((_productoActual.costo || 0) * gramos) / 100,
+      // El nombre lleva los gramos pegados y ya no coincide con el del
+      // catálogo, así que la categoría tiene que viajar con el ítem.
+      categoria: _productoActual.categoria || null,
+      codigo   : _productoActual.codigo || null,
     };
 
     if (_destinoActual === "ticket") {

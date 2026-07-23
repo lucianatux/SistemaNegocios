@@ -141,6 +141,9 @@ App.ClientesModule = (function (EventBus, Storage) {
       medioPago: medioPago || "efectivo",
       clienteId: cli.id,
       clienteNombre: cli.nombre,
+      // No es venta de mercadería: entra al total pero no al desglose
+      // por categoría, porque esos productos ya se contaron al fiarlos.
+      esPagoDeuda: true,
     });
 
     _actualizarFichaAbierta(cli);
@@ -870,7 +873,10 @@ App.ClientesModule = (function (EventBus, Storage) {
   function _exportarDatosCompletos() {
     var ventas = App.VentasModule ? App.VentasModule.getVentas() : [];
     var datos = {
-      version: 1,
+      // v2: los ítems de venta incluyen `categoria` y `codigo`.
+      // La estructura no cambió, solo se agregaron campos, así que un
+      // backup v2 abierto por una versión vieja de la app sigue andando.
+      version: 2,
       fecha: new Date().toISOString(),
       clientes: _clientes,
       ventas: ventas,
