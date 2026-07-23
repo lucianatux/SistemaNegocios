@@ -49,15 +49,27 @@ App.VentasModule = (function (EventBus, Storage) {
     _ventas = Array.isArray(datos) ? datos : [];
   }
 
+  // --- FIX zona horaria: fecha local, no UTC ---
+  function _fechaLocal(d) {
+    d = d || new Date();
+    return (
+      d.getFullYear() +
+      "-" +
+      String(d.getMonth() + 1).padStart(2, "0") +
+      "-" +
+      String(d.getDate()).padStart(2, "0")
+    );
+  }
+
   function _hoy() {
-    return new Date().toISOString().slice(0, 10);
+    return _fechaLocal();
   }
 
   function _inicioSemana() {
     var d = new Date();
     var dia = d.getDay() || 7;
     d.setDate(d.getDate() - dia + 1);
-    return d.toISOString().slice(0, 10);
+    return _fechaLocal(d);
   }
 
   function _inicioMes() {
