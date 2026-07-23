@@ -22,6 +22,7 @@ App.StatsService = (function () {
     Regaleria: "Regalería",
     Descartables: "Descartables",
     Electronica: "Electrónica",
+    Copias: "Copias",
   };
 
   // ---------------------------------------------------------

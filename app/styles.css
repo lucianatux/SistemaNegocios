@@ -2080,6 +2080,9 @@ footer a:hover {
 .barra-cat-electronica {
   background: #b8563a;
 }
+.barra-cat-copias {
+  background: #b0447e;
+}
 
 /* --- Compactación del encabezado del panel de ventas ---
    El encabezado se comía la pantalla y dejaba sin aire a la lista.
