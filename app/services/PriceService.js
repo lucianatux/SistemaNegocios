@@ -70,12 +70,39 @@ App.PriceService = (function () {
   var PASO_REDONDEO = 50;
   var PRECIO_MINIMO = 50;
 
-  function redondearPrecio(valor) {
+  // Categorías con regla propia. Las que no figuran acá usan el paso
+  // por defecto. Copias necesita un paso más fino porque con múltiplos
+  // de 50 todos los márgenes bajos caían al mismo precio.
+  var REDONDEO_POR_CATEGORIA = {
+    Copias: { paso: 10, minimo: 10 },
+  };
+
+  function _reglaRedondeo(categoria) {
+    if (categoria) {
+      if (REDONDEO_POR_CATEGORIA[categoria]) {
+        return REDONDEO_POR_CATEGORIA[categoria];
+      }
+      // Tolerante a tildes y mayúsculas, igual que los márgenes.
+      var objetivo = _norm(categoria);
+      var claves = Object.keys(REDONDEO_POR_CATEGORIA);
+      for (var i = 0; i < claves.length; i++) {
+        if (_norm(claves[i]) === objetivo) {
+          return REDONDEO_POR_CATEGORIA[claves[i]];
+        }
+      }
+    }
+    return { paso: PASO_REDONDEO, minimo: PRECIO_MINIMO };
+  }
+
+  // `categoria` es opcional: sin ella se usa el paso por defecto, así
+  // que cualquier llamada vieja sigue comportándose igual que antes.
+  function redondearPrecio(valor, categoria) {
     if (typeof valor !== "number" || !isFinite(valor)) return 0;
+    var regla = _reglaRedondeo(categoria);
     // El +0.0001 evita que un 2649,99999998 (error de coma flotante)
     // caiga del lado equivocado al redondear los "medios".
-    var redondeado = Math.round(valor / PASO_REDONDEO + 0.0001) * PASO_REDONDEO;
-    return Math.max(PRECIO_MINIMO, redondeado);
+    var redondeado = Math.round(valor / regla.paso + 0.0001) * regla.paso;
+    return Math.max(regla.minimo, redondeado);
   }
 
   // ---------------------------------------------------------
@@ -108,7 +135,7 @@ App.PriceService = (function () {
     var precioBase = producto.costo + (producto.costo * gananciaUsada) / 100;
 
     // Redondeo al múltiplo de 50 más cercano (regla del Excel del cliente)
-    return redondearPrecio(precioBase);
+    return redondearPrecio(precioBase, producto.categoria);
   }
 
   // ---------------------------------------------------------
@@ -174,7 +201,10 @@ App.PriceService = (function () {
     }
 
     var margen = escalaAplicable ? escalaAplicable.margen : 0;
-    return redondearPrecio(producto.costo + (producto.costo * margen) / 100);
+    return redondearPrecio(
+      producto.costo + (producto.costo * margen) / 100,
+      producto.categoria
+    );
   }
 
   // ---------------------------------------------------------

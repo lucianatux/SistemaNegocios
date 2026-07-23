@@ -51,7 +51,15 @@ App.EditorModule = (function (EventBus, Store, ProductService, PriceService) {
   function _precioParaEscala(margen) {
     var costo = parseFloat(_inputCosto.value);
     if (isNaN(costo) || isNaN(margen)) return "-";
-    return "$ " + PriceService.redondearPrecio(costo + (costo * margen) / 100);
+    // La categoría importa: define el paso de redondeo, y sin ella la
+    // vista previa mostraría un precio distinto al que se guarda.
+    return (
+      "$ " +
+      PriceService.redondearPrecio(
+        costo + (costo * margen) / 100,
+        _inputCategoria ? _inputCategoria.value : null
+      )
+    );
   }
 
   // ---------------------------------------------------------

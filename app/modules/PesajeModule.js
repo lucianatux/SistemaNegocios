@@ -73,10 +73,12 @@ App.PesajeModule = (function (EventBus, PriceService, Store) {
 
     escalasOrdenadas.forEach(function (escala) {
       var margen     = escala.margen !== undefined ? escala.margen : 0;
-      // Mismo redondeo que cobra el resto de la app (múltiplos de 50),
-      // para que los gramos calculados reconcilien con el precio real.
+      // Mismo redondeo que cobra el resto de la app (el paso depende de
+      // la categoría), para que los gramos calculados reconcilien con el
+      // precio real.
       var precio100g = PriceService.redondearPrecio(
-        producto.costo + (producto.costo * margen) / 100
+        producto.costo + (producto.costo * margen) / 100,
+        producto.categoria
       );
       if (precio100g <= 0) return;
 
